@@ -1,0 +1,12 @@
+<phpunit
+    bootstrap="tests/bootstrap.php"
+    backupGlobals="false"
+    colors="true"
+    convertErrorsToExceptions="true"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true"
+>
+    <testsuite name="unit">
+        <directory suffix=".php">tests/alley/wp/</directory>
+    </testsuite>
+</phpunit>

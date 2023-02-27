@@ -1,0 +1,20 @@
+name: Tests
+
+on:
+  pull_request:
+
+jobs:
+  phpunit:
+    strategy:
+      fail-fast: true
+      matrix:
+        php: [ 8.2, 8.1, 8.0 ]
+        wp_version: [ "latest" ]
+        multisite: [ false, true ]
+    name: WordPress ${{ matrix.wp_version }} @ PHP ${{ matrix.php }} (WP_MULTISITE=${{ matrix.multisite }})
+    uses: alleyinteractive/.github/.github/workflows/php-tests.yml@main
+    with:
+      command: "phpunit"
+      php: ${{ matrix.php }}
+      wordpress: ${{ matrix.wp_version }}
+      multisite: ${{ matrix.multisite }}
