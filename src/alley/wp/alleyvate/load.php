@@ -21,6 +21,14 @@ function load() {
 			'handle' => 'user_enumeration_restrictions',
 			'path'   => __DIR__ . '/feature-user-enumeration-restrictions.php',
 		],
+		[
+			'handle' => 'jetpack_sso',
+			'path'   => __DIR__ . '/feature-jetpack-sso.php',
+		],
+		[
+			'handle' => 'forced_jetpack_sso',
+			'path'   => __DIR__ . '/feature-forced-jetpack-sso.php',
+		],
 	];
 
 	foreach ( $features as $feature ) {

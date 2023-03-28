@@ -1,6 +1,6 @@
 <?php
 /**
- * User enumeration restrictions
+ * User enumeration restrictions feature
  *
  * (c) Alley <info@alley.com>
  *
