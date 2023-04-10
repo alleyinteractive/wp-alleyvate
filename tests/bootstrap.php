@@ -11,6 +11,7 @@
  */
 
 \Mantle\Testing\manager()
+	// Fires on 'muplugins_loaded'.
 	->loaded(
 		function () {
 			/*
