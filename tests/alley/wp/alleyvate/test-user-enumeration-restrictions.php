@@ -12,12 +12,29 @@
 
 namespace Alley\WP\Alleyvate;
 
+use Alley\WP\Alleyvate\Feature\User_Enumeration_Restrictions;
 use Mantle\Testkit\Test_Case;
 
 /**
  * Tests for the user enumeration restrictions feature.
  */
 final class Test_User_Enumeration_Restrictions extends Test_Case {
+	/**
+	 * Feature instance.
+	 *
+	 * @var Feature
+	 */
+	private Feature $feature;
+
+	/**
+	 * Set up.
+	 */
+	protected function setUp(): void {
+		parent::setUp();
+
+		$this->feature = new User_Enumeration_Restrictions();
+	}
+
 	/**
 	 * User should receive the given response code when accessing user routes.
 	 *
@@ -37,12 +54,31 @@ final class Test_User_Enumeration_Restrictions extends Test_Case {
 			]
 		);
 
-		$req_collection = new \WP_REST_Request( 'GET', '/wp/v2/users' );
-		$req_item       = new \WP_REST_Request( 'GET', "/wp/v2/users/{$post->post_author}" );
+		$reqs = [
+			new \WP_REST_Request( 'GET', '/wp/v2/users' ), // Collection.
+			new \WP_REST_Request( 'GET', "/wp/v2/users/{$post->post_author}" ), // Item.
+		];
 
-		wp_set_current_user( $logged_in ? self::factory()->user->create() : 0 );
+		wp_set_current_user( 0 );
 
-		foreach ( [ $req_collection, $req_item ] as $req ) {
+		foreach ( $reqs as $req ) {
+			$res = rest_do_request( $req );
+
+			if ( $res->get_status() !== 200 ) {
+				$this->markTestSkipped(
+					"Could not test feature because anonymous request for route {$req->get_route()} returned"
+					. " HTTP {$res->get_status()} even though feature is not booted",
+				);
+			}
+		}
+
+		$this->feature->boot();
+
+		if ( $logged_in ) {
+			wp_set_current_user( self::factory()->user->create() );
+		}
+
+		foreach ( $reqs as $req ) {
 			$res = rest_do_request( $req );
 
 			$this->assertSame(
