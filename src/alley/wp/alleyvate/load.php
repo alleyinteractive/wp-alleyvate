@@ -22,6 +22,7 @@ function load(): void {
 	 * @var Internals\Feature[] $features
 	 */
 	$features = [
+		new Feature\Redirect_Guess_Shortcircuit(),
 		new Feature\User_Enumeration_Restrictions(),
 	];
 
