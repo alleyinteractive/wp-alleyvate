@@ -20,7 +20,7 @@ Alleyvate is a collection of distinct features, each of which is enabled by defa
 
 This feature stops WordPress from attempting to guess a redirect URL for a 404 request. Its handle is `redirect_guess_shortcircuit`.
 
-The underlying behavior of `redirect_guess_404_permalink()` often confuses clients, and its raw database queries are non-performant on larger sites.
+The underlying behavior of `redirect_guess_404_permalink()` often confuses clients, and its database queries are non-performant on larger sites.
 
 ### User Enumeration Restrictions
 
