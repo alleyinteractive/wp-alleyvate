@@ -15,12 +15,14 @@ namespace Alley\WP\Alleyvate;
 /**
  * Load plugin features.
  */
-function load() {
+function load(): void {
+	/**
+	 * Features to load.
+	 *
+	 * @var Feature[] $features
+	 */
 	$features = [
-		[
-			'handle' => 'user_enumeration_restrictions',
-			'path'   => __DIR__ . '/feature-user-enumeration-restrictions.php',
-		],
+		new Feature\User_Enumeration_Restrictions(),
 	];
 
 	foreach ( $features as $feature ) {
@@ -32,7 +34,7 @@ function load() {
 		 * @param bool   $load   Whether to load the feature. Default true.
 		 * @param string $handle Feature handle.
 		 */
-		$load = apply_filters( 'alleyvate_load_feature', $load, $feature['handle'] );
+		$load = apply_filters( 'alleyvate_load_feature', $load, $feature->handle() );
 
 		/**
 		 * Filters whether to load the given Alleyvate feature.
@@ -42,11 +44,10 @@ function load() {
 		 *
 		 * @param bool $load Whether to load the feature. Default true.
 		 */
-		$load = apply_filters( "alleyvate_load_{$feature['handle']}", $load );
+		$load = apply_filters( "alleyvate_load_{$feature->handle()}", $load );
 
 		if ( $load ) {
-			// This file path is defined above.
-			require_once $feature['path']; // phpcs:ignore WordPressVIPMinimum.Files.IncludingFile.UsingVariable
+			$feature->boot();
 		}
 	}
 }
