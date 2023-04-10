@@ -15,7 +15,7 @@
 		function () {
 			/*
 			 * Turn off all features by default so that we can verify that the behavior
-			 * of WordPress changed after we turn the feature on.
+			 * of WordPress changes after we turn the feature on.
 			 */
 			add_filter( 'alleyvate_load_feature', '__return_false' );
 		},
