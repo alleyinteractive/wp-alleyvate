@@ -19,7 +19,7 @@ function load(): void {
 	/**
 	 * Features to load.
 	 *
-	 * @var Feature[] $features
+	 * @var Internals\Feature[] $features
 	 */
 	$features = [
 		new Feature\User_Enumeration_Restrictions(),

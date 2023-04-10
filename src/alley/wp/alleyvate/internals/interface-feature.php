@@ -1,6 +1,6 @@
 <?php
 /**
- * Interface file for Feature
+ * Interface file for Feature. This interface not subject to semantic-versioning constraints
  *
  * (c) Alley <info@alley.com>
  *
@@ -10,7 +10,7 @@
  * @package wp-alleyvate
  */
 
-namespace Alley\WP\Alleyvate;
+namespace Alley\WP\Alleyvate\Internals;
 
 use Stringable;
 

@@ -13,6 +13,7 @@
 namespace Alley\WP\Alleyvate;
 
 use Alley\WP\Alleyvate\Feature\User_Enumeration_Restrictions;
+use Alley\WP\Alleyvate\Internals\Feature;
 use Mantle\Testkit\Test_Case;
 
 /**
