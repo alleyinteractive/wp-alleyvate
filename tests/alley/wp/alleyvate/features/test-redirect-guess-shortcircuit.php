@@ -10,10 +10,9 @@
  * @package wp-alleyvate
  */
 
-namespace Alley\WP\Alleyvate;
+namespace Alley\WP\Alleyvate\Features;
 
-use Alley\WP\Alleyvate\Feature\Redirect_Guess_Shortcircuit;
-use Alley\WP\Alleyvate\Internals\Feature;
+use Alley\WP\Alleyvate\Feature;
 use Mantle\Testkit\Test_Case;
 
 /**

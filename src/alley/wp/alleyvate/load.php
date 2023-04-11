@@ -19,11 +19,11 @@ function load(): void {
 	/**
 	 * Features to load.
 	 *
-	 * @var Internals\Feature[] $features
+	 * @var Feature[] $features
 	 */
 	$features = [
-		'redirect_guess_shortcircuit'   => new Feature\Redirect_Guess_Shortcircuit(),
-		'user_enumeration_restrictions' => new Feature\User_Enumeration_Restrictions(),
+		'redirect_guess_shortcircuit'   => new Features\Redirect_Guess_Shortcircuit(),
+		'user_enumeration_restrictions' => new Features\User_Enumeration_Restrictions(),
 	];
 
 	foreach ( $features as $handle => $feature ) {

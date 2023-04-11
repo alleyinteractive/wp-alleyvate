@@ -1,6 +1,6 @@
 <?php
 /**
- * Interface file for Feature. This interface not subject to semantic-versioning constraints
+ * Interface file for Feature
  *
  * (c) Alley <info@alley.com>
  *
@@ -10,7 +10,7 @@
  * @package wp-alleyvate
  */
 
-namespace Alley\WP\Alleyvate\Internals;
+namespace Alley\WP\Alleyvate;
 
 /**
  * Describes an Alleyvate feature.

@@ -10,10 +10,9 @@
  * @package wp-alleyvate
  */
 
-namespace Alley\WP\Alleyvate\Feature;
+namespace Alley\WP\Alleyvate\Features;
 
-use Alley\WP\Alleyvate\Internals\Feature;
-use Stringable;
+use Alley\WP\Alleyvate\Feature;
 
 /**
  * Disable `redirect_guess_404_permalink()`, whose behavior often confuses clients
