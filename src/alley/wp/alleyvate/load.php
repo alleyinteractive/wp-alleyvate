@@ -22,8 +22,8 @@ function load(): void {
 	 * @var Internals\Feature[] $features
 	 */
 	$features = [
-		'user_enumeration_restrictions' => new Feature\User_Enumeration_Restrictions(),
 		'redirect_guess_shortcircuit'   => new Feature\Redirect_Guess_Shortcircuit(),
+		'user_enumeration_restrictions' => new Feature\User_Enumeration_Restrictions(),
 	];
 
 	foreach ( $features as $handle => $feature ) {
