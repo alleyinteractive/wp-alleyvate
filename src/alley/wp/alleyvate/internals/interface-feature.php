@@ -12,19 +12,10 @@
 
 namespace Alley\WP\Alleyvate\Internals;
 
-use Stringable;
-
 /**
  * Describes an Alleyvate feature.
  */
 interface Feature {
-	/**
-	 * Feature handle.
-	 *
-	 * @return string|Stringable
-	 */
-	public function handle(): string|Stringable;
-
 	/**
 	 * Boot the feature.
 	 */
