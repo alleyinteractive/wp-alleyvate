@@ -22,10 +22,10 @@ function load(): void {
 	 * @var Internals\Feature[] $features
 	 */
 	$features = [
-		new Feature\User_Enumeration_Restrictions(),
+		'user_enumeration_restrictions' => new Feature\User_Enumeration_Restrictions(),
 	];
 
-	foreach ( $features as $feature ) {
+	foreach ( $features as $handle => $feature ) {
 		$load = true;
 
 		/**
@@ -34,7 +34,7 @@ function load(): void {
 		 * @param bool   $load   Whether to load the feature. Default true.
 		 * @param string $handle Feature handle.
 		 */
-		$load = apply_filters( 'alleyvate_load_feature', $load, $feature->handle() );
+		$load = apply_filters( 'alleyvate_load_feature', $load, $handle );
 
 		/**
 		 * Filters whether to load the given Alleyvate feature.
@@ -44,7 +44,7 @@ function load(): void {
 		 *
 		 * @param bool $load Whether to load the feature. Default true.
 		 */
-		$load = apply_filters( "alleyvate_load_{$feature->handle()}", $load );
+		$load = apply_filters( "alleyvate_load_{$handle}", $load );
 
 		if ( $load ) {
 			$feature->boot();

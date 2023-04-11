@@ -13,7 +13,6 @@
 namespace Alley\WP\Alleyvate\Feature;
 
 use Alley\WP\Alleyvate\Internals\Feature;
-use Stringable;
 use WP_Error;
 use WP_HTTP_Response;
 use WP_REST_Request;
@@ -25,15 +24,6 @@ use WP_REST_Response;
  * tend to not want information about the registered users on their sites to be discoverable.
  */
 final class User_Enumeration_Restrictions implements Feature {
-	/**
-	 * Feature handle.
-	 *
-	 * @return string|Stringable
-	 */
-	public function handle(): string|Stringable {
-		return 'user_enumeration_restrictions';
-	}
-
 	/**
 	 * Boot the feature.
 	 */
