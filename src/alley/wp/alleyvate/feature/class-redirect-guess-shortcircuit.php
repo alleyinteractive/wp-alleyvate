@@ -21,15 +21,6 @@ use Stringable;
  */
 final class Redirect_Guess_Shortcircuit implements Feature {
 	/**
-	 * Feature handle.
-	 *
-	 * @return string|Stringable
-	 */
-	public function handle(): string|Stringable {
-		return 'redirect_guess_shortcircuit';
-	}
-
-	/**
 	 * Boot the feature.
 	 */
 	public function boot(): void {

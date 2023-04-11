@@ -23,7 +23,7 @@ function load(): void {
 	 */
 	$features = [
 		'user_enumeration_restrictions' => new Feature\User_Enumeration_Restrictions(),
-		new Feature\Redirect_Guess_Shortcircuit(),
+		'redirect_guess_shortcircuit'   => new Feature\Redirect_Guess_Shortcircuit(),
 	];
 
 	foreach ( $features as $handle => $feature ) {
