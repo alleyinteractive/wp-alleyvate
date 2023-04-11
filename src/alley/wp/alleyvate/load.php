@@ -22,7 +22,7 @@ function load(): void {
 	 * @var Feature[] $features
 	 */
 	$features = [
-		'user_enumeration_restrictions' => new Feature\User_Enumeration_Restrictions(),
+		'user_enumeration_restrictions' => new Features\User_Enumeration_Restrictions(),
 	];
 
 	foreach ( $features as $handle => $feature ) {

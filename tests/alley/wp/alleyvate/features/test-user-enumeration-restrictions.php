@@ -10,9 +10,9 @@
  * @package wp-alleyvate
  */
 
-namespace Alley\WP\Alleyvate;
+namespace Alley\WP\Alleyvate\Features;
 
-use Alley\WP\Alleyvate\Feature\User_Enumeration_Restrictions;
+use Alley\WP\Alleyvate\Feature;
 use Mantle\Testkit\Test_Case;
 
 /**
