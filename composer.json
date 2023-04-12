@@ -23,10 +23,11 @@
     "lock": false
   },
   "require": {
-    "php": "^8.0"
+    "php": "^8.0",
+    "alleyinteractive/composer-wordpress-autoloader": "^v1.0"
   },
   "require-dev": {
-    "alleyinteractive/alley-coding-standards": "^1.0.0",
+    "alleyinteractive/alley-coding-standards": "^1.0",
     "friendsofphp/php-cs-fixer": "^3.8",
     "mantle-framework/testkit": "^0.9"
   },
