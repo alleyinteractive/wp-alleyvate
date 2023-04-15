@@ -6,6 +6,7 @@
 #
 # Via WPCS.
 #
+/.editorconfig export-ignore
 /phpcs.xml export-ignore
 /phpunit.xml export-ignore
 /.github export-ignore
