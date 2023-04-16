@@ -1,15 +1,5 @@
 <?php
 /**
- * Plugin Name: Alleyvate
- * Plugin URI: https://github.com/alleyinteractive/wp-alleyvate
- * Description: Defaults for WordPress sites by Alley
- * Version: 2.0.0
- * Author: Alley
- * Author URI: https://www.alley.com
- * Requires at least: 6.2
- */
-
-/**
  * Plugin bootstrap
  *
  * (c) Alley <info@alley.com>
@@ -18,6 +8,16 @@
  * file that was distributed with this source code.
  *
  * @package wp-alleyvate
+ */
+
+/**
+ * Plugin Name: Alleyvate
+ * Plugin URI: https://github.com/alleyinteractive/wp-alleyvate
+ * Description: Defaults for WordPress sites by Alley
+ * Version: 2.0.0
+ * Author: Alley
+ * Author URI: https://www.alley.com
+ * Requires at least: 6.2
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
