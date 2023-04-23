@@ -12,17 +12,17 @@ $ composer require alleyinteractive/wp-alleyvate
 
 ## Basic usage
 
-Alleyvate is a collection of distinct features, each of which is enabled by default. Each feature has a handle, and sites can opt out of individual features with the `alleyvate_load_feature` or `alleyvate_load_{$handle}` filters.  Features load on the `after_setup_theme` hook, so your filters must be in place before then.
+Alleyvate is a collection of distinct features, each of which is enabled by default. Each feature has a handle, and sites can opt out of individual features with the `alleyvate_load_feature` or `alleyvate_load_{$handle}` filters. Features load on the `after_setup_theme` hook, so your filters must be in place before then.
 
 ## Features
 
-### Redirect-Guess Short-Circuit
+### Short-Circuit Redirect Guessing
 
 This feature stops WordPress from attempting to guess a redirect URL for a 404 request. Its handle is `redirect_guess_shortcircuit`.
 
 The underlying behavior of `redirect_guess_404_permalink()` often confuses clients, and its database queries are non-performant on larger sites.
 
-### User Enumeration Restrictions
+### Restrict User Enumeration
 
 This feature requires users to be logged in before accessing data about registered users that would otherwise be publicly accessible. Its handle is `user_enumeration_restrictions`.
 

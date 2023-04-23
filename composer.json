@@ -1,7 +1,7 @@
 {
   "name": "alleyinteractive/wp-alleyvate",
   "description": "Defaults for WordPress sites by Alley.",
-  "type": "library",
+  "type": "wordpress-plugin",
   "license": "GPL-2.0-or-later",
   "authors": [
     {
@@ -9,22 +9,18 @@
       "email": "info@alley.com"
     }
   ],
-  "autoload": {
-    "files": [
-      "src/alley/wp/index.php",
-      "src/alley/wp/alleyvate/load.php"
-    ]
-  },
   "config": {
     "allow-plugins": {
       "alleyinteractive/composer-wordpress-autoloader": true,
+      "composer/installers": true,
       "dealerdirect/phpcodesniffer-composer-installer": true
     },
     "lock": false
   },
   "require": {
     "php": "^8.0",
-    "alleyinteractive/composer-wordpress-autoloader": "^v1.0"
+    "alleyinteractive/composer-wordpress-autoloader": "^1.0",
+    "composer/installers": "^1.0"
   },
   "require-dev": {
     "alleyinteractive/alley-coding-standards": "^1.0",
