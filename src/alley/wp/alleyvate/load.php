@@ -22,6 +22,7 @@ function load(): void {
 	 * @var Feature[] $features
 	 */
 	$features = [
+		'dashboard_widget_removal'      => new Features\Dashboard_Widget_Removal(),
 		'redirect_guess_shortcircuit'   => new Features\Redirect_Guess_Shortcircuit(),
 		'user_enumeration_restrictions' => new Features\User_Enumeration_Restrictions(),
 	];
