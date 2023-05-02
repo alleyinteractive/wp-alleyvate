@@ -44,7 +44,7 @@ final class Test_Dashboard_Widget_Removal extends Test_Case {
 	 *
 	 * @param string $screen The ID of the WP_Screen to load.
 	 */
-	protected function loadAdminScreen( string $screen ): void {
+	protected function load_admin_screen( string $screen ): void {
 		// Create the administrator.
 		$user = $this->factory->user->create(
 			[
@@ -64,7 +64,7 @@ final class Test_Dashboard_Widget_Removal extends Test_Case {
 	 */
 	public function test_dashboard_widget_removal() {
 
-		$this->loadAdminScreen( 'dashboard' );
+		$this->load_admin_screen( 'dashboard' );
 
 		global $wp_meta_boxes; // <--- how do i access this?
 
