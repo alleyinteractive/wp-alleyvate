@@ -46,9 +46,11 @@ final class Test_Dashboard_Widget_Removal extends Test_Case {
 	 */
 	protected function loadAdminScreen( string $screen ): void {
 		// Create the administrator.
-		$user = $this->factory->user->create( [
-			'role' => 'administrator',
-		] );
+		$user = $this->factory->user->create(
+			[
+				'role' => 'administrator',
+			]
+		);
 
 		// Set the currently logged in User.
 		\wp_set_current_user( $user );
@@ -64,62 +66,34 @@ final class Test_Dashboard_Widget_Removal extends Test_Case {
 
 		$this->loadAdminScreen( 'dashboard' );
 
-		//global $wp_meta_boxes;
+		global $wp_meta_boxes; // <--- how do i access this?
 
-		$xwp_meta_boxes = [
-			'dashboard' => [
-				'side' => [
-					'core' => [
-						'dashboard_primary' => [
-							'id'       => 'dashboard_site_health',
-							'title'    => 'Site Health Status',
-							'callback' => 'wp_dashboard_site_health',
-							'args'     => [
-								'__widget_basename' => 'Site Health Status',
-							]
-						]
-					]
-				]
-			]
-		];
-
+		$array_keys = $this->array_keys_r( $wp_meta_boxes );
 
 		foreach ( $this->feature->get_widgets() as $widget ) {
-			$this->assertArrayHasKey(
-				$widget['context'],
-				$xwp_meta_boxes['dashboard'],
+			$this->assertNotContains(
+				$widget['id'],
+				$array_keys,
 				$widget['id'] . ' was not removed from dashboard widgets.'
 			);
-//			$this->assertArrayHasKey(
-//				$widget['priority'],
-//				$xwp_meta_boxes['dashboard'][$widget['context']],
-//				$widget['id'] . ' was not removed from dashboard widgets.'
-//			);
-//			$this->assertArrayHasKey(
-//				$widget['id'],
-//				$xwp_meta_boxes['dashboard'][$widget['context']][$widget['priority']],
-//				$widget['id'] . ' was not removed from dashboard widgets.'
-//			);
+		}
+	}
 
-
-
+	/**
+	 * Helper function for getting all array keys, recursively.
+	 *
+	 * @param array $array Array to recursively parse.
+	 *
+	 * @return array
+	 */
+	protected function array_keys_r( array $array ): array {
+		$keys = array_keys( $array );
+		foreach ( $array as $i ) {
+			if ( is_array( $i ) ) {
+				$keys = array_merge( $keys, $this->array_keys_r( $i ) );
+			}
 		}
 
-
-
-
-//			$this->assertNotContains(
-//				[
-//					$widget['context'][$widget['priority'] => [
-//							$widget['id']
-//						]
-//					],
-//				],
-//				$xwp_meta_boxes['dashboard'],
-//				$widget['id'] . ' was not removed from dashboard widgets.' );
-//		}
-
-
-
+		return $keys;
 	}
 }

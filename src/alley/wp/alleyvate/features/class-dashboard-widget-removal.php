@@ -18,12 +18,6 @@ use Alley\WP\Alleyvate\Feature;
  * Disable selected unpopular dashboard widgets.
  */
 final class Dashboard_Widget_Removal implements Feature {
-	/**
-	 * @var \string[][]
-	 */
-	private array $widgets;
-
-
 
 	/**
 	 * Boot the feature.
@@ -39,14 +33,17 @@ final class Dashboard_Widget_Removal implements Feature {
 	 */
 	public function dashboard_widget_removal() {
 		global $wp_meta_boxes;
-print_r($wp_meta_boxes);
-
 
 		foreach ( $this->get_widgets as $widget ) {
 			unset( $wp_meta_boxes['dashboard'][ $widget['context'] ][ $widget['priority'] ][ $widget['id'] ] );
 		}
 	}
 
+	/**
+	 * Getter for widgets to be removed.
+	 *
+	 * @return string[][]
+	 */
 	public function get_widgets() {
 		return [
 			[
