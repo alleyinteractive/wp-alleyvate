@@ -29,6 +29,11 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require_once __DIR__ . '/vendor/autoload.php';
 }
 
+// Bail if the Composer dependencies aren't loaded to prevent a fatal.
+if ( ! function_exists( 'Alley\WP\Alleyvate\load' ) ) {
+	return;
+}
+
 // Load the feature loader.
 require_once __DIR__ . '/src/alley/wp/alleyvate/load.php';
 
