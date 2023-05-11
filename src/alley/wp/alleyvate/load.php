@@ -22,6 +22,7 @@ function load(): void {
 	 * @var Feature[] $features
 	 */
 	$features = [
+		'disallow_file_edit'            => new Features\disallow_file_edit(),
 		'redirect_guess_shortcircuit'   => new Features\Redirect_Guess_Shortcircuit(),
 		'user_enumeration_restrictions' => new Features\User_Enumeration_Restrictions(),
 	];
