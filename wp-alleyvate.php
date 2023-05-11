@@ -30,7 +30,7 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 }
 
 // Bail if the Composer dependencies aren't loaded to prevent a fatal.
-if ( ! function_exists( 'Alley\WP\Alleyvate\load' ) ) {
+if ( ! class_exists( \Composer\InstalledVersions::class ) ) {
 	return;
 }
 
