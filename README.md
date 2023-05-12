@@ -16,6 +16,12 @@ Alleyvate is a collection of distinct features, each of which is enabled by defa
 
 ## Features
 
+### Disallow File Edit
+
+This feature prevents the editing of themes and plugins directly from the admin.
+
+Such editing can introduce unexpected and undocumented code changes.
+
 ### Short-Circuit Redirect Guessing
 
 This feature stops WordPress from attempting to guess a redirect URL for a 404 request. Its handle is `redirect_guess_shortcircuit`.
