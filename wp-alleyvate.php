@@ -27,9 +27,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Load Composer dependencies.
 if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require_once __DIR__ . '/vendor/autoload.php';
-} elseif ( ! class_exists( \Alley\WP\Alleyvate\Features\Redirect_Guess_Shortcircuit::class ) ) {
-	// Bail if the Composer dependencies aren't loaded to prevent a fatal.
-	return;
 }
 
 // Load the feature loader.

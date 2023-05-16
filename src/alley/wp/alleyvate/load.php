@@ -16,6 +16,11 @@ namespace Alley\WP\Alleyvate;
  * Load plugin features.
  */
 function load(): void {
+	// Bail if the Alleyvate feature interface isn't loaded to prevent a fatal error.
+	if ( ! class_exists( Feature::class ) ) {
+		return;
+	}
+
 	/**
 	 * Features to load.
 	 *
