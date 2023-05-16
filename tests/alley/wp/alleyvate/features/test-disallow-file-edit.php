@@ -40,7 +40,7 @@ final class Test_Disallow_File_Edit extends Test_Case {
 	 */
 	public function test_no_file_editing() {
 		$this->feature->boot();
-		$this->assertTrue( defined( 'DISALLOW_FILE_EDIT' ), );
+		$this->assertTrue( \defined( 'DISALLOW_FILE_EDIT' ), );
 		$this->assertTrue( DISALLOW_FILE_EDIT );
 	}
 }

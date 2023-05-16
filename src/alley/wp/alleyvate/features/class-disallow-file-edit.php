@@ -22,8 +22,8 @@ final class Disallow_File_Edit implements Feature {
 	 * Boot the feature.
 	 */
 	public function boot(): void {
-		if ( ! defined( 'DISALLOW_FILE_EDIT' ) ) {
-			define( 'DISALLOW_FILE_EDIT', \true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound
+		if ( ! \defined( 'DISALLOW_FILE_EDIT' ) ) {
+			\define( 'DISALLOW_FILE_EDIT', true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound
 		}
 	}
 }
