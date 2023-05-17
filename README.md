@@ -16,6 +16,11 @@ Alleyvate is a collection of distinct features, each of which is enabled by defa
 
 ## Features
 
+### Remove Dashboard Widgets
+
+This feature removes clutter from the dashboard. Its handle is `dashboard_widget_removal`.
+
+
 ### Short-Circuit Redirect Guessing
 
 This feature stops WordPress from attempting to guess a redirect URL for a 404 request. Its handle is `redirect_guess_shortcircuit`.
