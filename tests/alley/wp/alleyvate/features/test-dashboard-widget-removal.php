@@ -50,8 +50,8 @@ final class Test_Dashboard_Widget_Removal extends Test_Case {
 		require_once ABSPATH . 'wp-admin/includes/dashboard.php';
 
 		$this->feature->boot();
-		\set_current_screen( 'dashboard' );
-		\wp_dashboard_setup();
+		set_current_screen( 'dashboard' );
+		wp_dashboard_setup();
 
 		global $wp_meta_boxes;
 
@@ -76,7 +76,7 @@ final class Test_Dashboard_Widget_Removal extends Test_Case {
 	protected function array_keys_r( array $array ): array {
 		$keys = array_keys( $array );
 		foreach ( $array as $i ) {
-			if ( is_array( $i ) ) {
+			if ( \is_array( $i ) ) {
 				$keys = array_merge( $keys, $this->array_keys_r( $i ) );
 			}
 		}
