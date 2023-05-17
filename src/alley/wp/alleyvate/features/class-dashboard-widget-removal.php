@@ -23,7 +23,7 @@ final class Dashboard_Widget_Removal implements Feature {
 	 * Boot the feature.
 	 */
 	public function boot(): void {
-		add_action( 'wp_dashboard_setup', [ $this, 'dashboard_widget_removal' ] );
+		add_action( 'wp_dashboard_setup', [ $this, 'remove_dashboard_widgets' ] );
 	}
 
 	/**
@@ -31,10 +31,10 @@ final class Dashboard_Widget_Removal implements Feature {
 	 *
 	 * @return void
 	 */
-	public function dashboard_widget_removal() {
+	public function remove_dashboard_widgets() {
 		global $wp_meta_boxes;
 
-		foreach ( $this->get_widgets as $widget ) {
+		foreach ( $this->get_widgets() as $widget ) {
 			unset( $wp_meta_boxes['dashboard'][ $widget['context'] ][ $widget['priority'] ][ $widget['id'] ] );
 		}
 	}

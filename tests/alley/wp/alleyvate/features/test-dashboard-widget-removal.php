@@ -40,33 +40,20 @@ final class Test_Dashboard_Widget_Removal extends Test_Case {
 	}
 
 	/**
-	 * Load an admin screen as an administrator.
-	 *
-	 * @param string $screen The ID of the WP_Screen to load.
+	 * Test that widgets have been removed.
 	 */
-	protected function load_admin_screen( string $screen ): void {
-		// Create the administrator.
-		$user = $this->factory->user->create(
-			[
-				'role' => 'administrator',
-			]
-		);
+	public function test_remove_dashboard_widgets() {
 
-		// Set the currently logged in User.
-		\wp_set_current_user( $user );
+		// Load files required to get wp_meta_boxes global.
+		require_once ABSPATH . 'wp-admin/includes/misc.php';
+		require_once ABSPATH . 'wp-admin/includes/template.php';
+		require_once ABSPATH . 'wp-admin/includes/dashboard.php';
 
-		// Set the admin screen to active.
-		\set_current_screen( $screen );
-	}
+		$this->feature->boot();
+		\set_current_screen( 'dashboard' );
+		\wp_dashboard_setup();
 
-	/**
-	 * Test.
-	 */
-	public function test_dashboard_widget_removal() {
-
-		$this->load_admin_screen( 'dashboard' );
-
-		global $wp_meta_boxes; // <--- how do i access this?
+		global $wp_meta_boxes;
 
 		$array_keys = $this->array_keys_r( $wp_meta_boxes );
 
