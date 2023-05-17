@@ -18,7 +18,7 @@ Alleyvate is a collection of distinct features, each of which is enabled by defa
 
 ### Disallow File Edit
 
-This feature prevents the editing of themes and plugins directly from the admin.
+This feature prevents the editing of themes and plugins directly from the admin.  Its handle is `disable_file_edit`.
 
 Such editing can introduce unexpected and undocumented code changes.
 
