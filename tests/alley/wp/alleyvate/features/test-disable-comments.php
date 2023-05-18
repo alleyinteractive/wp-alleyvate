@@ -19,6 +19,8 @@ use Mantle\Testkit\Test_Case;
  * Tests for fully disabling comment functionality.
  */
 final class Test_Disable_Comments extends Test_Case {
+	use \Mantle\Testing\Concerns\Admin_Screen;
+
 	/**
 	 * Feature instance.
 	 *
@@ -75,6 +77,32 @@ final class Test_Disable_Comments extends Test_Case {
 
 		// Turn on comment flood checking again.
 		remove_filter( 'wp_is_comment_flood', '__return_false', \PHP_INT_MAX );
+	}
+
+	/**
+	 * Test that the Comments menu item is removed from the primary admin menu on the left.
+	 */
+	public function test_remove_comments_from_admin_menu(): void {
+		// Reset admin menus.
+		/* phpcs:disable WordPress.WP.GlobalVariablesOverride.Prohibited */
+		global $menu, $submenu;
+		$menu    = [];
+		$submenu = [];
+		/* phpcs:enable */
+
+		// Become admin and load the admin menu to build the $menu global.
+		$this->acting_as( 'administrator' );
+		require ABSPATH . 'wp-admin/includes/plugin.php';
+		require ABSPATH . 'wp-admin/menu.php';
+
+		// Ensure comments are in the menu before activating the feature.
+		$this->assertNotEmpty( array_filter( $menu, fn( $item ) => 'edit-comments.php' === $item[2] ) );
+
+		// Removing post type support happens on 'admin_menu', which has already occurred, so we need to call the callback directly.
+		$this->feature::action__admin_menu();
+
+		// Ensure comments have been removed from the menu.
+		$this->assertEmpty( array_filter( $menu, fn( $item ) => 'edit-comments.php' === $item[2] ) );
 	}
 
 	/**
