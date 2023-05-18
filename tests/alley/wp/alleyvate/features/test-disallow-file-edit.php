@@ -38,9 +38,10 @@ final class Test_Disallow_File_Edit extends Test_Case {
 	/**
 	 * Test that the feature disallows file editing.
 	 */
-	public function test_no_file_editing() {
+	public function test_disallow_file_editing() {
+		$this->assertFalse( \defined( 'DISALLOW_FILE_EDIT' ), 'DISALLOW_FILE_EDIT should not be defined prior to boot.' );
 		$this->feature->boot();
-		$this->assertTrue( \defined( 'DISALLOW_FILE_EDIT' ), );
+		$this->assertTrue( \defined( 'DISALLOW_FILE_EDIT' ), 'DISALLOW_FILE_EDIT should be defined after boot.' );
 		$this->assertTrue( DISALLOW_FILE_EDIT );
 	}
 }
