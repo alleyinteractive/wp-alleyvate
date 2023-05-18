@@ -19,9 +19,21 @@ use Alley\WP\Alleyvate\Feature;
  */
 final class Disable_Comments implements Feature {
 	/**
+	 * A callback for the init action hook.
+	 */
+	public static function action__init(): void {
+		foreach ( get_post_types() as $post_type ) {
+			if ( post_type_supports( $post_type, 'comments' ) ) {
+				remove_post_type_support( $post_type, 'comments' );
+			}
+		}
+	}
+
+	/**
 	 * Boot the feature.
 	 */
 	public function boot(): void {
+		add_action( 'init', [ self::class, 'action__init' ], PHP_INT_MAX );
 		add_filter( 'comments_open', '__return_false', PHP_INT_MAX );
 	}
 }

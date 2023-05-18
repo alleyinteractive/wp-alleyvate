@@ -36,9 +36,9 @@ final class Test_Disable_Comments extends Test_Case {
 	}
 
 	/**
-	 * Test that the feature disables comments when active.
+	 * Test that the feature prevents posting new comments.
 	 */
-	public function test_feature_disable_comments() {
+	public function test_prevent_comment_posting(): void {
 		$post_id = self::factory()->post->create();
 
 		// Turn off comment flood checking in order to run this test.
@@ -75,5 +75,19 @@ final class Test_Disable_Comments extends Test_Case {
 
 		// Turn on comment flood checking again.
 		remove_filter( 'wp_is_comment_flood', '__return_false', PHP_INT_MAX );
+	}
+
+	/**
+	 * Test that the feature removes post type support for comments.
+	 */
+	public function test_remove_post_type_support(): void {
+		// Ensure that the default is to enable comments on the 'post' post type.
+		$this->assertTrue( post_type_supports( 'post', 'comments' ) );
+
+		// Removing post type support happens on 'init', which has already occurred, so we need to call the callback directly.
+		$this->feature::action__init();
+
+		// Ensure that the 'post' post type no longer supports comments.
+		$this->assertFalse( post_type_supports( 'post', 'comments' ) );
 	}
 }
