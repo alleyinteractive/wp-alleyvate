@@ -33,8 +33,8 @@ final class Disable_Comments implements Feature {
 	 * Boot the feature.
 	 */
 	public function boot(): void {
-		add_action( 'init', [ self::class, 'action__init' ], PHP_INT_MAX );
-		add_filter( 'comments_open', '__return_false', PHP_INT_MAX );
-		add_filter( 'comments_pre_query', '__return_empty_array', PHP_INT_MAX );
+		add_action( 'init', [ self::class, 'action__init' ], \PHP_INT_MAX );
+		add_filter( 'comments_open', '__return_false', \PHP_INT_MAX );
+		add_filter( 'comments_pre_query', '__return_empty_array', \PHP_INT_MAX );
 	}
 }

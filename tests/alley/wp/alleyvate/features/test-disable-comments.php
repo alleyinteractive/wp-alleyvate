@@ -42,7 +42,7 @@ final class Test_Disable_Comments extends Test_Case {
 		$post_id = self::factory()->post->create();
 
 		// Turn off comment flood checking in order to run this test.
-		add_filter( 'wp_is_comment_flood', '__return_false', PHP_INT_MAX );
+		add_filter( 'wp_is_comment_flood', '__return_false', \PHP_INT_MAX );
 
 		// Post a comment on the post and ensure that it posts correctly.
 		$result_pre = wp_handle_comment_submission(
@@ -74,7 +74,7 @@ final class Test_Disable_Comments extends Test_Case {
 		$this->assertTrue( is_wp_error( $result_post ) );
 
 		// Turn on comment flood checking again.
-		remove_filter( 'wp_is_comment_flood', '__return_false', PHP_INT_MAX );
+		remove_filter( 'wp_is_comment_flood', '__return_false', \PHP_INT_MAX );
 	}
 
 	/**
