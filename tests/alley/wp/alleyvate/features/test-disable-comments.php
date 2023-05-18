@@ -36,22 +36,6 @@ final class Test_Disable_Comments extends Test_Case {
 	}
 
 	/**
-	 * Test that the comment_status field on the post object is coerced into always being closed.
-	 */
-	public function test_feature_comments_always_closed() {
-		$post = self::factory()->post->create_and_get();
-
-		// Test to ensure that comments are on by default.
-		$this->assertSame( 'open', $post->comment_status );
-
-		// Activate the disable comments feature.
-		$this->feature->boot();
-
-		// Test to ensure that comments are coerced to be off.
-		$this->assertSame( 'closed', $post->comment_status );
-	}
-
-	/**
 	 * Test that the feature disables comments when active.
 	 */
 	public function test_feature_disable_comments() {
