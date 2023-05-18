@@ -29,6 +29,7 @@ function load(): void {
 	$features = [
 		'redirect_guess_shortcircuit'   => new Features\Redirect_Guess_Shortcircuit(),
 		'user_enumeration_restrictions' => new Features\User_Enumeration_Restrictions(),
+		'disable_comments'              => new Features\Disable_Comments(),
 	];
 
 	foreach ( $features as $handle => $feature ) {
