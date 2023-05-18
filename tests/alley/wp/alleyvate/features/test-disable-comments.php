@@ -32,7 +32,7 @@ final class Test_Disable_Comments extends Test_Case {
 	protected function setUp(): void {
 		parent::setUp();
 
-		// $this->feature = new Disable_Comments();
+		$this->feature = new Disable_Comments();
 	}
 
 	/**
@@ -57,8 +57,8 @@ final class Test_Disable_Comments extends Test_Case {
 		);
 		$this->assertFalse( is_wp_error( $result_pre ) );
 
-		// TODO: Activate.
-		// $this->feature->boot();
+		// Activate the disable comments feature.
+		$this->feature->boot();
 
 		// Try again, and this time it should fail to insert.
 		$result_post = wp_handle_comment_submission(

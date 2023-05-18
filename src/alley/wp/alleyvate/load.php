@@ -27,6 +27,7 @@ function load(): void {
 	 * @var Feature[] $features
 	 */
 	$features = [
+		'disable_comments'              => new Features\Disable_Comments(),
 		'redirect_guess_shortcircuit'   => new Features\Redirect_Guess_Shortcircuit(),
 		'user_enumeration_restrictions' => new Features\User_Enumeration_Restrictions(),
 	];
