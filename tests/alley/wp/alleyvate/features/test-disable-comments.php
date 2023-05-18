@@ -90,4 +90,25 @@ final class Test_Disable_Comments extends Test_Case {
 		// Ensure that the 'post' post type no longer supports comments.
 		$this->assertFalse( post_type_supports( 'post', 'comments' ) );
 	}
+
+	/**
+	 * Test that the feature suppresses being able to fetch comments for posts altogether.
+	 */
+	public function test_suppress_comment_fetch(): void {
+		// Make a post and give it a comment, then ensure the comment is returned.
+		$post_id = self::factory()->post->create();
+		wp_insert_comment(
+			[
+				'comment_post_ID' => $post_id,
+				'comment_content' => 'Lorem ipsum dolor sit amet.',
+			]
+		);
+		$this->assertNotEmpty( get_comments( [ 'post_id' => $post_id ] ) );
+
+		// Activate the disable comments feature.
+		$this->feature->boot();
+
+		// Ensure comments are suppressed.
+		$this->assertEmpty( get_comments( [ 'post_id' => $post_id ] ) );
+	}
 }
