@@ -28,6 +28,18 @@ final class Disable_Comments implements Feature {
 	}
 
 	/**
+	 * A callback for the admin_init action hook.
+	 */
+	public static function action__admin_init(): void {
+		global $pagenow;
+
+		if ( 'edit-comments.php' === $pagenow ) {
+			wp_safe_redirect( admin_url() );
+			exit;
+		}
+	}
+
+	/**
 	 * A callback for the admin_menu action hook.
 	 */
 	public static function action__admin_menu(): void {
@@ -50,6 +62,7 @@ final class Disable_Comments implements Feature {
 	 */
 	public function boot(): void {
 		add_action( 'admin_bar_menu', [ self::class, 'action__admin_bar_menu' ], \PHP_INT_MAX );
+		add_action( 'admin_init', [ self::class, 'action__admin_init' ], \PHP_INT_MIN );
 		add_action( 'admin_menu', [ self::class, 'action__admin_menu' ], \PHP_INT_MAX );
 		add_action( 'init', [ self::class, 'action__init' ], \PHP_INT_MAX );
 		add_filter( 'comments_open', '__return_false', \PHP_INT_MAX );
