@@ -19,6 +19,15 @@ use Alley\WP\Alleyvate\Feature;
  */
 final class Disable_Comments implements Feature {
 	/**
+	 * A callback for the admin_bar_menu action hook.
+	 *
+	 * @param \WP_Admin_Bar $wp_admin_bar An instance of the WP_Admin_Bar class.
+	 */
+	public static function action__admin_bar_menu( \WP_Admin_Bar $wp_admin_bar ): void {
+		$wp_admin_bar->remove_node( 'comments' );
+	}
+
+	/**
 	 * A callback for the admin_menu action hook.
 	 */
 	public static function action__admin_menu(): void {
@@ -40,6 +49,7 @@ final class Disable_Comments implements Feature {
 	 * Boot the feature.
 	 */
 	public function boot(): void {
+		add_action( 'admin_bar_menu', [ self::class, 'action__admin_bar_menu' ], \PHP_INT_MAX );
 		add_action( 'admin_menu', [ self::class, 'action__admin_menu' ], \PHP_INT_MAX );
 		add_action( 'init', [ self::class, 'action__init' ], \PHP_INT_MAX );
 		add_filter( 'comments_open', '__return_false', \PHP_INT_MAX );

@@ -80,9 +80,9 @@ final class Test_Disable_Comments extends Test_Case {
 	}
 
 	/**
-	 * Test that the Comments menu item is removed from the primary admin menu on the left.
+	 * Test that the Comments menu item is removed from the primary admin menu on the left and the admin bar.
 	 */
-	public function test_remove_comments_from_admin_menu(): void {
+	public function test_remove_comments_from_admin_menus(): void {
 		// Reset admin menus.
 		/* phpcs:disable WordPress.WP.GlobalVariablesOverride.Prohibited */
 		global $menu, $submenu;
@@ -98,11 +98,23 @@ final class Test_Disable_Comments extends Test_Case {
 		// Ensure comments are in the menu before activating the feature.
 		$this->assertNotEmpty( array_filter( $menu, fn( $item ) => 'edit-comments.php' === $item[2] ) );
 
-		// Removing post type support happens on 'admin_menu', which has already occurred, so we need to call the callback directly.
+		// Removing the menu item happens on 'admin_menu', which has already occurred, so we need to call the callback directly.
 		$this->feature::action__admin_menu();
 
 		// Ensure comments have been removed from the menu.
 		$this->assertEmpty( array_filter( $menu, fn( $item ) => 'edit-comments.php' === $item[2] ) );
+
+		// Build the admin bar menu and ensure comments are in it by default.
+		$this->get( admin_url() );
+		global $wp_admin_bar;
+		do_action( 'admin_bar_menu', $wp_admin_bar ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+		$this->assertNotEmpty( $wp_admin_bar->get_node( 'comments' ) );
+
+		// Removing the menu item happens on 'admin_bar_menu', which has already occurred, so we need to call the callback directly.
+		$this->feature::action__admin_bar_menu( $wp_admin_bar );
+
+		// Ensure the comments node was removed from the admin bar.
+		$this->assertEmpty( $wp_admin_bar->get_node( 'comments' ) );
 	}
 
 	/**
