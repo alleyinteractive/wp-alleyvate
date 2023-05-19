@@ -38,6 +38,41 @@ final class Test_Disable_Comments extends Test_Case {
 	}
 
 	/**
+	 * Test that the feature prevents fetching a count of comments via the get_comments function.
+	 */
+	public function test_get_comments_count_returns_empty(): void {
+		$post_id = self::factory()->post->create();
+		wp_insert_comment(
+			[
+				'comment_post_ID' => $post_id,
+				'comment_content' => 'Lorem ipsum dolor sit amet.',
+			]
+		);
+		$this->assertSame(
+			1,
+			get_comments(
+				[
+					'post_id' => $post_id,
+					'count'   => true,
+				] 
+			) 
+		);
+
+		// Activate the disable comments feature.
+		$this->feature->boot();
+
+		$this->assertSame(
+			0,
+			get_comments(
+				[
+					'post_id' => $post_id,
+					'count'   => true,
+				] 
+			) 
+		);
+	}
+
+	/**
 	 * Test that the feature prevents posting new comments.
 	 */
 	public function test_prevent_comment_posting(): void {

@@ -58,6 +58,16 @@ final class Disable_Comments implements Feature {
 	}
 
 	/**
+	 * A callback for the comments_pre_query filter hook.
+	 *
+	 * @param array|int|null    $comment_data  Not used.
+	 * @param \WP_Comment_Query $comment_query The comment query object to filter results for.
+	 */
+	public static function filter__comments_pre_query( $comment_data, \WP_Comment_Query $comment_query ) {
+		return $comment_query->query_vars['count'] ? 0 : [];
+	}
+
+	/**
 	 * Boot the feature.
 	 */
 	public function boot(): void {
@@ -66,6 +76,6 @@ final class Disable_Comments implements Feature {
 		add_action( 'admin_menu', [ self::class, 'action__admin_menu' ], \PHP_INT_MAX );
 		add_action( 'init', [ self::class, 'action__init' ], \PHP_INT_MAX );
 		add_filter( 'comments_open', '__return_false', \PHP_INT_MAX );
-		add_filter( 'comments_pre_query', '__return_empty_array', \PHP_INT_MAX );
+		add_filter( 'comments_pre_query', [ self::class, 'filter__comments_pre_query' ], \PHP_INT_MAX, 2 );
 	}
 }
