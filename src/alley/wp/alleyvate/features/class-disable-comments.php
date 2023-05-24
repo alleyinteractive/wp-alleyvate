@@ -68,6 +68,23 @@ final class Disable_Comments implements Feature {
 	}
 
 	/**
+	 * A callback for the comments_pre_query filter hook.
+	 *
+	 * @param array $rules Rewrite rules to be filtered.
+	 *
+	 * @return array Filtered rewrite rules.
+	 */
+	public static function filter__rewrite_rules_array( array $rules ): array {
+		foreach ( array_keys( $rules ) as $regex ) {
+			if ( str_contains( $regex, 'comment-page-' ) ) {
+				unset( $rules[ $regex ] );
+			}
+		}
+
+		return $rules;
+	}
+
+	/**
 	 * Boot the feature.
 	 */
 	public function boot(): void {
@@ -77,6 +94,8 @@ final class Disable_Comments implements Feature {
 		add_action( 'init', [ self::class, 'action__init' ], \PHP_INT_MAX );
 		add_filter( 'comments_open', '__return_false', \PHP_INT_MAX );
 		add_filter( 'comments_pre_query', [ self::class, 'filter__comments_pre_query' ], \PHP_INT_MAX, 2 );
+		add_filter( 'comments_rewrite_rules', '__return_empty_array', \PHP_INT_MAX );
 		add_filter( 'get_comments_number', '__return_zero', \PHP_INT_MAX );
+		add_filter( 'rewrite_rules_array', [ self::class, 'filter__rewrite_rules_array' ], \PHP_INT_MAX );
 	}
 }

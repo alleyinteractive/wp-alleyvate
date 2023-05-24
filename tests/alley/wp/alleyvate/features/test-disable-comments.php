@@ -174,6 +174,78 @@ final class Test_Disable_Comments extends Test_Case {
 	}
 
 	/**
+	 * Test that the feature removes rewrite rules related to comments.
+	 */
+	public function test_remove_rewrite_rules(): void {
+		// Ensure comments rewrite rules exist before activating the feature.
+		$rewrite_rules = get_option( 'rewrite_rules' );
+		$this->assertSame(
+			'index.php?&feed=$matches[1]&withcomments=1',
+			$rewrite_rules['comments/feed/(feed|rdf|rss|rss2|atom)/?$']
+		);
+		$this->assertSame(
+			'index.php?&feed=$matches[1]&withcomments=1',
+			$rewrite_rules['comments/(feed|rdf|rss|rss2|atom)/?$']
+		);
+		$this->assertSame(
+			'index.php?&embed=true',
+			$rewrite_rules['comments/embed/?$']
+		);
+		$this->assertSame(
+			'index.php?attachment=$matches[1]&cpage=$matches[2]',
+			$rewrite_rules['[0-9]{4}/[0-9]{1,2}/[0-9]{1,2}/[^/]+/attachment/([^/]+)/comment-page-([0-9]{1,})/?$']
+		);
+		$this->assertSame(
+			'index.php?year=$matches[1]&monthnum=$matches[2]&day=$matches[3]&name=$matches[4]&cpage=$matches[5]',
+			$rewrite_rules['([0-9]{4})/([0-9]{1,2})/([0-9]{1,2})/([^/]+)/comment-page-([0-9]{1,})/?$']
+		);
+		$this->assertSame(
+			'index.php?attachment=$matches[1]&cpage=$matches[2]',
+			$rewrite_rules['[0-9]{4}/[0-9]{1,2}/[0-9]{1,2}/[^/]+/([^/]+)/comment-page-([0-9]{1,})/?$']
+		);
+		$this->assertSame(
+			'index.php?year=$matches[1]&monthnum=$matches[2]&day=$matches[3]&cpage=$matches[4]',
+			$rewrite_rules['([0-9]{4})/([0-9]{1,2})/([0-9]{1,2})/comment-page-([0-9]{1,})/?$']
+		);
+		$this->assertSame(
+			'index.php?year=$matches[1]&monthnum=$matches[2]&cpage=$matches[3]',
+			$rewrite_rules['([0-9]{4})/([0-9]{1,2})/comment-page-([0-9]{1,})/?$']
+		);
+		$this->assertSame(
+			'index.php?year=$matches[1]&cpage=$matches[2]',
+			$rewrite_rules['([0-9]{4})/comment-page-([0-9]{1,})/?$']
+		);
+		$this->assertSame(
+			'index.php?attachment=$matches[1]&cpage=$matches[2]',
+			$rewrite_rules['.?.+?/attachment/([^/]+)/comment-page-([0-9]{1,})/?$']
+		);
+		$this->assertSame(
+			'index.php?pagename=$matches[1]&cpage=$matches[2]',
+			$rewrite_rules['(.?.+?)/comment-page-([0-9]{1,})/?$']
+		);
+
+		// Activate feature.
+		$this->feature->boot();
+
+		// Flush the rewrite rules and load in our changes.
+		flush_rewrite_rules( false ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.flush_rewrite_rules_flush_rewrite_rules
+		$rewrite_rules = get_option( 'rewrite_rules' );
+
+		// Ensure rewrite rules have been removed.
+		$this->assertArrayNotHasKey( 'comments/feed/(feed|rdf|rss|rss2|atom)/?$', $rewrite_rules );
+		$this->assertArrayNotHasKey( 'comments/(feed|rdf|rss|rss2|atom)/?$', $rewrite_rules );
+		$this->assertArrayNotHasKey( 'comments/embed/?$', $rewrite_rules );
+		$this->assertArrayNotHasKey( '[0-9]{4}/[0-9]{1,2}/[0-9]{1,2}/[^/]+/attachment/([^/]+)/comment-page-([0-9]{1,})/?$', $rewrite_rules );
+		$this->assertArrayNotHasKey( '([0-9]{4})/([0-9]{1,2})/([0-9]{1,2})/([^/]+)/comment-page-([0-9]{1,})/?$', $rewrite_rules );
+		$this->assertArrayNotHasKey( '[0-9]{4}/[0-9]{1,2}/[0-9]{1,2}/[^/]+/([^/]+)/comment-page-([0-9]{1,})/?$', $rewrite_rules );
+		$this->assertArrayNotHasKey( '([0-9]{4})/([0-9]{1,2})/([0-9]{1,2})/comment-page-([0-9]{1,})/?$', $rewrite_rules );
+		$this->assertArrayNotHasKey( '([0-9]{4})/([0-9]{1,2})/comment-page-([0-9]{1,})/?$', $rewrite_rules );
+		$this->assertArrayNotHasKey( '([0-9]{4})/comment-page-([0-9]{1,})/?$', $rewrite_rules );
+		$this->assertArrayNotHasKey( '.?.+?/attachment/([^/]+)/comment-page-([0-9]{1,})/?$', $rewrite_rules );
+		$this->assertArrayNotHasKey( '(.?.+?)/comment-page-([0-9]{1,})/?$', $rewrite_rules );
+	}
+
+	/**
 	 * Test that the feature suppresses being able to fetch comments for posts altogether.
 	 */
 	public function test_suppress_comment_fetch(): void {
