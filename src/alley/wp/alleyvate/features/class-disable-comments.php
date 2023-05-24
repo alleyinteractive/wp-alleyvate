@@ -19,6 +19,16 @@ use Alley\WP\Alleyvate\Feature;
  */
 final class Disable_Comments implements Feature {
 	/**
+	 * A callback for the action_add_meta_boxes action hook.
+	 *
+	 * @param string $post_type The post type that metaboxes are being registered for.
+	 */
+	public static function action__add_meta_boxes( string $post_type ): void {
+		remove_meta_box( 'commentsdiv', $post_type, 'normal' );
+		remove_meta_box( 'commentstatusdiv', $post_type, 'normal' );
+	}
+
+	/**
 	 * A callback for the admin_bar_menu action hook.
 	 *
 	 * @param \WP_Admin_Bar $wp_admin_bar An instance of the WP_Admin_Bar class.
@@ -121,6 +131,7 @@ final class Disable_Comments implements Feature {
 	 * Boot the feature.
 	 */
 	public function boot(): void {
+		add_action( 'add_meta_boxes', [ self::class, 'action__add_meta_boxes' ], \PHP_INT_MAX );
 		add_action( 'admin_bar_menu', [ self::class, 'action__admin_bar_menu' ], \PHP_INT_MAX );
 		add_action( 'admin_init', [ self::class, 'action__admin_init' ], \PHP_INT_MIN );
 		add_action( 'admin_menu', [ self::class, 'action__admin_menu' ], \PHP_INT_MAX );

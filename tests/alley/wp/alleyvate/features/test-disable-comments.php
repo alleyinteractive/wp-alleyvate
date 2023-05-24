@@ -160,6 +160,34 @@ final class Test_Disable_Comments extends Test_Case {
 	}
 
 	/**
+	 * Test that the comments metaboxes are removed.
+	 */
+	public function test_remove_metaboxes(): void {
+		$post = self::factory()->post->create_and_get();
+
+		// Load files required to get $wp_meta_boxes global.
+		require_once ABSPATH . 'wp-admin/includes/misc.php';
+		require_once ABSPATH . 'wp-admin/includes/template.php';
+		require_once ABSPATH . 'wp-admin/includes/theme.php';
+		require_once ABSPATH . 'wp-admin/includes/meta-boxes.php';
+
+		// Setup metaboxes global and confirm comments are in it.
+		set_current_screen( 'post' );
+		register_and_do_post_meta_boxes( $post );
+		global $wp_meta_boxes;
+		$this->assertNotEmpty( $wp_meta_boxes['post']['normal']['core']['commentsdiv'] );
+		$this->assertNotEmpty( $wp_meta_boxes['post']['normal']['core']['commentstatusdiv'] );
+
+		// Activate feature.
+		$this->feature->boot();
+
+		// Confirm metaboxes are removed.
+		register_and_do_post_meta_boxes( $post );
+		$this->assertFalse( $wp_meta_boxes['post']['normal']['core']['commentsdiv'] );
+		$this->assertFalse( $wp_meta_boxes['post']['normal']['core']['commentstatusdiv'] );
+	}
+
+	/**
 	 * Test that the feature removes post type support for comments.
 	 */
 	public function test_remove_post_type_support(): void {
