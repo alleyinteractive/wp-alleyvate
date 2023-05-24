@@ -38,6 +38,16 @@ final class Test_Disable_Comments extends Test_Case {
 	}
 
 	/**
+	 * Tear down.
+	 */
+	protected function tearDown(): void {
+		parent::tearDown();
+
+		// Turn on comment flood checking again.
+		remove_filter( 'wp_is_comment_flood', '__return_false', \PHP_INT_MAX );
+	}
+
+	/**
 	 * Test that the feature prevents fetching a count of comments via the get_comments function.
 	 */
 	public function test_get_comments_count_returns_empty(): void {
@@ -54,8 +64,8 @@ final class Test_Disable_Comments extends Test_Case {
 				[
 					'post_id' => $post_id,
 					'count'   => true,
-				] 
-			) 
+				]
+			)
 		);
 
 		// Activate the disable comments feature.
@@ -67,8 +77,8 @@ final class Test_Disable_Comments extends Test_Case {
 				[
 					'post_id' => $post_id,
 					'count'   => true,
-				] 
-			) 
+				]
+			)
 		);
 	}
 
@@ -92,7 +102,7 @@ final class Test_Disable_Comments extends Test_Case {
 				'url'             => 'https://example.org',
 			]
 		);
-		$this->assertFalse( is_wp_error( $result_pre ) );
+		$this->assertNotWPError( $result_pre );
 
 		// Activate the disable comments feature.
 		$this->feature->boot();
@@ -108,10 +118,7 @@ final class Test_Disable_Comments extends Test_Case {
 				'url'             => 'https://example.org/testy',
 			]
 		);
-		$this->assertTrue( is_wp_error( $result_post ) );
-
-		// Turn on comment flood checking again.
-		remove_filter( 'wp_is_comment_flood', '__return_false', \PHP_INT_MAX );
+		$this->assertWPError( $result_post );
 	}
 
 	/**
