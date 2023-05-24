@@ -1,0 +1,5 @@
+# This file assigns responsibility for reviewing specific files
+# in this repo to specific people or teams.
+# See: https://docs.github.com/en/free-pro-team@latest/github/creating-cloning-and-archiving-repositories/about-code-owners
+
+*	@alleyinteractive/admins
