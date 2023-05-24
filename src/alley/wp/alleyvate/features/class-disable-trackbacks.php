@@ -26,6 +26,9 @@ final class Disable_Trackbacks implements Feature {
 			if ( post_type_supports( $post_type, 'trackbacks' ) ) {
 				remove_post_type_support( $post_type, 'trackbacks' );
 			}
+
+			// The REST API filters don't have a generic form, so they need to be registered for each post type.
+			add_filter( "rest_prepare_{$post_type}", [ self::class, 'filter__rest_prepare' ], \PHP_INT_MAX );
 		}
 	}
 
@@ -35,5 +38,20 @@ final class Disable_Trackbacks implements Feature {
 	public function boot(): void {
 		add_action( 'init', [ self::class, 'action__init' ], \PHP_INT_MAX );
 		add_filter( 'pings_open', '__return_false', \PHP_INT_MAX );
+	}
+
+	/**
+	 * A callback for the rest_prepare_{$post_type} filter hook.
+	 *
+	 * @param \WP_REST_Response $response Response to filter.
+	 *
+	 * @return \WP_REST_Response Filtered response.
+	 */
+	public static function filter__rest_prepare( \WP_REST_Response $response ): \WP_REST_Response {
+		if ( isset( $response->data['ping_status'] ) ) {
+			$response->data['ping_status'] = 'closed';
+		}
+
+		return $response;
 	}
 }

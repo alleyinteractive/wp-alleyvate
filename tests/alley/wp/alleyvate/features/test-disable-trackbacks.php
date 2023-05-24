@@ -55,13 +55,23 @@ final class Test_Disable_Trackbacks extends Test_Case {
 	 * Test that the feature removes support for trackbacks from post types.
 	 */
 	public function test_remove_trackback_support(): void {
+		$post_id = self::factory()->post->create();
+
 		// Ensure the "post" post type supports trackbacks out of the box.
 		$this->assertTrue( post_type_supports( 'post', 'trackbacks' ) );
+
+		// Ensure the ping status is reported as open out of the box.
+		$result = rest_do_request( sprintf( '/wp/v2/posts/%d', $post_id ) );
+		$this->assertSame( 'open', $result->data['ping_status'] );
 
 		// Removing post type support happens on 'init', which has already occurred, so we need to call the callback directly.
 		$this->feature::action__init();
 
 		// Ensure the "post" post type no longer supports trackbacks after activating the feature.
 		$this->assertFalse( post_type_supports( 'post', 'trackbacks' ) );
+
+		// Ensure the ping status is reported as closed.
+		$result = rest_do_request( sprintf( '/wp/v2/posts/%d', $post_id ) );
+		$this->assertSame( 'closed', $result->data['ping_status'] );
 	}
 }

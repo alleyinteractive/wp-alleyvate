@@ -163,14 +163,26 @@ final class Test_Disable_Comments extends Test_Case {
 	 * Test that the feature removes post type support for comments.
 	 */
 	public function test_remove_post_type_support(): void {
+		$post_id = self::factory()->post->create();
+
 		// Ensure that the default is to enable comments on the 'post' post type.
 		$this->assertTrue( post_type_supports( 'post', 'comments' ) );
+
+		// Ensure the comment status is reported as open and the replies link exists out of the box.
+		$result = rest_do_request( sprintf( '/wp/v2/posts/%d', $post_id ) );
+		$this->assertSame( 'open', $result->data['comment_status'] );
+		$this->assertArrayHasKey( 'replies', $result->get_links() );
 
 		// Removing post type support happens on 'init', which has already occurred, so we need to call the callback directly.
 		$this->feature::action__init();
 
 		// Ensure that the 'post' post type no longer supports comments.
 		$this->assertFalse( post_type_supports( 'post', 'comments' ) );
+
+		// Ensure the comment status is reported as closed and the replies link has been removed.
+		$result = rest_do_request( sprintf( '/wp/v2/posts/%d', $post_id ) );
+		$this->assertSame( 'closed', $result->data['comment_status'] );
+		$this->assertArrayNotHasKey( 'replies', $result->get_links() );
 	}
 
 	/**

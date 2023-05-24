@@ -54,6 +54,9 @@ final class Disable_Comments implements Feature {
 			if ( post_type_supports( $post_type, 'comments' ) ) {
 				remove_post_type_support( $post_type, 'comments' );
 			}
+
+			// The REST API filters don't have a generic form, so they need to be registered for each post type.
+			add_filter( "rest_prepare_{$post_type}", [ self::class, 'filter__rest_prepare' ], \PHP_INT_MAX );
 		}
 	}
 
@@ -79,6 +82,22 @@ final class Disable_Comments implements Feature {
 		unset( $endpoints['/wp/v2/comments/(?P<id>[\d]+)'] );
 
 		return $endpoints;
+	}
+
+	/**
+	 * A callback for the rest_prepare_{$post_type} filter hook.
+	 *
+	 * @param \WP_REST_Response $response Response to filter.
+	 *
+	 * @return \WP_REST_Response Filtered response.
+	 */
+	public static function filter__rest_prepare( \WP_REST_Response $response ): \WP_REST_Response {
+		$response->remove_link( 'replies' );
+		if ( isset( $response->data['comment_status'] ) ) {
+			$response->data['comment_status'] = 'closed';
+		}
+
+		return $response;
 	}
 
 	/**
