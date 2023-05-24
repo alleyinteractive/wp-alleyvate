@@ -34,6 +34,9 @@ final class Test_Disable_Comments extends Test_Case {
 	protected function setUp(): void {
 		parent::setUp();
 
+		// Turn off comment flood checking in order to run these tests.
+		add_filter( 'wp_is_comment_flood', '__return_false', \PHP_INT_MAX );
+
 		$this->feature = new Disable_Comments();
 	}
 
@@ -87,9 +90,6 @@ final class Test_Disable_Comments extends Test_Case {
 	 */
 	public function test_prevent_comment_posting(): void {
 		$post_id = self::factory()->post->create();
-
-		// Turn off comment flood checking in order to run this test.
-		add_filter( 'wp_is_comment_flood', '__return_false', \PHP_INT_MAX );
 
 		// Post a comment on the post and ensure that it posts correctly.
 		$result_pre = wp_handle_comment_submission(
@@ -192,5 +192,28 @@ final class Test_Disable_Comments extends Test_Case {
 
 		// Ensure comments are suppressed.
 		$this->assertEmpty( get_comments( [ 'post_id' => $post_id ] ) );
+	}
+
+	/**
+	 * Test that the feature reports comment count as 0.
+	 */
+	public function test_suppress_comments_number(): void {
+		// Create a post and give it a comment.
+		$post_id = self::factory()->post->create();
+		wp_insert_comment(
+			[
+				'comment_post_ID' => $post_id,
+				'comment_content' => 'Lorem ipsum dolor sit amet.',
+			]
+		);
+
+		// Ensure that the get_comments_number function returns the correct comment count.
+		$this->assertSame( '1', get_comments_number( $post_id ) );
+
+		// Activate the feature.
+		$this->feature->boot();
+
+		// Ensure the comments number is reported as 0.
+		$this->assertSame( 0, get_comments_number( $post_id ) );
 	}
 }

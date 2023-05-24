@@ -77,5 +77,6 @@ final class Disable_Comments implements Feature {
 		add_action( 'init', [ self::class, 'action__init' ], \PHP_INT_MAX );
 		add_filter( 'comments_open', '__return_false', \PHP_INT_MAX );
 		add_filter( 'comments_pre_query', [ self::class, 'filter__comments_pre_query' ], \PHP_INT_MAX, 2 );
+		add_filter( 'get_comments_number', '__return_zero', \PHP_INT_MAX );
 	}
 }
