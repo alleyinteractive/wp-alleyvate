@@ -174,55 +174,40 @@ final class Test_Disable_Comments extends Test_Case {
 	}
 
 	/**
+	 * Test that the feature removes REST routes related to comments.
+	 */
+	public function test_remove_rest_routes(): void {
+		// Ensure comment routes exist before the plugin is active.
+		$routes = rest_get_server()->get_routes();
+		$this->assertArrayHasKey( '/wp/v2/comments', $routes );
+		$this->assertArrayHasKey( '/wp/v2/comments/(?P<id>[\d]+)', $routes );
+
+		// Activate plugin.
+		$this->feature->boot();
+
+		// Ensure comment routes are removed.
+		$routes = rest_get_server()->get_routes();
+		$this->assertArrayNotHasKey( '/wp/v2/comments', $routes );
+		$this->assertArrayNotHasKey( '/wp/v2/comments/(?P<id>[\d]+)', $routes );
+	}
+
+	/**
 	 * Test that the feature removes rewrite rules related to comments.
 	 */
 	public function test_remove_rewrite_rules(): void {
 		// Ensure comments rewrite rules exist before activating the feature.
 		$rewrite_rules = get_option( 'rewrite_rules' );
-		$this->assertSame(
-			'index.php?&feed=$matches[1]&withcomments=1',
-			$rewrite_rules['comments/feed/(feed|rdf|rss|rss2|atom)/?$']
-		);
-		$this->assertSame(
-			'index.php?&feed=$matches[1]&withcomments=1',
-			$rewrite_rules['comments/(feed|rdf|rss|rss2|atom)/?$']
-		);
-		$this->assertSame(
-			'index.php?&embed=true',
-			$rewrite_rules['comments/embed/?$']
-		);
-		$this->assertSame(
-			'index.php?attachment=$matches[1]&cpage=$matches[2]',
-			$rewrite_rules['[0-9]{4}/[0-9]{1,2}/[0-9]{1,2}/[^/]+/attachment/([^/]+)/comment-page-([0-9]{1,})/?$']
-		);
-		$this->assertSame(
-			'index.php?year=$matches[1]&monthnum=$matches[2]&day=$matches[3]&name=$matches[4]&cpage=$matches[5]',
-			$rewrite_rules['([0-9]{4})/([0-9]{1,2})/([0-9]{1,2})/([^/]+)/comment-page-([0-9]{1,})/?$']
-		);
-		$this->assertSame(
-			'index.php?attachment=$matches[1]&cpage=$matches[2]',
-			$rewrite_rules['[0-9]{4}/[0-9]{1,2}/[0-9]{1,2}/[^/]+/([^/]+)/comment-page-([0-9]{1,})/?$']
-		);
-		$this->assertSame(
-			'index.php?year=$matches[1]&monthnum=$matches[2]&day=$matches[3]&cpage=$matches[4]',
-			$rewrite_rules['([0-9]{4})/([0-9]{1,2})/([0-9]{1,2})/comment-page-([0-9]{1,})/?$']
-		);
-		$this->assertSame(
-			'index.php?year=$matches[1]&monthnum=$matches[2]&cpage=$matches[3]',
-			$rewrite_rules['([0-9]{4})/([0-9]{1,2})/comment-page-([0-9]{1,})/?$']
-		);
-		$this->assertSame(
-			'index.php?year=$matches[1]&cpage=$matches[2]',
-			$rewrite_rules['([0-9]{4})/comment-page-([0-9]{1,})/?$']
-		);
-		$this->assertSame(
-			'index.php?attachment=$matches[1]&cpage=$matches[2]',
-			$rewrite_rules['.?.+?/attachment/([^/]+)/comment-page-([0-9]{1,})/?$']
-		);
-		$this->assertSame(
-			'index.php?pagename=$matches[1]&cpage=$matches[2]',
-			$rewrite_rules['(.?.+?)/comment-page-([0-9]{1,})/?$']
-		);
+		$this->assertArrayHasKey( 'comments/feed/(feed|rdf|rss|rss2|atom)/?$', $rewrite_rules );
+		$this->assertArrayHasKey( 'comments/(feed|rdf|rss|rss2|atom)/?$', $rewrite_rules );
+		$this->assertArrayHasKey( 'comments/embed/?$', $rewrite_rules );
+		$this->assertArrayHasKey( '[0-9]{4}/[0-9]{1,2}/[0-9]{1,2}/[^/]+/attachment/([^/]+)/comment-page-([0-9]{1,})/?$', $rewrite_rules );
+		$this->assertArrayHasKey( '([0-9]{4})/([0-9]{1,2})/([0-9]{1,2})/([^/]+)/comment-page-([0-9]{1,})/?$', $rewrite_rules );
+		$this->assertArrayHasKey( '[0-9]{4}/[0-9]{1,2}/[0-9]{1,2}/[^/]+/([^/]+)/comment-page-([0-9]{1,})/?$', $rewrite_rules );
+		$this->assertArrayHasKey( '([0-9]{4})/([0-9]{1,2})/([0-9]{1,2})/comment-page-([0-9]{1,})/?$', $rewrite_rules );
+		$this->assertArrayHasKey( '([0-9]{4})/([0-9]{1,2})/comment-page-([0-9]{1,})/?$', $rewrite_rules );
+		$this->assertArrayHasKey( '([0-9]{4})/comment-page-([0-9]{1,})/?$', $rewrite_rules );
+		$this->assertArrayHasKey( '.?.+?/attachment/([^/]+)/comment-page-([0-9]{1,})/?$', $rewrite_rules );
+		$this->assertArrayHasKey( '(.?.+?)/comment-page-([0-9]{1,})/?$', $rewrite_rules );
 
 		// Activate feature.
 		$this->feature->boot();

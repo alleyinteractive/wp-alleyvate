@@ -68,6 +68,20 @@ final class Disable_Comments implements Feature {
 	}
 
 	/**
+	 * A callback for the rest_endpoints filter hook.
+	 *
+	 * @param array $endpoints REST endpoints to be filtered.
+	 *
+	 * @return array Filtered endpoints.
+	 */
+	public static function filter__rest_endpoints( array $endpoints ): array {
+		unset( $endpoints['/wp/v2/comments'] );
+		unset( $endpoints['/wp/v2/comments/(?P<id>[\d]+)'] );
+
+		return $endpoints;
+	}
+
+	/**
 	 * A callback for the comments_pre_query filter hook.
 	 *
 	 * @param array $rules Rewrite rules to be filtered.
@@ -96,6 +110,7 @@ final class Disable_Comments implements Feature {
 		add_filter( 'comments_pre_query', [ self::class, 'filter__comments_pre_query' ], \PHP_INT_MAX, 2 );
 		add_filter( 'comments_rewrite_rules', '__return_empty_array', \PHP_INT_MAX );
 		add_filter( 'get_comments_number', '__return_zero', \PHP_INT_MAX );
+		add_filter( 'rest_endpoints', [ self::class, 'filter__rest_endpoints' ], \PHP_INT_MAX );
 		add_filter( 'rewrite_rules_array', [ self::class, 'filter__rewrite_rules_array' ], \PHP_INT_MAX );
 	}
 }
