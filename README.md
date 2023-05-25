@@ -24,6 +24,12 @@ This feature disables WordPress comments entirely, including the ability to post
 
 This feature disables WordPress from sending or receiving trackbacks or pingbacks. Its handle is `disable_trackbacks`.
 
+### Disallow File Edit
+
+This feature prevents the editing of themes and plugins directly from the admin.  Its handle is `disable_file_edit`.
+
+Such editing can introduce unexpected and undocumented code changes.
+
 ### Short-Circuit Redirect Guessing
 
 This feature stops WordPress from attempting to guess a redirect URL for a 404 request. Its handle is `redirect_guess_shortcircuit`.
