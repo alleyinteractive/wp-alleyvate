@@ -43,7 +43,7 @@ final class Disable_Comments implements Feature {
 	public static function action__admin_init(): void {
 		global $pagenow;
 
-		if ( 'edit-comments.php' === $pagenow ) {
+		if ( \in_array( $pagenow, [ 'edit-comments.php', 'options-discussion.php' ], true ) ) {
 			wp_safe_redirect( admin_url() );
 			exit;
 		}
@@ -54,6 +54,7 @@ final class Disable_Comments implements Feature {
 	 */
 	public static function action__admin_menu(): void {
 		remove_menu_page( 'edit-comments.php' );
+		remove_submenu_page( 'options-general.php', 'options-discussion.php' );
 	}
 
 	/**

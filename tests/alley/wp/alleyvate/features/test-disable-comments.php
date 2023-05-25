@@ -139,12 +139,14 @@ final class Test_Disable_Comments extends Test_Case {
 
 		// Ensure comments are in the menu before activating the feature.
 		$this->assertNotEmpty( array_filter( $menu, fn( $item ) => 'edit-comments.php' === $item[2] ) );
+		$this->assertSame( 'options-discussion.php', $submenu['options-general.php'][25][2] );
 
 		// Removing the menu item happens on 'admin_menu', which has already occurred, so we need to call the callback directly.
 		$this->feature::action__admin_menu();
 
 		// Ensure comments have been removed from the menu.
 		$this->assertEmpty( array_filter( $menu, fn( $item ) => 'edit-comments.php' === $item[2] ) );
+		$this->assertArrayNotHasKey( 25, $submenu['options-general.php'] );
 
 		// Build the admin bar menu and ensure comments are in it by default.
 		$this->get( admin_url() );
