@@ -19,17 +19,33 @@ use Alley\WP\Alleyvate\Feature;
  */
 final class Disable_Comments implements Feature {
 	/**
-	 * A callback for the action_add_meta_boxes action hook.
+	 * Boot the feature.
+	 */
+	public function boot(): void {
+		add_action( 'add_meta_boxes', [ self::class, 'action__add_meta_boxes' ], 9999 );
+		add_action( 'admin_bar_menu', [ self::class, 'action__admin_bar_menu' ], 9999 );
+		add_action( 'admin_init', [ self::class, 'action__admin_init' ], 0 );
+		add_action( 'admin_menu', [ self::class, 'action__admin_menu' ], 9999 );
+		add_action( 'init', [ self::class, 'action__init' ], 9999 );
+		add_filter( 'comments_open', '__return_false', 9999 );
+		add_filter( 'comments_pre_query', [ self::class, 'filter__comments_pre_query' ], 9999, 2 );
+		add_filter( 'comments_rewrite_rules', '__return_empty_array', 9999 );
+		add_filter( 'get_comments_number', '__return_zero', 9999 );
+		add_filter( 'rest_endpoints', [ self::class, 'filter__rest_endpoints' ], 9999 );
+		add_filter( 'rewrite_rules_array', [ self::class, 'filter__rewrite_rules_array' ], 9999 );
+	}
+
+	/**
+	 * Removes the comments metabox from the classic editor.
 	 *
 	 * @param string $post_type The post type that metaboxes are being registered for.
 	 */
 	public static function action__add_meta_boxes( string $post_type ): void {
 		remove_meta_box( 'commentsdiv', $post_type, 'normal' );
-		remove_meta_box( 'commentstatusdiv', $post_type, 'normal' );
 	}
 
 	/**
-	 * A callback for the admin_bar_menu action hook.
+	 * Removes the comments node from the admin bar menu.
 	 *
 	 * @param \WP_Admin_Bar $wp_admin_bar An instance of the WP_Admin_Bar class.
 	 */
@@ -38,7 +54,7 @@ final class Disable_Comments implements Feature {
 	}
 
 	/**
-	 * A callback for the admin_init action hook.
+	 * Redirects direct requests for the comments list and discussion settings page to the admin dashboard.
 	 */
 	public static function action__admin_init(): void {
 		global $pagenow;
@@ -50,7 +66,7 @@ final class Disable_Comments implements Feature {
 	}
 
 	/**
-	 * A callback for the admin_menu action hook.
+	 * Removes the Comments primary menu item and the Discussion submenu item (under Settings) from admin menus.
 	 */
 	public static function action__admin_menu(): void {
 		remove_menu_page( 'edit-comments.php' );
@@ -58,7 +74,7 @@ final class Disable_Comments implements Feature {
 	}
 
 	/**
-	 * A callback for the init action hook.
+	 * Removes post type support for comments and filters REST responses for each post type to remove comment support.
 	 */
 	public static function action__init(): void {
 		foreach ( get_post_types() as $post_type ) {
@@ -67,12 +83,12 @@ final class Disable_Comments implements Feature {
 			}
 
 			// The REST API filters don't have a generic form, so they need to be registered for each post type.
-			add_filter( "rest_prepare_{$post_type}", [ self::class, 'filter__rest_prepare' ], \PHP_INT_MAX );
+			add_filter( "rest_prepare_{$post_type}", [ self::class, 'filter__rest_prepare' ], 9999 );
 		}
 	}
 
 	/**
-	 * A callback for the comments_pre_query filter hook.
+	 * Short-circuits the comments query to return an empty array or 0 (if count was requested).
 	 *
 	 * @param array|int|null    $comment_data  Not used.
 	 * @param \WP_Comment_Query $comment_query The comment query object to filter results for.
@@ -82,7 +98,7 @@ final class Disable_Comments implements Feature {
 	}
 
 	/**
-	 * A callback for the rest_endpoints filter hook.
+	 * Removes REST endpoints related to comments.
 	 *
 	 * @param array $endpoints REST endpoints to be filtered.
 	 *
@@ -96,7 +112,7 @@ final class Disable_Comments implements Feature {
 	}
 
 	/**
-	 * A callback for the rest_prepare_{$post_type} filter hook.
+	 * Filters REST responses for post endpoints to force comment_status to be closed.
 	 *
 	 * @param \WP_REST_Response $response Response to filter.
 	 *
@@ -112,7 +128,7 @@ final class Disable_Comments implements Feature {
 	}
 
 	/**
-	 * A callback for the comments_pre_query filter hook.
+	 * Removes rewrite rules related to comments.
 	 *
 	 * @param array $rules Rewrite rules to be filtered.
 	 *
@@ -126,22 +142,5 @@ final class Disable_Comments implements Feature {
 		}
 
 		return $rules;
-	}
-
-	/**
-	 * Boot the feature.
-	 */
-	public function boot(): void {
-		add_action( 'add_meta_boxes', [ self::class, 'action__add_meta_boxes' ], \PHP_INT_MAX );
-		add_action( 'admin_bar_menu', [ self::class, 'action__admin_bar_menu' ], \PHP_INT_MAX );
-		add_action( 'admin_init', [ self::class, 'action__admin_init' ], \PHP_INT_MIN );
-		add_action( 'admin_menu', [ self::class, 'action__admin_menu' ], \PHP_INT_MAX );
-		add_action( 'init', [ self::class, 'action__init' ], \PHP_INT_MAX );
-		add_filter( 'comments_open', '__return_false', \PHP_INT_MAX );
-		add_filter( 'comments_pre_query', [ self::class, 'filter__comments_pre_query' ], \PHP_INT_MAX, 2 );
-		add_filter( 'comments_rewrite_rules', '__return_empty_array', \PHP_INT_MAX );
-		add_filter( 'get_comments_number', '__return_zero', \PHP_INT_MAX );
-		add_filter( 'rest_endpoints', [ self::class, 'filter__rest_endpoints' ], \PHP_INT_MAX );
-		add_filter( 'rewrite_rules_array', [ self::class, 'filter__rewrite_rules_array' ], \PHP_INT_MAX );
 	}
 }

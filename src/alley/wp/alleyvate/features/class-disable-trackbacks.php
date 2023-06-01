@@ -19,7 +19,15 @@ use Alley\WP\Alleyvate\Feature;
  */
 final class Disable_Trackbacks implements Feature {
 	/**
-	 * A callback for the init action hook.
+	 * Boot the feature.
+	 */
+	public function boot(): void {
+		add_action( 'init', [ self::class, 'action__init' ], 9999 );
+		add_filter( 'pings_open', '__return_false', 9999 );
+	}
+
+	/**
+	 * Removes post type support for trackbacks and filters REST responses for each post type to remove trackback support.
 	 */
 	public static function action__init(): void {
 		foreach ( get_post_types() as $post_type ) {
@@ -28,20 +36,12 @@ final class Disable_Trackbacks implements Feature {
 			}
 
 			// The REST API filters don't have a generic form, so they need to be registered for each post type.
-			add_filter( "rest_prepare_{$post_type}", [ self::class, 'filter__rest_prepare' ], \PHP_INT_MAX );
+			add_filter( "rest_prepare_{$post_type}", [ self::class, 'filter__rest_prepare' ], 9999 );
 		}
 	}
 
 	/**
-	 * Boot the feature.
-	 */
-	public function boot(): void {
-		add_action( 'init', [ self::class, 'action__init' ], \PHP_INT_MAX );
-		add_filter( 'pings_open', '__return_false', \PHP_INT_MAX );
-	}
-
-	/**
-	 * A callback for the rest_prepare_{$post_type} filter hook.
+	 * Filters REST responses for post endpoints to force ping_status to be closed.
 	 *
 	 * @param \WP_REST_Response $response Response to filter.
 	 *

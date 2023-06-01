@@ -134,8 +134,8 @@ final class Test_Disable_Comments extends Test_Case {
 
 		// Become admin and load the admin menu to build the $menu global.
 		$this->acting_as( 'administrator' );
-		require ABSPATH . 'wp-admin/includes/plugin.php';
-		require ABSPATH . 'wp-admin/menu.php';
+		require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		require_once ABSPATH . 'wp-admin/menu.php';
 
 		// Ensure comments are in the menu before activating the feature.
 		$this->assertNotEmpty( array_filter( $menu, fn( $item ) => 'edit-comments.php' === $item[2] ) );
@@ -178,7 +178,6 @@ final class Test_Disable_Comments extends Test_Case {
 		register_and_do_post_meta_boxes( $post );
 		global $wp_meta_boxes;
 		$this->assertNotEmpty( $wp_meta_boxes['post']['normal']['core']['commentsdiv'] );
-		$this->assertNotEmpty( $wp_meta_boxes['post']['normal']['core']['commentstatusdiv'] );
 
 		// Activate feature.
 		$this->feature->boot();
@@ -186,7 +185,6 @@ final class Test_Disable_Comments extends Test_Case {
 		// Confirm metaboxes are removed.
 		register_and_do_post_meta_boxes( $post );
 		$this->assertFalse( $wp_meta_boxes['post']['normal']['core']['commentsdiv'] );
-		$this->assertFalse( $wp_meta_boxes['post']['normal']['core']['commentstatusdiv'] );
 	}
 
 	/**
