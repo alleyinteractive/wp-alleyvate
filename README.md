@@ -16,6 +16,14 @@ Alleyvate is a collection of distinct features, each of which is enabled by defa
 
 ## Features
 
+### Disable Comments
+
+This feature disables WordPress comments entirely, including the ability to post, view, edit, list, count, modify settings for, or access URLs that are related to comments completely. Its handle is `disable_comments`.
+
+### Disable Trackbacks
+
+This feature disables WordPress from sending or receiving trackbacks or pingbacks. Its handle is `disable_trackbacks`.
+
 ### Disallow File Edit
 
 This feature prevents the editing of themes and plugins directly from the admin.  Its handle is `disable_file_edit`.

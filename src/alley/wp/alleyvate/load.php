@@ -27,6 +27,8 @@ function load(): void {
 	 * @var Feature[] $features
 	 */
 	$features = [
+		'disable_comments'              => new Features\Disable_Comments(),
+		'disable_trackbacks'            => new Features\Disable_Trackbacks(),
 		'disallow_file_edit'            => new Features\Disallow_File_Edit(),
 		'redirect_guess_shortcircuit'   => new Features\Redirect_Guess_Shortcircuit(),
 		'user_enumeration_restrictions' => new Features\User_Enumeration_Restrictions(),
