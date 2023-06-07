@@ -135,8 +135,8 @@ final class Disable_Comments implements Feature {
 	 * @return array Filtered rewrite rules.
 	 */
 	public static function filter__rewrite_rules_array( array $rules ): array {
-		foreach ( array_keys( $rules ) as $regex ) {
-			if ( str_contains( $regex, 'comment-page-' ) ) {
+		foreach ( $rules as $regex => $rewrite ) {
+			if ( str_contains( $rewrite, 'cpage=$' ) ) {
 				unset( $rules[ $regex ] );
 			}
 		}
