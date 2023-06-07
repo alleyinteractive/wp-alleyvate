@@ -24,6 +24,7 @@ final class Disable_Trackbacks implements Feature {
 	public function boot(): void {
 		add_action( 'init', [ self::class, 'action__init' ], 9999 );
 		add_filter( 'pings_open', '__return_false', 9999 );
+		add_filter( 'rewrite_rules_array', [ self::class, 'filter__rewrite_rules_array' ], 9999 );
 	}
 
 	/**
@@ -53,5 +54,22 @@ final class Disable_Trackbacks implements Feature {
 		}
 
 		return $response;
+	}
+
+	/**
+	 * Removes rewrite rules related to trackbacks.
+	 *
+	 * @param array $rules Rewrite rules to be filtered.
+	 *
+	 * @return array Filtered rewrite rules.
+	 */
+	public static function filter__rewrite_rules_array( array $rules ): array {
+		foreach ( $rules as $regex => $rewrite ) {
+			if ( str_contains( $rewrite, 'tb=1' ) ) {
+				unset( $rules[ $regex ] );
+			}
+		}
+
+		return $rules;
 	}
 }

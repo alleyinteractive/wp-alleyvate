@@ -52,6 +52,33 @@ final class Test_Disable_Trackbacks extends Test_Case {
 	}
 
 	/**
+	 * Test that the feature removes rewrite rules related to trackbacks.
+	 */
+	public function test_remove_rewrite_rules(): void {
+		// Ensure trackback rewrite rules exist before activating the feature.
+		$rewrite_rules = get_option( 'rewrite_rules' );
+		$this->assertArrayHasKey( '[0-9]{4}/[0-9]{1,2}/[0-9]{1,2}/[^/]+/attachment/([^/]+)/trackback/?$', $rewrite_rules );
+		$this->assertArrayHasKey( '([0-9]{4})/([0-9]{1,2})/([0-9]{1,2})/([^/]+)/trackback/?$', $rewrite_rules );
+		$this->assertArrayHasKey( '[0-9]{4}/[0-9]{1,2}/[0-9]{1,2}/[^/]+/([^/]+)/trackback/?$', $rewrite_rules );
+		$this->assertArrayHasKey( '.?.+?/attachment/([^/]+)/trackback/?$', $rewrite_rules );
+		$this->assertArrayHasKey( '(.?.+?)/trackback/?$', $rewrite_rules );
+
+		// Activate feature.
+		$this->feature->boot();
+
+		// Flush the rewrite rules and load in our changes.
+		flush_rewrite_rules( false ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.flush_rewrite_rules_flush_rewrite_rules
+		$rewrite_rules = get_option( 'rewrite_rules' );
+
+		// Ensure rewrite rules have been removed.
+		$this->assertArrayNotHasKey( '[0-9]{4}/[0-9]{1,2}/[0-9]{1,2}/[^/]+/attachment/([^/]+)/trackback/?$', $rewrite_rules );
+		$this->assertArrayNotHasKey( '([0-9]{4})/([0-9]{1,2})/([0-9]{1,2})/([^/]+)/trackback/?$', $rewrite_rules );
+		$this->assertArrayNotHasKey( '[0-9]{4}/[0-9]{1,2}/[0-9]{1,2}/[^/]+/([^/]+)/trackback/?$', $rewrite_rules );
+		$this->assertArrayNotHasKey( '.?.+?/attachment/([^/]+)/trackback/?$', $rewrite_rules );
+		$this->assertArrayNotHasKey( '(.?.+?)/trackback/?$', $rewrite_rules );
+	}
+
+	/**
 	 * Test that the feature removes support for trackbacks from post types.
 	 */
 	public function test_remove_trackback_support(): void {
