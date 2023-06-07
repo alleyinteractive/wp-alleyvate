@@ -17,22 +17,22 @@ use Alley\WP\Alleyvate\Feature;
 /**
  * Fully disables comments.
  */
-final class Disable_Comments implements Feature {
+final class Disable_Comments extends Feature {
 	/**
 	 * Boot the feature.
 	 */
 	public function boot(): void {
-		add_action( 'add_meta_boxes', [ self::class, 'action__add_meta_boxes' ], 9999 );
-		add_action( 'admin_bar_menu', [ self::class, 'action__admin_bar_menu' ], 9999 );
-		add_action( 'admin_init', [ self::class, 'action__admin_init' ], 0 );
-		add_action( 'admin_menu', [ self::class, 'action__admin_menu' ], 9999 );
-		add_action( 'init', [ self::class, 'action__init' ], 9999 );
-		add_filter( 'comments_open', '__return_false', 9999 );
-		add_filter( 'comments_pre_query', [ self::class, 'filter__comments_pre_query' ], 9999, 2 );
-		add_filter( 'comments_rewrite_rules', '__return_empty_array', 9999 );
-		add_filter( 'get_comments_number', '__return_zero', 9999 );
-		add_filter( 'rest_endpoints', [ self::class, 'filter__rest_endpoints' ], 9999 );
-		add_filter( 'rewrite_rules_array', [ self::class, 'filter__rewrite_rules_array' ], 9999 );
+		add_action( 'add_meta_boxes', [ self::class, 'action__add_meta_boxes' ], self::PRIORITY_VERY_LATE );
+		add_action( 'admin_bar_menu', [ self::class, 'action__admin_bar_menu' ], self::PRIORITY_VERY_LATE );
+		add_action( 'admin_init', [ self::class, 'action__admin_init' ], self::PRIORITY_VERY_EARLY );
+		add_action( 'admin_menu', [ self::class, 'action__admin_menu' ], self::PRIORITY_VERY_LATE );
+		add_action( 'init', [ self::class, 'action__init' ], self::PRIORITY_VERY_LATE );
+		add_filter( 'comments_open', '__return_false', self::PRIORITY_VERY_LATE );
+		add_filter( 'comments_pre_query', [ self::class, 'filter__comments_pre_query' ], self::PRIORITY_VERY_LATE, 2 );
+		add_filter( 'comments_rewrite_rules', '__return_empty_array', self::PRIORITY_VERY_LATE );
+		add_filter( 'get_comments_number', '__return_zero', self::PRIORITY_VERY_LATE );
+		add_filter( 'rest_endpoints', [ self::class, 'filter__rest_endpoints' ], self::PRIORITY_VERY_LATE );
+		add_filter( 'rewrite_rules_array', [ self::class, 'filter__rewrite_rules_array' ], self::PRIORITY_VERY_LATE );
 	}
 
 	/**
@@ -83,7 +83,7 @@ final class Disable_Comments implements Feature {
 			}
 
 			// The REST API filters don't have a generic form, so they need to be registered for each post type.
-			add_filter( "rest_prepare_{$post_type}", [ self::class, 'filter__rest_prepare' ], 9999 );
+			add_filter( "rest_prepare_{$post_type}", [ self::class, 'filter__rest_prepare' ], self::PRIORITY_VERY_LATE );
 		}
 	}
 

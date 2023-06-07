@@ -17,14 +17,14 @@ use Alley\WP\Alleyvate\Feature;
 /**
  * Fully disables pingbacks and trackbacks.
  */
-final class Disable_Trackbacks implements Feature {
+final class Disable_Trackbacks extends Feature {
 	/**
 	 * Boot the feature.
 	 */
 	public function boot(): void {
-		add_action( 'init', [ self::class, 'action__init' ], 9999 );
-		add_filter( 'pings_open', '__return_false', 9999 );
-		add_filter( 'rewrite_rules_array', [ self::class, 'filter__rewrite_rules_array' ], 9999 );
+		add_action( 'init', [ self::class, 'action__init' ], self::PRIORITY_VERY_LATE );
+		add_filter( 'pings_open', '__return_false', self::PRIORITY_VERY_LATE );
+		add_filter( 'rewrite_rules_array', [ self::class, 'filter__rewrite_rules_array' ], self::PRIORITY_VERY_LATE );
 	}
 
 	/**
@@ -37,7 +37,7 @@ final class Disable_Trackbacks implements Feature {
 			}
 
 			// The REST API filters don't have a generic form, so they need to be registered for each post type.
-			add_filter( "rest_prepare_{$post_type}", [ self::class, 'filter__rest_prepare' ], 9999 );
+			add_filter( "rest_prepare_{$post_type}", [ self::class, 'filter__rest_prepare' ], self::PRIORITY_VERY_LATE );
 		}
 	}
 

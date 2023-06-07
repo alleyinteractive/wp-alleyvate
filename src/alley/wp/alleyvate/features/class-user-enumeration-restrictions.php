@@ -23,12 +23,12 @@ use WP_REST_Response;
  * WordPress core doesn't consider usernames or user IDs to be private, but our clients
  * tend to not want information about the registered users on their sites to be discoverable.
  */
-final class User_Enumeration_Restrictions implements Feature {
+final class User_Enumeration_Restrictions extends Feature {
 	/**
 	 * Boot the feature.
 	 */
 	public function boot(): void {
-		add_filter( 'rest_request_before_callbacks', [ $this, 'restrict_rest_user_enumeration' ], 10, 3 );
+		add_filter( 'rest_request_before_callbacks', [ $this, 'restrict_rest_user_enumeration' ], self::PRIORITY_VERY_LATE, 3 );
 	}
 
 	/**

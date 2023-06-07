@@ -17,7 +17,7 @@ use Alley\WP\Alleyvate\Feature;
 /**
  * Disallow theme/plugin editing in the filesystem to safeguard against unexpected code changes.
  */
-final class Disallow_File_Edit implements Feature {
+final class Disallow_File_Edit extends Feature {
 	/**
 	 * Boot the feature.
 	 */

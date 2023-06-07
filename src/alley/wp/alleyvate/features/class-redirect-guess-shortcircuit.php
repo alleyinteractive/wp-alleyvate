@@ -18,7 +18,7 @@ use Alley\WP\Alleyvate\Feature;
  * Disable `redirect_guess_404_permalink()`, whose behavior often confuses clients
  * and is non-performant on larger sites.
  */
-final class Redirect_Guess_Shortcircuit implements Feature {
+final class Redirect_Guess_Shortcircuit extends Feature {
 	/**
 	 * Boot the feature.
 	 */
