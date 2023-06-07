@@ -217,10 +217,24 @@ final class Test_Disable_Comments extends Test_Case {
 	 * Test that the feature removes REST routes related to comments.
 	 */
 	public function test_remove_rest_routes(): void {
+		$post_id    = self::factory()->post->create();
+		$comment_id = wp_insert_comment(
+			[
+				'comment_post_ID' => $post_id,
+				'comment_content' => 'Lorem ipsum dolor sit amet.',
+			]
+		);
+
 		// Ensure comment routes exist before the plugin is active.
 		$routes = rest_get_server()->get_routes();
 		$this->assertArrayHasKey( '/wp/v2/comments', $routes );
 		$this->assertArrayHasKey( '/wp/v2/comments/(?P<id>[\d]+)', $routes );
+
+		// Ensure comment routes are successful before the plugin is active.
+		$result_generic  = rest_do_request( new \WP_REST_Request( 'GET', '/wp/v2/comments' ) );
+		$result_specific = rest_do_request( new \WP_REST_Request( 'GET', sprintf( '/wp/v2/comments/%d', $comment_id ) ) );
+		$this->assertSame( 200, $result_generic->get_status() );
+		$this->assertSame( 200, $result_specific->get_status() );
 
 		// Activate plugin.
 		$this->feature->boot();
@@ -229,6 +243,12 @@ final class Test_Disable_Comments extends Test_Case {
 		$routes = rest_get_server()->get_routes();
 		$this->assertArrayNotHasKey( '/wp/v2/comments', $routes );
 		$this->assertArrayNotHasKey( '/wp/v2/comments/(?P<id>[\d]+)', $routes );
+
+		// Ensure comment routes 404.
+		$result_generic  = rest_do_request( new \WP_REST_Request( 'GET', '/wp/v2/comments' ) );
+		$result_specific = rest_do_request( new \WP_REST_Request( 'GET', sprintf( '/wp/v2/comments/%d', $comment_id ) ) );
+		$this->assertSame( 404, $result_generic->get_status() );
+		$this->assertSame( 404, $result_specific->get_status() );
 	}
 
 	/**
