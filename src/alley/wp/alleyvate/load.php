@@ -27,6 +27,7 @@ function load(): void {
 	 * @var Feature[] $features
 	 */
 	$features = [
+		'disable_attachment_routes'     => new Features\Disable_Attachment_Routes(),
 		'disable_comments'              => new Features\Disable_Comments(),
 		'disable_trackbacks'            => new Features\Disable_Trackbacks(),
 		'disallow_file_edit'            => new Features\Disallow_File_Edit(),
