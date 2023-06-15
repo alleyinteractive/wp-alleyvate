@@ -15,7 +15,16 @@ namespace Alley\WP\Alleyvate\Features;
 use Alley\WP\Alleyvate\Feature;
 use Mantle\Testkit\Test_Case;
 
-class Disable_Apple_News_No_Prod_Push_Test extends TestCase {
+class Disable_Apple_News_No_Prod_Push_Test extends Test_Case {
+	/**
+	 * Set up.
+	 */
+	protected function setUp(): void {
+		parent::setUp();
+
+		// Need to remove the current definition of WP_ENV.
+	}
+
 	// Test that the filter_apple_news_skip_push method returns false when passed false on a production environment.
 	public function testFalseFilterAppleNewsSkipPushProductionEnvironment() {
 		$instance = new Disable_Apple_News_No_Prod_Push();
