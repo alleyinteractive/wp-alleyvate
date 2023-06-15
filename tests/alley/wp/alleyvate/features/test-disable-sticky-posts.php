@@ -44,8 +44,8 @@ final class Test_Disable_Sticky_Posts extends Test_Case {
 	 */
 	public function test_disable_sticky_posts_in_query() {
 
-		$posts         = $this->factory()->post->create_ordered_set( 5 );
-		$stick_post_id = $this->factory()->post->create(
+		$posts         = static::factory()->post->create_ordered_set( 5 );
+		$stick_post_id = static::factory()->post->create(
 			[
 				'post_date' => '2019-01-01 00:00:00',
 			]
@@ -90,11 +90,7 @@ final class Test_Disable_Sticky_Posts extends Test_Case {
 	public function test_disable_action_sticky_rest_api_edit() {
 		$this->acting_as( 'administrator' );
 
-		$post_id = $this->factory()->post->create(
-			[
-				'post_date' => '2019-01-01 00:00:00',
-			]
-		);
+		$post_id = static::factory()->post->create();
 
 		$this->get(
 			rest_url( 'wp/v2/posts/' . $post_id . '?context=edit' ),
