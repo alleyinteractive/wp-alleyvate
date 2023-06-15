@@ -32,6 +32,7 @@ function load(): void {
 		'disallow_file_edit'            => new Features\Disallow_File_Edit(),
 		'redirect_guess_shortcircuit'   => new Features\Redirect_Guess_Shortcircuit(),
 		'user_enumeration_restrictions' => new Features\User_Enumeration_Restrictions(),
+		'full_page_cache_404'           => new Features\Full_Page_Cache_404(),
 	];
 
 	foreach ( $features as $handle => $feature ) {
