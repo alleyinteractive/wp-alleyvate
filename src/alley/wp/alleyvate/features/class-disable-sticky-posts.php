@@ -30,11 +30,15 @@ final class Disable_Sticky_Posts implements Feature {
 
 	/**
 	 * Remove sticky posts from the admin edit screen.
+	 *
+	 * Includes a script to remove the checkbox from the quick edit screen that
+	 * will cover the browsers that :has is not supported in yet.
 	 */
 	public function on_admin_head(): void {
 		?>
 		<style>
-			.wp-admin #sticky-span {
+			.wp-admin #sticky-span,
+			label:has(input[name="sticky"]) {
 				display: none !important;
 			}
 		</style>
