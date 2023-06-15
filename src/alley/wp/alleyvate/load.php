@@ -27,6 +27,7 @@ function load(): void {
 	 * @var Feature[] $features
 	 */
 	$features = [
+		'disable_apple_new_push'        => new Features\Disable_Apple_News_No_Prod_Push(),
 		'disable_comments'              => new Features\Disable_Comments(),
 		'disable_trackbacks'            => new Features\Disable_Trackbacks(),
 		'disallow_file_edit'            => new Features\Disallow_File_Edit(),
