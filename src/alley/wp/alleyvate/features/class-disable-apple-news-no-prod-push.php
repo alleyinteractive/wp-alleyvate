@@ -31,16 +31,8 @@ final class Disable_Apple_News_No_Prod_Push implements Feature {
 	 * @param bool $skip Should we skip the Apple News push.
 	 */
 	public function filter_apple_news_skip_push( bool $skip ) {
-		// If we are not on a production environment according to WP_ENV, don't modify the value.
-		if ( defined( 'WP_ENV' ) && 'production' === WP_ENV ) {
-			return $skip;
-		}
-		// If we are on Pantheon LIVE, don't modify the value.
-		if ( isset( $_ENV['PANTHEON_ENVIRONMENT'] ) && 'live' === $_ENV['PANTHEON_ENVIRONMENT'] ) {
-			return $skip;
-		}
-		// If we are on VIP Production, don't modify the value.
-		if ( defined( 'VIP_GO_ENV' ) && VIP_GO_ENV === 'production' ) {
+		// If we are on a production environment, don't modify the value.
+		if ( $this->is_production_environment() ) {
 			return $skip;
 		}
 		// All other cases, return true - but allow it to be filtered.
@@ -55,5 +47,26 @@ final class Disable_Apple_News_No_Prod_Push implements Feature {
 		 * @param bool $skip Should we skip the Apple News push?
 		 */
 		return apply_filters( 'alleyvate_disable_apple_news_no_prod_push', true );
+	}
+
+	/**
+	 * Detect if we are on a production environment.
+	 *
+	 * @return boolean
+	 */
+	private function is_production_environment(): bool {
+		// If we are not on a production environment according to WP_ENV, return true.
+		if ( defined( 'WP_ENV' ) && 'production' === WP_ENV ) {
+			return true;
+		}
+		// If we are on Pantheon LIVE, return true.
+		if ( isset( $_ENV['PANTHEON_ENVIRONMENT'] ) && 'live' === $_ENV['PANTHEON_ENVIRONMENT'] ) {
+			return true;
+		}
+		// If we are on VIP Production, don't modify the value.
+		if ( defined( 'VIP_GO_ENV' ) && VIP_GO_ENV === 'production' ) {
+			return true;
+		}
+		return false;
 	}
 }
