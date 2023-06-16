@@ -20,6 +20,10 @@ Alleyvate is a collection of distinct features, each of which is enabled by defa
 
 This feature disables WordPress comments entirely, including the ability to post, view, edit, list, count, modify settings for, or access URLs that are related to comments completely. Its handle is `disable_comments`.
 
+### Disable Sticky Posts
+
+This feature disables WordPress sticky posts entirely, including the ability to set and query sticky posts. Its handle is `disable_sticky_posts`.
+
 ### Disable Trackbacks
 
 This feature disables WordPress from sending or receiving trackbacks or pingbacks. Its handle is `disable_trackbacks`.

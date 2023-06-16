@@ -29,6 +29,7 @@ function load(): void {
 	$features = [
 		'disable_apple_new_push'        => new Features\Disable_Apple_News_No_Prod_Push(),
 		'disable_comments'              => new Features\Disable_Comments(),
+		'disable_sticky_posts'          => new Features\Disable_Sticky_Posts(),
 		'disable_trackbacks'            => new Features\Disable_Trackbacks(),
 		'disallow_file_edit'            => new Features\Disallow_File_Edit(),
 		'redirect_guess_shortcircuit'   => new Features\Redirect_Guess_Shortcircuit(),
