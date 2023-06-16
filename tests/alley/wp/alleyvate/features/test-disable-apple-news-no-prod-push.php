@@ -18,7 +18,7 @@ use Mantle\Testkit\Test_Case;
 /**
  * Test Disable_Apple_News_No_Prod_Push
  */
-class Disable_Apple_News_No_Prod_Push_Test extends Test_Case {
+final class Disable_Apple_News_No_Prod_Push_Test extends Test_Case {
 	/**
 	 * Production instance of Disable_Apple_News_No_Prod_Push
 	 *

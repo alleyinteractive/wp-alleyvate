@@ -29,7 +29,7 @@ final class Disable_Apple_News_No_Prod_Push implements Feature {
 	 * Boot the feature.
 	 */
 	public function boot(): void {
-		\add_filter( 'apple_news_skip_push', [ $this, 'filter_apple_news_skip_push' ], 1, 100 );
+		add_filter( 'apple_news_skip_push', [ $this, 'filter_apple_news_skip_push' ], 1, 100 );
 		$this->is_production = $this->is_production_environment();
 	}
 
@@ -54,7 +54,7 @@ final class Disable_Apple_News_No_Prod_Push implements Feature {
 		 *
 		 * @param bool $skip Should we skip the Apple News push?
 		 */
-		return \apply_filters( 'alleyvate_disable_apple_news_no_prod_push', true );
+		return apply_filters( 'alleyvate_disable_apple_news_no_prod_push', true );
 	}
 
 	/**
@@ -71,7 +71,7 @@ final class Disable_Apple_News_No_Prod_Push implements Feature {
 			return true;
 		}
 		// If we are on Pantheon LIVE, return true.
-		if ( \isset( $_ENV['PANTHEON_ENVIRONMENT'] ) && 'live' === $_ENV['PANTHEON_ENVIRONMENT'] ) {
+		if ( isset( $_ENV['PANTHEON_ENVIRONMENT'] ) && 'live' === $_ENV['PANTHEON_ENVIRONMENT'] ) {
 			return true;
 		}
 		// If we are on VIP Production, don't modify the value.
