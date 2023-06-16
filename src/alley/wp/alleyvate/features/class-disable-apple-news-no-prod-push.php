@@ -60,6 +60,9 @@ class Disable_Apple_News_No_Prod_Push implements Feature {
 	/**
 	 * Detect if we are on a production environment.
 	 *
+	 * Note: I thought about using https://developer.wordpress.org/reference/functions/wp_get_environment_type/
+	 * but it defaults to 'production' if no value is set, which did not seem ideal for this use case.
+	 *
 	 * @return boolean
 	 */
 	protected function is_production_environment(): bool {
