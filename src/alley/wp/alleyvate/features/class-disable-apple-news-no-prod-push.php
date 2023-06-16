@@ -67,15 +67,15 @@ final class Disable_Apple_News_No_Prod_Push implements Feature {
 	 */
 	protected function is_production_environment(): bool {
 		// If we are not on a production environment according to WP_ENV, return true.
-		if ( defined( 'WP_ENV' ) && 'production' === WP_ENV ) {
+		if ( \defined( 'WP_ENV' ) && 'production' === WP_ENV ) {
 			return true;
 		}
 		// If we are on Pantheon LIVE, return true.
-		if ( isset( $_ENV['PANTHEON_ENVIRONMENT'] ) && 'live' === $_ENV['PANTHEON_ENVIRONMENT'] ) {
+		if ( \isset( $_ENV['PANTHEON_ENVIRONMENT'] ) && 'live' === $_ENV['PANTHEON_ENVIRONMENT'] ) {
 			return true;
 		}
 		// If we are on VIP Production, don't modify the value.
-		if ( defined( 'VIP_GO_ENV' ) && VIP_GO_ENV === 'production' ) {
+		if ( \defined( 'VIP_GO_ENV' ) && VIP_GO_ENV === 'production' ) {
 			return true;
 		}
 		return false;
