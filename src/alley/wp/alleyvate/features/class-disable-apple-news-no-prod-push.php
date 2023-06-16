@@ -19,10 +19,18 @@ use Alley\WP\Alleyvate\Feature;
  */
 class Disable_Apple_News_No_Prod_Push implements Feature {
 	/**
+	 * Store if this is a production environment.
+	 *
+	 * @var [type]
+	 */
+	private $is_production;
+
+	/**
 	 * Boot the feature.
 	 */
 	public function boot(): void {
 		add_filter( 'apple_news_skip_push', [ $this, 'filter_apple_news_skip_push' ], 1, 100 );
+		$this->is_production = $this->is_production_environment();
 	}
 
 	/**
@@ -32,7 +40,7 @@ class Disable_Apple_News_No_Prod_Push implements Feature {
 	 */
 	public function filter_apple_news_skip_push( bool $skip ) {
 		// If we are on a production environment, don't modify the value.
-		if ( $this->is_production_environment() ) {
+		if ( $this->is_production ) {
 			return $skip;
 		}
 		// All other cases, return true - but allow it to be filtered.

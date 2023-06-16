@@ -15,92 +15,93 @@ namespace Alley\WP\Alleyvate\Features;
 use Alley\WP\Alleyvate\Feature;
 use Mantle\Testkit\Test_Case;
 
-// phpcs:disable Generic.Files.OneObjectStructurePerFile.MultipleFound
-
-/**
- * Test double for Disable_Apple_News_No_Prod_Push. Mocks production environment.
- */
-class TestDoubleProduction extends Disable_Apple_News_No_Prod_Push {
-	/**
-	 * Override of the is_production_environment method to always return true.
-	 *
-	 * @return boolean
-	 */
-	protected function is_production_environment(): bool {
-		return true;
-	}
-}
-
-/**
- * Test double for Disable_Apple_News_No_Prod_Push. Mocks non-production environment.
- */
-class TestDoubleNonProduction extends Disable_Apple_News_No_Prod_Push {
-	/**
-	 * Override of the is_production_environment method to always return false.
-	 *
-	 * @return boolean
-	 */
-	protected function is_production_environment(): bool {
-		return false;
-	}
-}
-
 /**
  * Test Disable_Apple_News_No_Prod_Push
  */
 class Disable_Apple_News_No_Prod_Push_Test extends Test_Case {
 	/**
-	 * Test that the filter_apple_news_skip_push method returns false when passed false on a production environment.
+	 * Production instance of Disable_Apple_News_No_Prod_Push
+	 *
+	 * @var Disable_Apple_News_No_Prod_Push
+	 */
+	protected $production_instance;
+
+	/**
+	 * Non-production_ instance of Disable_Apple_News_No_Prod_Push
+	 *
+	 * @var Disable_Apple_News_No_Prod_Push
+	 */
+	protected $non_production_instance;
+
+	/**
+	 * Sets up our mocks.
+	 *
+	 * @return void
+	 */
+	protected function setUp(): void {
+		parent::setUp();
+
+		$reflection_class = new \ReflectionClass( 'Alley\WP\Alleyvate\Features\Disable_Apple_News_No_Prod_Push' );
+
+		$production_property = $reflection_class->getProperty( 'is_production' );
+		$production_property->setAccessible( true );
+		$this->production_instance = new Disable_Apple_News_No_Prod_Push();
+		$production_property->setValue( $this->production_instance, true );
+
+		$non_production_property = $reflection_class->getProperty( 'is_production' );
+		$non_production_property->setAccessible( true );
+		$this->non_production_instance = new Disable_Apple_News_No_Prod_Push();
+		$non_production_property->setValue( $this->non_production_instance, false );
+	}
+
+	/**
+	 * Test that the filter_apple_news_skip_push method returns false when passed false on a production_ environment.
 	 *
 	 * @return void
 	 */
 	public function testFalseFilterAppleNewsSkipPushProductionEnvironment() {
-		$instance = new TestDoubleProduction();
-		$skip     = false;
+		$skip = false;
 
-		$result = $instance->filter_apple_news_skip_push( $skip );
+		$result = $this->production_instance->filter_apple_news_skip_push( $skip );
 
 		$this->assertFalse( $result );
 	}
 
 	/**
-	 * Test that the filter_apple_news_skip_push method returns true when passed true on a production environment.
+	 * Test that the filter_apple_news_skip_push method returns true when passed true on a production_ environment.
 	 *
 	 * @return void
 	 */
 	public function testTrueFilterAppleNewsSkipPushProductionEnvironment() {
-		$instance = new TestDoubleProduction();
-		$skip     = true;
+		$skip = true;
 
-		$result = $instance->filter_apple_news_skip_push( $skip );
+		$result = $this->production_instance->filter_apple_news_skip_push( $skip );
 
 		$this->assertTrue( $result );
 	}
 
 	/**
-	 * Test that the filter_apple_news_skip_push method returns true when passed false on a non-production environment.
+	 * Test that the filter_apple_news_skip_push method returns true when passed false on a non-production_ environment.
 	 *
 	 * @return void
 	 */
 	public function testFalseFilterAppleNewsSkipPushOtherEnvironments() {
-		$instance = new TestDoubleNonProduction();
-		$skip     = false;
+		$skip = false;
 
-		$result = $instance->filter_apple_news_skip_push( $skip );
+		$result = $this->non_production_instance->filter_apple_news_skip_push( $skip );
 
 		$this->assertTrue( $result );
 	}
 
 	/**
-	 * Test that the filter_apple_news_skip_push method returns true when passed true on a non-production environment.
+	 * Test that the filter_apple_news_skip_push method returns true when passed true on a non-production_ environment.
 	 *
 	 * @return void
 	 */
 	public function testTrueFilterAppleNewsSkipPushOtherEnvironments() {
-		$instance = new TestDoubleNonProduction();
-		$skip     = true;
+		$skip = true;
 
-		$result = $instance->filter_apple_news_skip_push( $skip );
+		$result = $this->non_production_instance->filter_apple_news_skip_push( $skip );
 
 		$this->assertTrue( $result );
 	}
