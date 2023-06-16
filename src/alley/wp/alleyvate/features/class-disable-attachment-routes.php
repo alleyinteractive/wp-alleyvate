@@ -23,6 +23,7 @@ final class Disable_Attachment_Routes implements Feature {
 	 */
 	public function boot(): void {
 		add_filter( 'rewrite_rules_array', [ self::class, 'filter__rewrite_rules_array' ], 9999 );
+		add_filter( 'pre_handle_404', [ self::class, 'filter__pre_handle_404' ], 9999 );
 	}
 
 	/**

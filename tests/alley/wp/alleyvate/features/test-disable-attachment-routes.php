@@ -79,4 +79,23 @@ final class Test_Disable_Attachment_Routes extends Test_Case {
 		// Ensure rewrite rules have been removed.
 		$this->assertArrayNotHasKey( $pattern, $rewrite_rules );
 	}
+
+	/**
+	 * Test that the feature returns a 404 for a request to an unattached media item's detail page.
+	 */
+	public function test_unattached_404(): void {
+		// Create image and test that the route is available.
+		$attachment = self::factory()->attachment->create_and_get(
+			[
+				'post_title' => 'lorem-ipsum',
+			]
+		);
+		$this->get( $attachment )->assertOk();
+
+		// Activate feature.
+		$this->feature->boot();
+
+		// Test 404 after boot.
+		$this->get( $attachment )->assertNotFound();
+	}
 }
