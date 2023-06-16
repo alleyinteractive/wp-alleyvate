@@ -17,7 +17,7 @@ use Alley\WP\Alleyvate\Feature;
 /**
  * Disables Apple News Push on Non Production Environments.
  */
-class Disable_Apple_News_No_Prod_Push implements Feature {
+final class Disable_Apple_News_No_Prod_Push implements Feature {
 	/**
 	 * Store if this is a production environment.
 	 *
