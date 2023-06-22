@@ -33,38 +33,43 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 	 */
 	protected function setUp(): void {
 		parent::setUp();
-
 		$this->feature = new Full_Page_Cache_404();
 	}
 
 	/**
 	 * Test full page cache 404.
+	 *
 	 */
 	public function test_full_page_cache_404_returns_cache() {
 		$this->feature->boot();
 		$response = $this->get( '/this-is-a-404-page' );
-		$cache    = wp_cache_get( 'alleyvate_404_cache', 'alleyvate' );
-		$response->assertSee( $cache );
+		// Expect empty string if cache isn't set.
+		$response->assertNoContent( 404 );
+		$html = '<html>404</html>';
+		$this->feature->set_cache( $html );
 		$response = $this->get( '/this-is-a-404-page' );
-		$response->assertSee( $cache );
+		$response->assertSee( $html );
+		$response->assertStatus( 404 );
 	}
 
-	public function test_full_page_cache_is_disabled_for_admin() {
-		$this->feature->boot();
-		//$response = $this->get( '/wp-admin' );
-		//$cache    = wp_cache_get( 'alleyvate_404_cache', 'alleyvate' );
-		//$this->assertNotSame( $cache, $response );
-	}
 
+	/**
+	 * Test
+	 *
+	 */
 	public function test_full_page_cache_not_returned_for_non_404() {
 		$this->feature->boot();
-		$post_id = self::factory()->post->create( array( 'post_title' => 'Hello World' ) );
+		$post_id  = self::factory()->post->create( [ 'post_title' => 'Hello World' ] );
 		$response = $this->get( get_the_permalink( $post_id ) );
 		$response->assertHeaderMissing( 'X-Alleyvate-404-Cache' );
 	}
 
+	/**
+	 * Tear down.
+	 */
 	public function tearDown(): void {
 		$this->feature->delete_cache();
+		add_action( 'send_headers', [ $this->feature, 'action__send_headers' ] );
 		parent::tearDown();
 	}
 

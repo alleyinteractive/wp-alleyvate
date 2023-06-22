@@ -66,7 +66,7 @@ final class Full_Page_Cache_404 implements Feature {
 	public function boot(): void {
 		add_action( 'template_redirect', [ $this, 'action__template_redirect' ], 9999 );
 		add_action( 'send_headers', [ $this, 'action__send_headers' ] );
-		add_action( 'pre_get_posts', [ $this, 'action__pre_get_posts'] );
+		add_action( 'pre_get_posts', [ $this, 'action__pre_get_posts' ] );
 		add_action( 'alleyvate_404_cache', [ $this, 'populate_cache' ] );
 		// Replenish the cache every hour.
 		if ( ! wp_next_scheduled( 'alleyvate_404_cache' ) ) {
@@ -77,8 +77,6 @@ final class Full_Page_Cache_404 implements Feature {
 
 	/**
 	 * Get 404 Page Cache and return early if found.
-	 *
-	 * @param \WP $wp WP object.
 	 */
 	public function action__template_redirect() {
 
@@ -106,7 +104,7 @@ final class Full_Page_Cache_404 implements Feature {
 			echo $cache; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			exit;
 		} else {
-			// schedule a single event to generate the cache
+			// Schedule a single event to generate the cache.
 			if ( ! wp_next_scheduled( 'alleyvate_404_cache' ) ) {
 				wp_schedule_single_event( time(), 'alleyvate_404_cache' );
 			}
@@ -116,6 +114,9 @@ final class Full_Page_Cache_404 implements Feature {
 		}
 	}
 
+	/**
+	 * Send Headers.
+	 */
 	public function action__send_headers() {
 		if ( ! is_404() ) {
 			return;
@@ -123,7 +124,7 @@ final class Full_Page_Cache_404 implements Feature {
 		if ( isset( $_SERVER['REQUEST_URI'] ) && self::GUARANTEED_404_URI === $_SERVER['REQUEST_URI'] ) {
 			return;
 		}
-		if (  self::get_cache() ) {
+		if ( self::get_cache() ) {
 			header( 'X-Alleyvate-404-Cache: HIT' );
 		} elseif ( self::get_stale_cache() ) {
 			header( 'X-Alleyvate-404-Cache: HIT (stale)' );
@@ -132,9 +133,14 @@ final class Full_Page_Cache_404 implements Feature {
 		}
 	}
 
+	/**
+	 * Ensure that the 404 page is always a 404.
+	 * We cache this page, so need to make sure it's always a 404.
+	 *
+	 * @param \WP_Query $query WP Query.
+	 */
 	public function action__pre_get_posts( $query ) {
-		if ( isset( $_SERVER['REQUEST_URI'] ) && $_SERVER['REQUEST_URI'] === self::GUARANTEED_404_URI ) {
-			// Set the HTTP response code to 404
+		if ( isset( $_SERVER['REQUEST_URI'] ) && self::GUARANTEED_404_URI === $_SERVER['REQUEST_URI'] ) {
 			global $wp_query;
 			$wp_query->set_404();
 		}
@@ -172,26 +178,32 @@ final class Full_Page_Cache_404 implements Feature {
 
 	/**
 	 * Delete cache.
-	 *
 	 */
 	public function delete_cache() {
 		wp_cache_delete( self::CACHE_KEY, self::CACHE_GROUP );
 		wp_cache_delete( self::STALE_CACHE_KEY, self::CACHE_GROUP );
 	}
 
+	/**
+	 * Populate cache.
+	 */
 	public function populate_cache() {
-		// load 404 page
-		$buffer = $this->get_404_page();
-		// set cache
-		$this->set_cache( $buffer );
+		$html = $this->get_404_page();
+		if ( ! empty( $html ) ) {
+			$this->set_cache( $html );
+		}
 	}
 
+	/**
+	 * Get 404 page.
+	 *
+	 * @return string
+	 */
 	public function get_404_page() {
 		$url = home_url( self::GUARANTEED_404_URI, 'https' );
-		// replace http with https
+		// replace http with https to ensure the styles don't get blocked due to insecure content.
 		$url = str_replace( 'http://', 'https://', $url );
-		// error log the url for debugging
-		error_log( 'Alleyvate 404 Cache: ' . $url );
+
 		$not_found_page = wpcom_vip_file_get_contents( $url );
 
 		return $not_found_page;
