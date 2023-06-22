@@ -20,6 +20,13 @@ use Alley\WP\Alleyvate\Feature;
 final class Full_Page_Cache_404 implements Feature {
 
 	/**
+	 * Cache group.
+	 *
+	 * @var string
+	 */
+	const CACHE_GROUP = 'alleyvate';
+
+	/**
 	 * Cache key.
 	 *
 	 * @var string
@@ -27,11 +34,11 @@ final class Full_Page_Cache_404 implements Feature {
 	const CACHE_KEY = 'alleyvate_404_cache';
 
 	/**
-	 * Cache group.
+	 * Cache key.
 	 *
 	 * @var string
 	 */
-	const CACHE_GROUP = 'alleyvate';
+	const STALE_CACHE_KEY = 'alleyvate_404_cache_stale';
 
 	/**
 	 * Cache time.
@@ -41,10 +48,31 @@ final class Full_Page_Cache_404 implements Feature {
 	const CACHE_TIME = HOUR_IN_SECONDS;
 
 	/**
+	 * Stale cache time.
+	 *
+	 * @var int
+	 */
+	const STALE_CACHE_TIME = DAY_IN_SECONDS;
+
+	/**
+	 * Guaranteed 404 URI.
+	 * Used for populating the cache.
+	 */
+	const GUARANTEED_404_URI = '/wp-alleyvate-this-is-a-404-page';
+
+	/**
 	 * Boot the feature.
 	 */
 	public function boot(): void {
-		add_action( 'wp', [ $this, 'action__wp' ], 9999 );
+		add_action( 'template_redirect', [ $this, 'action__template_redirect' ], 9999 );
+		add_action( 'send_headers', [ $this, 'action__send_headers' ] );
+		add_action( 'pre_get_posts', [ $this, 'action__pre_get_posts'] );
+		add_action( 'alleyvate_404_cache', [ $this, 'populate_cache' ] );
+		// Replenish the cache every hour.
+		if ( ! wp_next_scheduled( 'alleyvate_404_cache' ) ) {
+			wp_schedule_event( time(), 'hourly', 'alleyvate_404_cache' );
+		}
+
 	}
 
 	/**
@@ -52,9 +80,9 @@ final class Full_Page_Cache_404 implements Feature {
 	 *
 	 * @param \WP $wp WP object.
 	 */
-	public function action__wp( \WP $wp ) {
+	public function action__template_redirect() {
 
-		// Don't cache admin pages.
+		// Allow 404s for the Admin.
 		if ( is_admin() ) {
 			return;
 		}
@@ -64,44 +92,52 @@ final class Full_Page_Cache_404 implements Feature {
 			return;
 		}
 
+		if ( isset( $_SERVER['REQUEST_URI'] ) && self::GUARANTEED_404_URI === $_SERVER['REQUEST_URI'] ) {
+			return;
+		}
+
 		$cache = self::get_cache();
 
+		if ( false === $cache ) {
+			$cache = self::get_stale_cache();
+		}
 		if ( $cache ) {
-			header( 'X-Alleyvate-404-Cache: HIT' );
 			// Cached content is already escaped.
 			echo $cache; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			exit;
 		} else {
-			/**
-			 * Avoid generating cache during logged in requests, incase 404 page is customized
-			 * or contains private posts.
-			 */
-			if ( $this->should_cache_404_request() ) {
-				header( 'X-Alleyvate-404-Cache: MISS' );
-				// Start output buffering so that this 404 request can be cached.
-				ob_start( [ self::class, 'finish_output_buffering' ] );
+			// schedule a single event to generate the cache
+			if ( ! wp_next_scheduled( 'alleyvate_404_cache' ) ) {
+				wp_schedule_single_event( time(), 'alleyvate_404_cache' );
 			}
+			// If no cache, return an empty string.
+			echo '';
+			exit;
 		}
 	}
 
-	/**
-	 * Finish output buffering.
-	 *
-	 * @param string $buffer Buffer.
-	 */
-	public function finish_output_buffering( $buffer ) {
-		global $wp_query;
-		if ( ! $wp_query->is_404() ) {
-			return $buffer;
+	public function action__send_headers() {
+		if ( ! is_404() ) {
+			return;
 		}
-		if ( ! $this->get_cache() ) {
-			self::set_cache( $buffer );
+		if ( isset( $_SERVER['REQUEST_URI'] ) && self::GUARANTEED_404_URI === $_SERVER['REQUEST_URI'] ) {
+			return;
 		}
-		return $buffer;
+		if (  self::get_cache() ) {
+			header( 'X-Alleyvate-404-Cache: HIT' );
+		} elseif ( self::get_stale_cache() ) {
+			header( 'X-Alleyvate-404-Cache: HIT (stale)' );
+		} else {
+			header( 'X-Alleyvate-404-Cache: MISS' );
+		}
 	}
 
-	private function should_cache_404_request() {
-		return ! is_user_logged_in() && ! is_admin();
+	public function action__pre_get_posts( $query ) {
+		if ( isset( $_SERVER['REQUEST_URI'] ) && $_SERVER['REQUEST_URI'] === self::GUARANTEED_404_URI ) {
+			// Set the HTTP response code to 404
+			global $wp_query;
+			$wp_query->set_404();
+		}
 	}
 
 	/**
@@ -114,14 +150,24 @@ final class Full_Page_Cache_404 implements Feature {
 	}
 
 	/**
+	 * Get stale cache.
+	 *
+	 * @return mixed
+	 */
+	public function get_stale_cache() {
+		return wp_cache_get( self::STALE_CACHE_KEY, self::CACHE_GROUP );
+	}
+
+	/**
 	 * Set cache.
 	 *
 	 * @param string $buffer The Output Buffer.
 	 *
 	 * @return void
 	 */
-	public function set_cache( $buffer ): void {
+	public function set_cache( string $buffer ): void {
 		wp_cache_set( self::CACHE_KEY, $buffer, self::CACHE_GROUP, self::CACHE_TIME ); // phpcs:ignore WordPressVIPMinimum.Performance.LowExpiryCacheTime.CacheTimeUndetermined
+		wp_cache_set( self::STALE_CACHE_KEY, $buffer, self::CACHE_GROUP, self::STALE_CACHE_TIME ); // phpcs:ignore WordPressVIPMinimum.Performance.LowExpiryCacheTime.CacheTimeUndetermined
 	}
 
 	/**
@@ -130,6 +176,24 @@ final class Full_Page_Cache_404 implements Feature {
 	 */
 	public function delete_cache() {
 		wp_cache_delete( self::CACHE_KEY, self::CACHE_GROUP );
+		wp_cache_delete( self::STALE_CACHE_KEY, self::CACHE_GROUP );
 	}
 
+	public function populate_cache() {
+		// load 404 page
+		$buffer = $this->get_404_page();
+		// set cache
+		$this->set_cache( $buffer );
+	}
+
+	public function get_404_page() {
+		$url = home_url( self::GUARANTEED_404_URI, 'https' );
+		// replace http with https
+		$url = str_replace( 'http://', 'https://', $url );
+		// error log the url for debugging
+		error_log( 'Alleyvate 404 Cache: ' . $url );
+		$not_found_page = wpcom_vip_file_get_contents( $url );
+
+		return $not_found_page;
+	}
 }
