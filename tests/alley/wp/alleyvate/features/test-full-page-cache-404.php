@@ -47,7 +47,7 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 		$response->assertNoContent( 404 );
 
 		// Expect cron job to be scheduled.
-		$this->assertTrue( wp_next_scheduled( 'alleyvate_404_cache' ) > 0 );
+		$this->assertTrue( wp_next_scheduled( 'alleyvate_404_cache_single' ) > 0 );
 
 		$this->set_404_cache();
 

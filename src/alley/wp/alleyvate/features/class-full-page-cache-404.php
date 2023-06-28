@@ -34,7 +34,7 @@ final class Full_Page_Cache_404 implements Feature {
 	const CACHE_KEY = 'alleyvate_404_cache';
 
 	/**
-	 * Cache key.
+	 * Cache key for stale cache.
 	 *
 	 * @var string
 	 */
@@ -64,16 +64,26 @@ final class Full_Page_Cache_404 implements Feature {
 	 * Boot the feature.
 	 */
 	public function boot(): void {
+
+		// Return 404 page cache on template_redirect.
 		add_action( 'template_redirect', [ $this, 'action__template_redirect' ], 9999 );
+
+		// Add HTTP header for debugging.
 		add_action( 'send_headers', [ $this, 'action__send_headers' ] );
+
+		// Force the Guaranteed 404 page to be a 404, because this is the page we will cache.
 		add_action( 'pre_get_posts', [ $this, 'action__pre_get_posts' ] );
+
+		// For the Guaranteed 404 page, hook in on WP to start output buffering, to capture the HTML.
 		add_action( 'wp', [ $this, 'action__wp' ] );
-		add_action( 'alleyvate_404_cache', [ $this, 'trigger_404_page_cache' ] );
+
 		// Replenish the cache every hour.
 		if ( ! wp_next_scheduled( 'alleyvate_404_cache' ) ) {
 			wp_schedule_event( time(), 'hourly', 'alleyvate_404_cache' );
 		}
-
+		// Callback for Cron Event.
+		add_action( 'alleyvate_404_cache', [ $this, 'trigger_404_page_cache' ] );
+		add_action( 'alleyvate_404_cache_single', [ $this, 'trigger_404_page_cache' ] );
 	}
 
 	/**
@@ -106,9 +116,9 @@ final class Full_Page_Cache_404 implements Feature {
 			echo $cache; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			exit;
 		} else {
-			// Schedule a single event to generate the cache.
-			if ( ! wp_next_scheduled( 'alleyvate_404_cache' ) ) {
-				wp_schedule_single_event( time(), 'alleyvate_404_cache' );
+			// Schedule a single event to generate the cache immediately.
+			if ( ! wp_next_scheduled( 'alleyvate_404_cache_single' ) ) {
+				wp_schedule_single_event( time(), 'alleyvate_404_cache_single' );
 			}
 			// If no cache, return an empty string.
 			echo '';
