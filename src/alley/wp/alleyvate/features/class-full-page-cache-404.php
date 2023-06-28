@@ -67,7 +67,8 @@ final class Full_Page_Cache_404 implements Feature {
 		add_action( 'template_redirect', [ $this, 'action__template_redirect' ], 9999 );
 		add_action( 'send_headers', [ $this, 'action__send_headers' ] );
 		add_action( 'pre_get_posts', [ $this, 'action__pre_get_posts' ] );
-		add_action( 'alleyvate_404_cache', [ $this, 'populate_cache' ] );
+		add_action( 'wp', [ $this, 'action__wp' ] );
+		add_action( 'alleyvate_404_cache', [ $this, 'trigger_404_page_cache' ] );
 		// Replenish the cache every hour.
 		if ( ! wp_next_scheduled( 'alleyvate_404_cache' ) ) {
 			wp_schedule_event( time(), 'hourly', 'alleyvate_404_cache' );
@@ -90,6 +91,7 @@ final class Full_Page_Cache_404 implements Feature {
 			return;
 		}
 
+		// Allow this URL through, as this request will populate the cache.
 		if ( isset( $_SERVER['REQUEST_URI'] ) && self::GUARANTEED_404_URI === $_SERVER['REQUEST_URI'] ) {
 			return;
 		}
@@ -146,6 +148,32 @@ final class Full_Page_Cache_404 implements Feature {
 		}
 	}
 
+
+	/**
+	 * Start output buffering, so we can cache the 404 page.
+	 */
+	public function action__wp() {
+		if ( isset( $_SERVER['REQUEST_URI'] ) && self::GUARANTEED_404_URI === $_SERVER['REQUEST_URI'] ) {
+			ob_start( [ self::class, 'finish_output_buffering' ] );
+		}
+	}
+
+	/**
+	 * Finish output buffering.
+	 *
+	 * @param string $buffer Buffer.
+	 */
+	public function finish_output_buffering( $buffer ) {
+		global $wp_query;
+		if ( ! $wp_query->is_404() ) {
+			return $buffer;
+		}
+		if ( ! $this->get_cache() ) {
+			self::set_cache( $buffer );
+		}
+		return $buffer;
+	}
+
 	/**
 	 * Get cache.
 	 *
@@ -188,24 +216,18 @@ final class Full_Page_Cache_404 implements Feature {
 	 * Populate cache.
 	 */
 	public function populate_cache() {
-		$html = $this->get_404_page();
-		if ( ! empty( $html ) ) {
-			$this->set_cache( $html );
-		}
+		ob_start( [ self::class, 'finish_output_buffering' ] );
 	}
 
 	/**
-	 * Get 404 page.
-	 *
-	 * @return string
+	 * Spin up a request to the guaranteed 404 page to populate the cache.
 	 */
-	public function get_404_page() {
+	public function trigger_404_page_cache() {
 		$url = home_url( self::GUARANTEED_404_URI, 'https' );
 		// replace http with https to ensure the styles don't get blocked due to insecure content.
 		$url = str_replace( 'http://', 'https://', $url );
 
-		$not_found_page = wpcom_vip_file_get_contents( $url );
-
-		return $not_found_page;
+		// This request will populate the cache using output buffering.
+		wpcom_vip_file_get_contents( $url );
 	}
 }

@@ -38,30 +38,51 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 
 	/**
 	 * Test full page cache 404.
-	 *
 	 */
 	public function test_full_page_cache_404_returns_cache() {
 		$this->feature->boot();
 		$response = $this->get( '/this-is-a-404-page' );
+
 		// Expect empty string if cache isn't set.
 		$response->assertNoContent( 404 );
-		$html = '<html>404</html>';
-		$this->feature->set_cache( $html );
+
+		// Expect cron job to be scheduled.
+		$this->assertTrue( wp_next_scheduled( 'alleyvate_404_cache' ) > 0 );
+
+		$this->set_404_cache();
+
+		// Expect the cache to be returned.
 		$response = $this->get( '/this-is-a-404-page' );
-		$response->assertSee( $html );
+		$response->assertSee( $this->get_404_html() );
 		$response->assertStatus( 404 );
 	}
 
-
 	/**
-	 * Test
-	 *
+	 * Test that a post request returns the correct content.
 	 */
 	public function test_full_page_cache_not_returned_for_non_404() {
 		$this->feature->boot();
 		$post_id  = self::factory()->post->create( [ 'post_title' => 'Hello World' ] );
 		$response = $this->get( get_the_permalink( $post_id ) );
 		$response->assertHeaderMissing( 'X-Alleyvate-404-Cache' );
+		$response->assertSee( 'Hello World' );
+	}
+
+	/**
+	 * Set the cache.
+	 */
+	private function set_404_cache() {
+		$html = $this->get_404_html();
+		$this->feature->set_cache( $html );
+	}
+
+	/**
+	 * Get the 404 HTML.
+	 *
+	 * @return string
+	 */
+	private function get_404_html() {
+		return '<html><head></head><body><h1>404 Not Found</h1><p>The requested URL was not found on this server.</p></body></html>';
 	}
 
 	/**
@@ -69,7 +90,6 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 	 */
 	public function tearDown(): void {
 		$this->feature->delete_cache();
-		add_action( 'send_headers', [ $this->feature, 'action__send_headers' ] );
 		parent::tearDown();
 	}
 
