@@ -16,6 +16,11 @@ namespace Alley\WP\Alleyvate;
  * Load plugin features.
  */
 function load(): void {
+	// Bail if the Alleyvate feature interface isn't loaded to prevent a fatal error.
+	if ( ! interface_exists( Feature::class ) ) {
+		return;
+	}
+
 	/**
 	 * Features to load.
 	 *
@@ -23,6 +28,10 @@ function load(): void {
 	 */
 	$features = [
 		'dashboard_widget_removal'      => new Features\Dashboard_Widget_Removal(),
+		'disable_comments'              => new Features\Disable_Comments(),
+		'disable_sticky_posts'          => new Features\Disable_Sticky_Posts(),
+		'disable_trackbacks'            => new Features\Disable_Trackbacks(),
+		'disallow_file_edit'            => new Features\Disallow_File_Edit(),
 		'redirect_guess_shortcircuit'   => new Features\Redirect_Guess_Shortcircuit(),
 		'user_enumeration_restrictions' => new Features\User_Enumeration_Restrictions(),
 	];
