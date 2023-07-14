@@ -14,14 +14,12 @@ namespace Alley\WP\Alleyvate\Features;
 
 use Alley\WP\Alleyvate\Feature;
 use Mantle\Testkit\Test_Case;
-use Mantle\Testing\Concerns\Admin_Screen;
 
 /**
  * Tests for disabling selected unpopular dashboard widgets.
  */
 final class Test_Dashboard_Widget_Removal extends Test_Case {
-
-	use Admin_Screen;
+	use \Mantle\Testing\Concerns\Admin_Screen;
 
 	/**
 	 * Feature instance.
@@ -49,38 +47,30 @@ final class Test_Dashboard_Widget_Removal extends Test_Case {
 		require_once ABSPATH . 'wp-admin/includes/template.php';
 		require_once ABSPATH . 'wp-admin/includes/dashboard.php';
 
-		$this->feature->boot();
+		$this->acting_as( 'administrator' );
 		set_current_screen( 'dashboard' );
 		wp_dashboard_setup();
-
 		global $wp_meta_boxes;
 
-		$array_keys = $this->array_keys_r( $wp_meta_boxes );
+		foreach ( $this->feature->widgets as $widget ) {
+			if ( str_contains( $widget['id'], 'jetpack' ) ) {
+				continue;
+			}
+			$this->assertNotEmpty(
+				$wp_meta_boxes['dashboard'][ $widget['context'] ][ $widget['priority'] ][ $widget['id'] ],
+				$widget['id'] . ' was not in dashboard widgets.'
+			);
+		}
 
-		foreach ( $this->feature->get_widgets() as $widget ) {
-			$this->assertNotContains(
-				$widget['id'],
-				$array_keys,
+		$this->feature->boot();
+		// Reset the dashboard post boot.
+		wp_dashboard_setup();
+
+		foreach ( $this->feature->widgets as $widget ) {
+			$this->assertEmpty(
+				$wp_meta_boxes['dashboard'][ $widget['context'] ][ $widget['priority'] ][ $widget['id'] ],
 				$widget['id'] . ' was not removed from dashboard widgets.'
 			);
 		}
-	}
-
-	/**
-	 * Helper function for getting all array keys, recursively.
-	 *
-	 * @param array $array Array to recursively parse.
-	 *
-	 * @return array
-	 */
-	protected function array_keys_r( array $array ): array {
-		$keys = array_keys( $array );
-		foreach ( $array as $i ) {
-			if ( \is_array( $i ) ) {
-				$keys = array_merge( $keys, $this->array_keys_r( $i ) );
-			}
-		}
-
-		return $keys;
 	}
 }

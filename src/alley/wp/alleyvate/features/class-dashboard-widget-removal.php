@@ -20,6 +20,29 @@ use Alley\WP\Alleyvate\Feature;
 final class Dashboard_Widget_Removal implements Feature {
 
 	/**
+	 * Array of widgets to be removed.
+	 *
+	 * @var array|\string[][]
+	 */
+	public array $widgets = [
+		[
+			'context'  => 'side',
+			'priority' => 'core',
+			'id'       => 'dashboard_primary',
+		],
+		[
+			'context'  => 'side',
+			'priority' => 'core',
+			'id'       => 'dashboard_quick_press',
+		],
+		[
+			'context'  => 'side',
+			'priority' => 'core',
+			'id'       => 'jetpack_summary_widget',
+		],
+	];
+
+	/**
 	 * Boot the feature.
 	 */
 	public function boot(): void {
@@ -32,35 +55,9 @@ final class Dashboard_Widget_Removal implements Feature {
 	 * @return void
 	 */
 	public function remove_dashboard_widgets() {
-		global $wp_meta_boxes;
-
-		foreach ( $this->get_widgets() as $widget ) {
-			unset( $wp_meta_boxes['dashboard'][ $widget['context'] ][ $widget['priority'] ][ $widget['id'] ] );
+		foreach ( $this->widgets as $widget ) {
+			remove_meta_box( $widget['id'], 'dashboard', $widget['context'] );
 		}
 	}
 
-	/**
-	 * Getter for widgets to be removed.
-	 *
-	 * @return string[][]
-	 */
-	public function get_widgets() {
-		return [
-			[
-				'context'  => 'side',
-				'priority' => 'core',
-				'id'       => 'dashboard_primary',
-			],
-			[
-				'context'  => 'side',
-				'priority' => 'core',
-				'id'       => 'dashboard_quick_press',
-			],
-			[
-				'context'  => 'side',
-				'priority' => 'core',
-				'id'       => 'jetpack_summary_widget',
-			],
-		];
-	}
 }
