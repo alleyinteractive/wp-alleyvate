@@ -28,14 +28,13 @@ add_filter( 'alleyvate_load_disable_comments', '__return_false' );
 
 Each feature's handle is listed below, along with a description of what it does.
 
-
-### `dashboard_widget_removal`
-
-This feature removes clutter from the dashboard. Its handle is `dashboard_widget_removal`.
-
 ### `disable_comments`
 
 This feature disables WordPress comments entirely, including the ability to post, view, edit, list, count, modify settings for, or access URLs that are related to comments completely.
+
+### `disable_dashboard_widgets`
+
+This feature removes clutter from the dashboard. Its handle is `dashboard_widget_removal`.
 
 ### `disable_sticky_posts`
 

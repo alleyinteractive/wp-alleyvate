@@ -1,6 +1,6 @@
 <?php
 /**
- * Class file for Test_Dashboard_Widget_Removal
+ * Class file for Test_Disable_Dashboard_Widgets
  *
  * (c) Alley <info@alley.com>
  *
@@ -18,7 +18,7 @@ use Mantle\Testkit\Test_Case;
 /**
  * Tests for disabling selected unpopular dashboard widgets.
  */
-final class Test_Dashboard_Widget_Removal extends Test_Case {
+final class Test_Disable_Dashboard_Widgets extends Test_Case {
 	use \Mantle\Testing\Concerns\Admin_Screen;
 	use \Mantle\Testing\Concerns\Refresh_Database;
 
@@ -35,13 +35,13 @@ final class Test_Dashboard_Widget_Removal extends Test_Case {
 	protected function setUp(): void {
 		parent::setUp();
 
-		$this->feature = new Dashboard_Widget_Removal();
+		$this->feature = new Disable_Dashboard_Widgets();
 	}
 
 	/**
 	 * Test that widgets have been removed.
 	 */
-	public function test_remove_dashboard_widgets() {
+	public function test_disable_dashboard_widgets() {
 
 		// Load files required to get wp_meta_boxes global.
 		require_once ABSPATH . 'wp-admin/includes/misc.php';

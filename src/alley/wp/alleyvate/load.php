@@ -27,8 +27,8 @@ function load(): void {
 	 * @var Feature[] $features
 	 */
 	$features = [
-		'dashboard_widget_removal'      => new Features\Dashboard_Widget_Removal(),
 		'disable_comments'              => new Features\Disable_Comments(),
+		'disable_dashboard_widgets'     => new Features\Disable_Dashboard_Widgets(),
 		'disable_sticky_posts'          => new Features\Disable_Sticky_Posts(),
 		'disable_trackbacks'            => new Features\Disable_Trackbacks(),
 		'disallow_file_edit'            => new Features\Disallow_File_Edit(),

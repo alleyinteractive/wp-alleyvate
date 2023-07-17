@@ -1,6 +1,6 @@
 <?php
 /**
- * Class file for Dashboard_Widget_Removal
+ * Class file for Disable_Dashboard_Widgets
  *
  * (c) Alley <info@alley.com>
  *
@@ -17,7 +17,7 @@ use Alley\WP\Alleyvate\Feature;
 /**
  * Disable selected unpopular dashboard widgets.
  */
-final class Dashboard_Widget_Removal implements Feature {
+final class Disable_Dashboard_Widgets implements Feature {
 
 	/**
 	 * Array of widgets to be removed.
@@ -46,7 +46,7 @@ final class Dashboard_Widget_Removal implements Feature {
 	 * Boot the feature.
 	 */
 	public function boot(): void {
-		add_action( 'wp_dashboard_setup', [ $this, 'remove_dashboard_widgets' ] );
+		add_action( 'wp_dashboard_setup', [ $this, 'disable_dashboard_widgets' ] );
 	}
 
 	/**
@@ -54,7 +54,7 @@ final class Dashboard_Widget_Removal implements Feature {
 	 *
 	 * @return void
 	 */
-	public function remove_dashboard_widgets() {
+	public function disable_dashboard_widgets() {
 		foreach ( $this->widgets as $widget ) {
 			remove_meta_box( $widget['id'], 'dashboard', $widget['context'] );
 		}
