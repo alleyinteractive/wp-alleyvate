@@ -46,7 +46,7 @@ final class Disable_Dashboard_Widgets implements Feature {
 	 * Boot the feature.
 	 */
 	public function boot(): void {
-		add_action( 'wp_dashboard_setup', [ $this, 'disable_dashboard_widgets' ] );
+		add_action( 'wp_dashboard_setup', [ $this, 'action__disable_dashboard_widgets' ] );
 	}
 
 	/**
@@ -54,7 +54,7 @@ final class Disable_Dashboard_Widgets implements Feature {
 	 *
 	 * @return void
 	 */
-	public function disable_dashboard_widgets() {
+	public function action__disable_dashboard_widgets() {
 		foreach ( $this->widgets as $widget ) {
 			remove_meta_box( $widget['id'], 'dashboard', $widget['context'] );
 		}

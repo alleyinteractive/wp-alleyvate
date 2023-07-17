@@ -41,7 +41,7 @@ final class Test_Disable_Dashboard_Widgets extends Test_Case {
 	/**
 	 * Test that widgets have been removed.
 	 */
-	public function test_disable_dashboard_widgets() {
+	public function test_action__disable_dashboard_widgets() {
 
 		// Load files required to get wp_meta_boxes global.
 		require_once ABSPATH . 'wp-admin/includes/misc.php';
