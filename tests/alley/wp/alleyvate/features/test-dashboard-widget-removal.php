@@ -20,6 +20,7 @@ use Mantle\Testkit\Test_Case;
  */
 final class Test_Dashboard_Widget_Removal extends Test_Case {
 	use \Mantle\Testing\Concerns\Admin_Screen;
+	use \Mantle\Testing\Concerns\Refresh_Database;
 
 	/**
 	 * Feature instance.
