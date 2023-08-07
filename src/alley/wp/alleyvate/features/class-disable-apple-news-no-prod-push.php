@@ -43,18 +43,9 @@ final class Disable_Apple_News_No_Prod_Push implements Feature {
 		if ( $this->is_production ) {
 			return $skip;
 		}
-		// All other cases, return true - but allow it to be filtered.
+		// All other cases, return true.
 
-		/**
-		 * Filters the final value in filter_apple_news_skip_push.
-		 *
-		 * Allow developers to disable this feature.
-		 *
-		 * @since 2.0.0
-		 *
-		 * @param bool $skip Should we skip the Apple News push?
-		 */
-		return apply_filters( 'alleyvate_disable_apple_news_no_prod_push', true );
+		return true;
 	}
 
 	/**

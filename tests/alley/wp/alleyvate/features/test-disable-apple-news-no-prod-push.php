@@ -35,8 +35,6 @@ final class Disable_Apple_News_No_Prod_Push_Test extends Test_Case {
 
 	/**
 	 * Sets up our mocks.
-	 *
-	 * @return void
 	 */
 	protected function setUp(): void {
 		parent::setUp();
@@ -56,8 +54,6 @@ final class Disable_Apple_News_No_Prod_Push_Test extends Test_Case {
 
 	/**
 	 * Test that the filter_apple_news_skip_push method returns false when passed false on a production_ environment.
-	 *
-	 * @return void
 	 */
 	public function testFalseFilterAppleNewsSkipPushProductionEnvironment() {
 		$skip = false;
@@ -69,8 +65,6 @@ final class Disable_Apple_News_No_Prod_Push_Test extends Test_Case {
 
 	/**
 	 * Test that the filter_apple_news_skip_push method returns true when passed true on a production_ environment.
-	 *
-	 * @return void
 	 */
 	public function testTrueFilterAppleNewsSkipPushProductionEnvironment() {
 		$skip = true;
@@ -82,8 +76,6 @@ final class Disable_Apple_News_No_Prod_Push_Test extends Test_Case {
 
 	/**
 	 * Test that the filter_apple_news_skip_push method returns true when passed false on a non-production_ environment.
-	 *
-	 * @return void
 	 */
 	public function testFalseFilterAppleNewsSkipPushOtherEnvironments() {
 		$skip = false;
@@ -95,8 +87,6 @@ final class Disable_Apple_News_No_Prod_Push_Test extends Test_Case {
 
 	/**
 	 * Test that the filter_apple_news_skip_push method returns true when passed true on a non-production_ environment.
-	 *
-	 * @return void
 	 */
 	public function testTrueFilterAppleNewsSkipPushOtherEnvironments() {
 		$skip = true;
