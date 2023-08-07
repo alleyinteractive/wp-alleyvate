@@ -21,7 +21,7 @@ final class Disable_Apple_News_No_Prod_Push implements Feature {
 	/**
 	 * Store if this is a production environment.
 	 *
-	 * @var [type]
+	 * @var bool
 	 */
 	private $is_production;
 
@@ -38,7 +38,7 @@ final class Disable_Apple_News_No_Prod_Push implements Feature {
 	 *
 	 * @param bool $skip Should we skip the Apple News push.
 	 */
-	public function filter_apple_news_skip_push( bool $skip ) {
+	public function filter_apple_news_skip_push( bool $skip ): bool {
 		// If we are on a production environment, don't modify the value.
 		if ( $this->is_production ) {
 			return $skip;
@@ -75,9 +75,6 @@ final class Disable_Apple_News_No_Prod_Push implements Feature {
 			return true;
 		}
 		// If we are on VIP Production, don't modify the value.
-		if ( \defined( 'VIP_GO_ENV' ) && VIP_GO_ENV === 'production' ) {
-			return true;
-		}
-		return false;
+		return ( \defined( 'VIP_GO_ENV' ) && VIP_GO_ENV === 'production' );
 	}
 }
