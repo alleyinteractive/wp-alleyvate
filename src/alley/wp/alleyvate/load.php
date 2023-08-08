@@ -27,13 +27,13 @@ function load(): void {
 	 * @var Feature[] $features
 	 */
 	$features = [
-		'disable_apple_news_no_prod_push' => new Features\Disable_Apple_News_No_Prod_Push(),
-		'disable_comments'                => new Features\Disable_Comments(),
-		'disable_sticky_posts'            => new Features\Disable_Sticky_Posts(),
-		'disable_trackbacks'              => new Features\Disable_Trackbacks(),
-		'disallow_file_edit'              => new Features\Disallow_File_Edit(),
-		'redirect_guess_shortcircuit'     => new Features\Redirect_Guess_Shortcircuit(),
-		'user_enumeration_restrictions'   => new Features\User_Enumeration_Restrictions(),
+		'disable_apple_news_non_prod_push' => new Features\Disable_Apple_News_Non_Prod_Push(),
+		'disable_comments'                 => new Features\Disable_Comments(),
+		'disable_sticky_posts'             => new Features\Disable_Sticky_Posts(),
+		'disable_trackbacks'               => new Features\Disable_Trackbacks(),
+		'disallow_file_edit'               => new Features\Disallow_File_Edit(),
+		'redirect_guess_shortcircuit'      => new Features\Redirect_Guess_Shortcircuit(),
+		'user_enumeration_restrictions'    => new Features\User_Enumeration_Restrictions(),
 	];
 
 	foreach ( $features as $handle => $feature ) {

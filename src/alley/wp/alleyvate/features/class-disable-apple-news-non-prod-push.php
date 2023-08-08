@@ -1,6 +1,6 @@
 <?php
 /**
- * Class file for Disable_Apple_News_No_Prod_Push
+ * Class file for Disable_Apple_News_Non_Prod_Push
  *
  * (c) Alley <info@alley.com>
  *
@@ -17,7 +17,7 @@ use Alley\WP\Alleyvate\Feature;
 /**
  * Disables Apple News Push on Non Production Environments.
  */
-final class Disable_Apple_News_No_Prod_Push implements Feature {
+final class Disable_Apple_News_Non_Prod_Push implements Feature {
 	/**
 	 * Store if this is a production environment.
 	 *
@@ -66,6 +66,9 @@ final class Disable_Apple_News_No_Prod_Push implements Feature {
 			return true;
 		}
 		// If we are on VIP Production, don't modify the value.
-		return ( \defined( 'VIP_GO_ENV' ) && VIP_GO_ENV === 'production' );
+		if ( \defined( 'VIP_GO_ENV' ) && VIP_GO_ENV === 'production' ) {
+			return true;
+		}
+		return false;
 	}
 }
