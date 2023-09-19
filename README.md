@@ -56,7 +56,7 @@ This feature stops WordPress from attempting to guess a redirect URL for a 404 r
 
 The underlying behavior of `redirect_guess_404_permalink()` often confuses clients, and its database queries are non-performant on larger sites.
 
-### user_enumeration_restrictions
+### `user_enumeration_restrictions`
 
 This feature requires users to be logged in before accessing data about registered users that would otherwise be publicly accessible. Its handle is `user_enumeration_restrictions`.
 
