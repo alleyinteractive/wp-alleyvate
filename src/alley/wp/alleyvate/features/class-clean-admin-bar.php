@@ -48,8 +48,6 @@ final class Clean_Admin_Bar implements Feature {
 	public function get_disposable_nodes() {
 		$disposable_nodes = [
 			'comments',
-			//'customize',
-			//'notes',
 			'themes',
 		];
 
