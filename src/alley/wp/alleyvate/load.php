@@ -28,7 +28,7 @@ function load(): void {
 	 */
 	$features = [
 		'clean_admin_bar'               => new Features\Clean_Admin_Bar(),
-		'disable_comments'              => new Features\Disable_Comments(),
+		//'disable_comments'              => new Features\Disable_Comments(),
 		'disable_dashboard_widgets'     => new Features\Disable_Dashboard_Widgets(),
 		'disable_sticky_posts'          => new Features\Disable_Sticky_Posts(),
 		'disable_trackbacks'            => new Features\Disable_Trackbacks(),

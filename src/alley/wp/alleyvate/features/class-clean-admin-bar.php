@@ -22,25 +22,7 @@ final class Clean_Admin_Bar implements Feature {
 	 * Boot the feature.
 	 */
 	public function boot(): void {
-		add_filter( 'wp_before_admin_bar_render', [ $this, 'before_admin_bar_render' ], 9999 );
-	}
-
-	/**
-	 * Set menus to be disabled.
-	 *
-	 * @return mixed|void
-	 */
-	public function menus() {
-		$default_menus = [
-			'comments',
-			'customize',
-			'gform-forms', // Gravity forms noise
-			'notes',
-			'themes',
-			'wp-seo-menu', // Yoast noise
-		];
-
-		return apply_filters( 'alleyvate_clean_admin_bar_menus', $default_menus );
+		add_action( 'wp_before_admin_bar_render', [ $this, 'before_admin_bar_render' ], 9999 );
 	}
 
 	/**
@@ -49,9 +31,28 @@ final class Clean_Admin_Bar implements Feature {
 	 * @return void
 	 */
 	public function before_admin_bar_render() {
+
 		global $wp_admin_bar;
-		foreach ( $this->menus() as $menu ) {
-			$wp_admin_bar->remove_menu( $menu );
+
+		$current_nodes = $wp_admin_bar->get_nodes();
+		foreach ( $this->get_disposable_nodes() as $node ) {
+			$wp_admin_bar->remove_menu( $node );
 		}
+	}
+
+	/**
+	 * Set menus to be disabled.
+	 *
+	 * @return mixed|void
+	 */
+	public function get_disposable_nodes() {
+		$disposable_nodes = [
+			'comments',
+			//'customize',
+			//'notes',
+			'themes',
+		];
+
+		return apply_filters( 'alleyvate_clean_admin_bar_menus', $disposable_nodes );
 	}
 }
