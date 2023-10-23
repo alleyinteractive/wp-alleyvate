@@ -29,9 +29,9 @@ final class Test_Clean_Admin_Bar extends Test_Case {
 	private Feature $feature;
 
 	/**
-	 * Test that the feature disallows file editing.
+	 * Test admin bar cleaning.
 	 */
-	public function test_clean_admin_bar() {
+	public function test_clean_admin_bar() { // // phpcs:ignore Generic.NamingConventions.ConstructorName.OldStyle
 
 		// Load file required to work with the admin bar.
 		require_once ABSPATH . WPINC . '/class-wp-admin-bar.php';
@@ -42,7 +42,7 @@ final class Test_Clean_Admin_Bar extends Test_Case {
 		// Make admin bar go.
 		global $wp_admin_bar;
 		_wp_admin_bar_init();
-		do_action_ref_array( 'admin_bar_menu', [ &$wp_admin_bar ] );
+		do_action_ref_array( 'admin_bar_menu', [ &$wp_admin_bar ] ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 
 		// Get nodes to compare.
 		$disposable_nodes = $this->feature->get_disposable_nodes();
@@ -55,10 +55,10 @@ final class Test_Clean_Admin_Bar extends Test_Case {
 
 		// Boot feature.
 		$this->feature->boot();
-		do_action( 'wp_before_admin_bar_render' );
+		do_action( 'wp_before_admin_bar_render' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 
 		// Get updated set of nodes.
-		$current_nodes    = $wp_admin_bar->get_nodes();
+		$current_nodes = $wp_admin_bar->get_nodes();
 
 		// Compare again.
 		foreach ( $disposable_nodes as $disposable_node ) {
