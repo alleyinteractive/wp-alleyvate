@@ -34,8 +34,10 @@ final class Clean_Admin_Bar implements Feature {
 		$default_menus = [
 			'comments',
 			'customize',
+			'gform-forms', // Gravity forms noise
+			'notes',
 			'themes',
-			'wp-seo-menu', // Yoast.
+			'wp-seo-menu', // Yoast noise
 		];
 
 		return apply_filters( 'alleyvate_clean_admin_bar_menus', $default_menus );

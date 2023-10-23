@@ -16,9 +16,9 @@ use Alley\WP\Alleyvate\Feature;
 use Mantle\Testkit\Test_Case;
 
 /**
- * Tests for the disallowing of file editing.
+ * Tests for the cleaning of the admin bar.
  */
-final class Test_Disallow_File_Edit extends Test_Case {
+final class Test_Clean_Admin_Bar extends Test_Case {
 	/**
 	 * Feature instance.
 	 *
@@ -32,13 +32,15 @@ final class Test_Disallow_File_Edit extends Test_Case {
 	protected function setUp(): void {
 		parent::setUp();
 
-		$this->feature = new Disallow_File_Edit();
+		$this->feature = new Clean_Admin_Bar();
 	}
 
 	/**
 	 * Test that the feature disallows file editing.
 	 */
-	public function test_disallow_file_editing() {
+	public function test_clean_admin_bar() {
+		global $wp_admin_bar;
+
 		$this->assertFalse( \defined( 'DISALLOW_FILE_EDIT' ), 'DISALLOW_FILE_EDIT should not be defined prior to boot.' );
 		$this->feature->boot();
 		$this->assertTrue( \defined( 'DISALLOW_FILE_EDIT' ), 'DISALLOW_FILE_EDIT should be defined after boot.' );
