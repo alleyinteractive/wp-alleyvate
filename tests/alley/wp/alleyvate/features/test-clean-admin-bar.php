@@ -112,10 +112,5 @@ final class Test_Clean_Admin_Bar extends Test_Case {
 
 		return $wp_admin_bar;
 	}
-
-
-
-
+	
 }
-
-
