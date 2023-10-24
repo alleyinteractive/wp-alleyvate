@@ -31,10 +31,8 @@ final class Clean_Admin_Bar implements Feature {
 	 * @return void
 	 */
 	public function before_admin_bar_render() {
-
 		global $wp_admin_bar;
 
-		$current_nodes = $wp_admin_bar->get_nodes();
 		foreach ( $this->get_disposable_nodes() as $node ) {
 			$wp_admin_bar->remove_menu( $node );
 		}
@@ -49,6 +47,8 @@ final class Clean_Admin_Bar implements Feature {
 		$disposable_nodes = [
 			'comments',
 			'themes',
+			'updates',
+			'wp-logo',
 		];
 
 		return apply_filters( 'alleyvate_clean_admin_bar_menus', $disposable_nodes );
