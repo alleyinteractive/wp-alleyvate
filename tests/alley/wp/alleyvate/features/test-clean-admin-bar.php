@@ -48,7 +48,7 @@ final class Test_Clean_Admin_Bar extends Test_Case {
 		$disposable_nodes = $this->feature->get_disposable_nodes();
 		$current_nodes    = $admin_bar->get_nodes();
 
-		// Let's make sure they are there before we remove them.
+		// Let's make sure the nodes exist before we remove them.
 		foreach ( $disposable_nodes as $disposable_node ) {
 			// Updates will not exist in a test context.
 			if ( 'updates' === $disposable_node ) {
@@ -77,7 +77,7 @@ final class Test_Clean_Admin_Bar extends Test_Case {
 	public function test_filter() {
 
 		$admin_bar = $this->apply_admin_bar();
-		$node      = 'comments';
+		$node      = 'my-account';
 
 		add_filter(
 			'alleyvate_clean_admin_bar_menus',
@@ -87,6 +87,12 @@ final class Test_Clean_Admin_Bar extends Test_Case {
 				return $disposable_nodes;
 			}
 		);
+
+		// Get nodes to compare.
+		$current_nodes = $admin_bar->get_nodes();
+
+		// Let's make sure the node exists before we remove it.
+		$this->assertArrayHasKey( $node, $current_nodes, 'The filtered node ' . $node . ' should exist in $wp_admin_bar global prior to boot.' );
 
 		// Boot feature.
 		$this->feature->boot();
