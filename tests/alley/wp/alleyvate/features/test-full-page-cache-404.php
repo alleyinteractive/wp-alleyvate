@@ -1,6 +1,6 @@
 <?php
 /**
- * Class file for Test_Disable_Comments
+ * Class file for Test_Full_Page_Cache_404
  *
  * (c) Alley <info@alley.com>
  *
@@ -16,7 +16,7 @@ use Alley\WP\Alleyvate\Feature;
 use Mantle\Testkit\Test_Case;
 
 /**
- * Tests for fully disabling comment functionality.
+ * Tests for Full Page Cache 404 functionality.
  */
 final class Test_Full_Page_Cache_404 extends Test_Case {
 	use \Mantle\Testing\Concerns\Admin_Screen;
