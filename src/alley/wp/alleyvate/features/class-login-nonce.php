@@ -189,6 +189,6 @@ final class Login_Nonce implements Feature {
 				$parts[] = "{$key}={$value}";
 			}
 		}
-		return \hash( 'sha256', implode( '-', $parts ) );
+		return hash( 'sha256', implode( '-', $parts ) );
 	}
 }
