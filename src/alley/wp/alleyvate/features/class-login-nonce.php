@@ -16,6 +16,10 @@ use Alley\WP\Alleyvate\Feature;
 
 /**
  * Adds a nonce field to the login form.
+ *
+ * Heavily inspired by `wp-login-nonce` by `elyobo`
+ *
+ * @link https://github.com/elyobo/wp-login-nonce
  */
 final class Login_Nonce implements Feature {
 
