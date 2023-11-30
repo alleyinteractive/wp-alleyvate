@@ -48,10 +48,12 @@ final class Test_Login_Nonce extends Test_Case {
 
 		$this->feature->initialize_nonce_fields();
 
-		static::factory()->user->create([
-			'user_login' => 'nonce_user',
-			'user_pass' => 'password',
-		]);
+		static::factory()->user->create(
+			[
+				'user_login' => 'nonce_user',
+				'user_pass'  => 'password',
+			]
+		);
 
 		$_POST = [
 			'log' => 'nonce_user',
@@ -72,15 +74,17 @@ final class Test_Login_Nonce extends Test_Case {
 
 		$this->feature->initialize_nonce_fields();
 
-		static::factory()->user->create([
-			'user_login' => 'nonce_user',
-			'user_pass' => 'password',
-		]);
+		static::factory()->user->create(
+			[
+				'user_login' => 'nonce_user',
+				'user_pass'  => 'password',
+			]
+		);
 
 		$_POST = [
 			'log' => 'nonce_user',
 			'pwd' => 'password',
-			$this->feature->generate_random_nonce_name( 'alleyvate_login_nonce' ) => wp_create_nonce( 'alleyvate_login_action' )
+			$this->feature->generate_random_nonce_name( 'alleyvate_login_nonce' ) => wp_create_nonce( 'alleyvate_login_action' ),
 		];
 
 		add_filter( 'send_auth_cookies', '__return_false' );
