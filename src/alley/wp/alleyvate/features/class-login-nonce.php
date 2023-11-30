@@ -76,19 +76,8 @@ final class Login_Nonce implements Feature {
 	 * Initializes the nonce fields. Is only run on `login_init` to restrict nonce data to login page.
 	 */
 	public function initialize_nonce_fields(): void {
-		/**
-		 * Filters the nonce name.
-		 *
-		 * @param string $nonce_name The nonce name.
-		 */
-		$this->nonce_name = (string) apply_filters( 'alleyvate_nonce_name', $this->generate_random_nonce_name( 'alleyvate_login_nonce' ) );
-
-		/**
-		 * Filters the nonce action name.
-		 *
-		 * @param string $nonce_action The action name.
-		 */
-		$this->nonce_action = (string) apply_filters( 'alleyvate_nonce_action', 'alleyvate_login_action' );
+		$this->nonce_name   = $this->generate_random_nonce_name( 'alleyvate_login_nonce' );
+		$this->nonce_action = 'alleyvate_login_action';
 
 		/**
 		 * Filters the lifetime of the nonce, in minutes.
