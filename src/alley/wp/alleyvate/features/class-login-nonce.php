@@ -34,7 +34,7 @@ final class Login_Nonce implements Feature {
 	private string $nonce_action;
 
 	/**
-	 * The nonce lifetime, in minutes.
+	 * The nonce lifetime. Stored in seconds.
 	 *
 	 * @var int
 	 */
@@ -88,6 +88,8 @@ final class Login_Nonce implements Feature {
 
 		/**
 		 * Filters the lifetime of the nonce, in minutes.
+		 *
+		 * Converted to seconds before storage.
 		 *
 		 * @param int $timeout The lifetime of the nonce, in minutes. Default 30.
 		 */
