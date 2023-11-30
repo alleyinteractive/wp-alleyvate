@@ -176,7 +176,7 @@ final class Login_Nonce implements Feature {
 	 * @param string $name The salt value.
 	 * @return string
 	 */
-	private function generate_random_nonce_name( string $name ): string {
+	public function generate_random_nonce_name( string $name ): string {
 		$parts = [ $name ];
 		if ( ! empty( $_SERVER ) ) { // phpcs:ignore WordPressVIPMinimum.Variables.ServerVariables.UserControlledHeaders
 			foreach ( [ 'REMOTE_ADDR', 'HTTP_X_FORWARDED_FOR', 'HTTP_CLIENT_IP' ] as $key ) {
