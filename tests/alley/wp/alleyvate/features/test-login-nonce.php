@@ -50,6 +50,7 @@ final class Test_Login_Nonce extends Test_Case {
 	 */
 	protected function tearDown(): void {
 		$_POST = [];
+		http_response_code( 200 );
 		parent::tearDown();
 	}
 
