@@ -14,12 +14,9 @@
 
 namespace Alley\WP\Alleyvate\Features;
 
-use Alley\WP\Alleyvate\Feature;
 use Mantle\Testing\Concerns\Refresh_Database;
 use Mantle\Testing\Exceptions\WP_Die_Exception;
 use Mantle\Testkit\Test_Case;
-use WP_Error;
-use WP_User;
 
 /**
  * Tests for the login nonce.
