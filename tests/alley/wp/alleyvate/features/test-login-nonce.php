@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  *
  * @package wp-alleyvate
+ *
+ * @phpcs:disable WordPress.WP.GlobalVariablesOverride.Prohibited, Generic.CodeAnalysis.EmptyStatement.DetectedCatch
  */
 
 namespace Alley\WP\Alleyvate\Features;
@@ -43,7 +45,7 @@ final class Test_Login_Nonce extends Test_Case {
 		/*
 		 * Prime the response code to 200 before running nonce validations.
 		 */
-		http_response_code(200);
+		http_response_code( 200 );
 	}
 
 	/**
@@ -62,7 +64,9 @@ final class Test_Login_Nonce extends Test_Case {
 
 		try {
 			Login_Nonce::action__pre_validate_login_nonce();
-		}catch( WP_Die_Exception $e ) {}
+		} catch ( WP_Die_Exception $e ) {
+			// Do nothing.
+		}
 
 		$this->assertSame( 403, http_response_code() );
 	}
@@ -82,7 +86,7 @@ final class Test_Login_Nonce extends Test_Case {
 		 */
 		add_filter( 'nonce_life', $nonce_life_filter );
 		$_POST = [
-			'wp-submit' => 'Log In',
+			'wp-submit'                               => 'Log In',
 			Login_Nonce::generate_random_nonce_name() => wp_create_nonce( Login_Nonce::NONCE_ACTION ),
 		];
 
@@ -92,7 +96,9 @@ final class Test_Login_Nonce extends Test_Case {
 
 		try {
 			Login_Nonce::action__pre_validate_login_nonce();
-		}catch( WP_Die_Exception $e ) {}
+		} catch ( WP_Die_Exception $e ) {
+			// Do nothing.
+		}
 
 		$this->assertSame( 200, http_response_code() );
 	}

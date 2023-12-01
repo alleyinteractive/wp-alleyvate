@@ -126,7 +126,6 @@ final class Login_Nonce implements Feature {
 	/**
 	 * Randomize the nonce name using the data from the $_SERVER super global, and a provided salt.
 	 *
-	 * @param string $name The salt value.
 	 * @return string
 	 */
 	public static function generate_random_nonce_name(): string {
