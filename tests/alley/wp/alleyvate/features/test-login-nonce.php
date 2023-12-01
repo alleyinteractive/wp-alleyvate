@@ -46,6 +46,14 @@ final class Test_Login_Nonce extends Test_Case {
 	}
 
 	/**
+	 * Tear Down.
+	 */
+	protected function tearDown(): void {
+		$_POST = [];
+		parent::tearDown();
+	}
+
+	/**
 	 * Test that login nonces are required to login successfully.
 	 */
 	public function test_logins_require_nonce() {
