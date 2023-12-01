@@ -35,14 +35,14 @@ final class Login_Nonce implements Feature {
 	 *
 	 * @var string
 	 */
-	private const NONCE_ACTION = 'alleyvate_login_action';
+	public const NONCE_ACTION = 'alleyvate_login_action';
 
 	/**
 	 * The nonce lifetime. Stored in seconds.
 	 *
 	 * @var int
 	 */
-	private const NONCE_TIMEOUT = 1800;
+	public const NONCE_TIMEOUT = 1800;
 
 	/**
 	 * Boot the feature.
@@ -65,7 +65,7 @@ final class Login_Nonce implements Feature {
 	 * Add the nonce field to the form.
 	 */
 	public static function action__add_nonce_to_form(): void {
-		wp_nonce_field( self::NONCE_ACTION, self::generate_random_nonce_name( self::NONCE_SALT ) );
+		wp_nonce_field( self::NONCE_ACTION, self::generate_random_nonce_name() );
 	}
 
 	/**
@@ -103,8 +103,8 @@ final class Login_Nonce implements Feature {
 		add_filter( 'nonce_life', $nonce_life_filter );
 
 		$nonce = false;
-		if ( ! empty( $_POST[ self::generate_random_nonce_name( self::NONCE_SALT ) ] ) ) {
-			$nonce = sanitize_key( $_POST[ self::generate_random_nonce_name( self::NONCE_SALT ) ] );
+		if ( ! empty( $_POST[ self::generate_random_nonce_name() ] ) ) {
+			$nonce = sanitize_key( $_POST[ self::generate_random_nonce_name() ] );
 		}
 
 		if (
@@ -113,7 +113,8 @@ final class Login_Nonce implements Feature {
 		) {
 			// This is a login with an invalid nonce. Throw an error.
 			http_response_code( 403 );
-			die;
+			wp_die();
+			return;
 		}
 
 		/*
@@ -128,8 +129,8 @@ final class Login_Nonce implements Feature {
 	 * @param string $name The salt value.
 	 * @return string
 	 */
-	public static function generate_random_nonce_name( string $name ): string {
-		$parts = [ $name ];
+	public static function generate_random_nonce_name(): string {
+		$parts = [ self::NONCE_SALT ];
 		if ( ! empty( $_SERVER ) ) { // phpcs:ignore WordPressVIPMinimum.Variables.ServerVariables.UserControlledHeaders
 			foreach ( [ 'REMOTE_ADDR', 'HTTP_X_FORWARDED_FOR', 'HTTP_CLIENT_IP' ] as $key ) {
 				$value   = ! empty( $_SERVER[ $key ] ) ? sanitize_key( $_SERVER[ $key ] ) : '';

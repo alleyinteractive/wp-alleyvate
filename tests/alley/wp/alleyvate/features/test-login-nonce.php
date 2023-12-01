@@ -14,6 +14,7 @@ namespace Alley\WP\Alleyvate\Features;
 
 use Alley\WP\Alleyvate\Feature;
 use Mantle\Testing\Concerns\Refresh_Database;
+use Mantle\Testing\Exceptions\WP_Die_Exception;
 use Mantle\Testkit\Test_Case;
 use WP_Error;
 use WP_User;
@@ -38,59 +39,61 @@ final class Test_Login_Nonce extends Test_Case {
 		parent::setUp();
 
 		$this->feature = new Login_Nonce();
+
+		/*
+		 * Prime the response code to 200 before running nonce validations.
+		 */
+		http_response_code(200);
 	}
 
 	/**
 	 * Test that login nonces are required to login successfully.
 	 */
 	public function test_logins_require_nonce() {
+		global $pagenow;
+
 		$this->feature->boot();
 
-		$this->feature->initialize_nonce_fields();
-
-		static::factory()->user->create(
-			[
-				'user_login' => 'nonce_user',
-				'user_pass'  => 'password',
-			]
-		);
-
 		$_POST = [
-			'log' => 'nonce_user',
-			'pwd' => 'password',
+			'wp-submit' => 'Log In',
 		];
 
-		$user = wp_signon();
+		$pagenow = 'wp-login.php';
 
-		$this->assertInstanceOf( WP_Error::class, $user );
-		$this->assertSame( 'nonce_failure', $user->get_error_code() );
+		try {
+			Login_Nonce::action__pre_validate_login_nonce();
+		}catch( WP_Die_Exception $e ) {}
+
+		$this->assertSame( 403, http_response_code() );
 	}
 
 	/**
 	 * Test that using nonces allow successful logins.
 	 */
 	public function test_logins_work_with_nonce() {
+		global $pagenow;
 		$this->feature->boot();
 
-		$this->feature->initialize_nonce_fields();
+		$nonce_life_filter = fn() => Login_Nonce::NONCE_TIMEOUT;
 
-		static::factory()->user->create(
-			[
-				'user_login' => 'nonce_user',
-				'user_pass'  => 'password',
-			]
-		);
-
+		/*
+		 * Nonce life is used to generate the nonce value. If this differs from the form,
+		 * the nonce will not validate.
+		 */
+		add_filter( 'nonce_life', $nonce_life_filter );
 		$_POST = [
-			'log' => 'nonce_user',
-			'pwd' => 'password',
-			$this->feature->generate_random_nonce_name( 'alleyvate_login_nonce' ) => wp_create_nonce( 'alleyvate_login_action' ),
+			'wp-submit' => 'Log In',
+			Login_Nonce::generate_random_nonce_name() => wp_create_nonce( Login_Nonce::NONCE_ACTION ),
 		];
 
-		add_filter( 'send_auth_cookies', '__return_false' );
+		remove_filter( 'nonce_life', $nonce_life_filter );
 
-		$user = wp_signon();
+		$pagenow = 'wp-login.php';
 
-		$this->assertInstanceOf( WP_User::class, $user );
+		try {
+			Login_Nonce::action__pre_validate_login_nonce();
+		}catch( WP_Die_Exception $e ) {}
+
+		$this->assertSame( 200, http_response_code() );
 	}
 }
