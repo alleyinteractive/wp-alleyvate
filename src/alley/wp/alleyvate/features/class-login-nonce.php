@@ -28,146 +28,98 @@ final class Login_Nonce implements Feature {
 	 *
 	 * @var string
 	 */
-	private string $nonce_name;
+	private const NONCE_SALT = 'wp_alleyvate_login_nonce';
 
 	/**
 	 * The action to use for the nonce.
 	 *
 	 * @var string
 	 */
-	private string $nonce_action;
+	private const NONCE_ACTION = 'alleyvate_login_action';
 
 	/**
 	 * The nonce lifetime. Stored in seconds.
 	 *
 	 * @var int
 	 */
-	private int $nonce_timeout;
+	private const NONCE_TIMEOUT = 1800;
 
 	/**
 	 * Boot the feature.
 	 */
 	public function boot(): void {
-		add_action( 'login_init', [ $this, 'initialize_nonce_fields' ] );
-		add_action( 'login_head', [ $this, 'add_meta_refresh' ] );
-		add_action( 'login_form', [ $this, 'add_nonce_to_form' ] );
-		add_filter( 'authenticate', [ $this, 'validate_login_nonce' ], 9999, 3 );
+		add_action( 'login_init', [ self::class, 'action__add_nonce_life_filter' ] );
+		add_action( 'login_head', [ self::class, 'action__add_meta_refresh' ] );
+		add_action( 'login_form', [ self::class, 'action__add_nonce_to_form' ] );
+		add_action( 'after_setup_theme', [ self::class, 'action__pre_validate_login_nonce' ], 9999 );
 	}
 
 	/**
 	 * Add a meta refresh to the login page, so it will refresh after the nonce timeout.
 	 */
-	public function add_meta_refresh(): void {
-		if ( ! ( (bool) apply_filters( 'alleyvate_nonce_meta_refresh', true ) ) ) {
-			return;
-		}
-
-		echo sprintf( '<meta http-equiv="refresh" content="%d">', esc_attr( $this->nonce_timeout ) );
+	public static function action__add_meta_refresh(): void {
+		echo sprintf( '<meta http-equiv="refresh" content="%d">', esc_attr( self::NONCE_TIMEOUT ) );
 	}
 
 	/**
 	 * Add the nonce field to the form.
 	 */
-	public function add_nonce_to_form(): void {
-		wp_nonce_field( $this->nonce_action, $this->nonce_name );
+	public static function action__add_nonce_to_form(): void {
+		wp_nonce_field( self::NONCE_ACTION, self::generate_random_nonce_name( self::NONCE_SALT ) );
 	}
 
 	/**
 	 * Initializes the nonce fields. Is only run on `login_init` to restrict nonce data to login page.
 	 */
-	public function initialize_nonce_fields(): void {
-		$this->nonce_name   = $this->generate_random_nonce_name( 'alleyvate_login_nonce' );
-		$this->nonce_action = 'alleyvate_login_action';
-
-		/**
-		 * Filters the lifetime of the nonce, in minutes.
-		 *
-		 * Converted to seconds before storage.
-		 *
-		 * @param int $timeout The lifetime of the nonce, in minutes. Default 30.
-		 */
-		$this->nonce_timeout = ( (int) apply_filters( 'alleyvate_nonce_timeout', 30 ) ) * 60;
-
-		add_filter( 'nonce_life', fn() => $this->nonce_timeout );
+	public static function action__add_nonce_life_filter(): void {
+		add_filter( 'nonce_life', fn() => self::NONCE_TIMEOUT );
 	}
 
 	/**
-	 * Validates the passed nonce is valid. Returns a user object on valid login,
-	 * or void on invalid nonce.
-	 *
-	 * @param \WP_User|\WP_Error|null $user     The result of previous login validations. An instance of
-	 *                                          WP_User if all validations have passed previously.
-	 * @param string                  $username The username used to try to login.
-	 * @param string                  $password The password used to try to login.
-	 * @return \WP_User|\WP_Error
+	 * Validates the login nonce as early as possible to avoid login attempts.
 	 */
-	public function validate_login_nonce( $user, $username, $password ) {
+	public static function action__pre_validate_login_nonce(): void {
 		/*
-		 * If the filter is returning a \WP_Error, then validation has already failed.
-		 * No need to check the nonce.
+		 * If this request is not specifically a login attempt on the wp-login.php page,
+		 * then skip it.
 		 */
-		if ( $user instanceof \WP_Error ) {
-			return $user;
+		if (
+			'wp-login.php' !== $GLOBALS['pagenow'] ||
+			empty( $_POST ) ||
+			(
+				isset( $_POST['wp-submit'] ) &&
+				'Log In' !== $_POST['wp-submit']
+			)
+		) {
+			return;
 		}
 
-		/*
-		 * We can't be sure when this filter will be triggered. Since we always need
-		 * this filter triggered last, in the case of `$user` coming through as null
-		 * lets run authentications again, and make sure.
-		 *
-		 * In a perfect world, this block will never run, but if it needs to be run,
-		 * we want it to run.
-		 */
-		if ( null === $user ) {
-			// Remove this check to avoid infinite loops.
-			remove_filter( 'authenticate', [ $this, 'validate_login_nonce' ], 9999 );
-			$user = apply_filters( 'authenticate', $user, $username, $password ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
-		}
-
-		// We're sure about this value now. Exit early.
-		if ( ! $user instanceof \WP_User ) {
-			return $user;
-		}
+		$nonce_life_filter = fn() => self::NONCE_TIMEOUT;
 
 		/*
-		 * Now that we've manually run all of the authentication filters,
-		 * and we know we have a valid login attempt, remove all the filters
-		 * so we don't risk bypassing our nonce validation down the line.
+		 * Nonce life is used to generate the nonce value. If this differs from the form,
+		 * the nonce will not validate.
 		 */
-		remove_all_filters( 'authenticate' );
-
-		// If no post data exists, no nonce data exists, which means our login is invalid.
-		if ( empty( $_POST ) ) {
-			return new \WP_Error(
-				'nonce_failure',
-				__( 'Login attempt timed out. Please try again.', 'alley' )
-			);
-		}
+		add_filter( 'nonce_life', $nonce_life_filter );
 
 		$nonce = false;
-
-		if ( ! empty( $_POST[ $this->nonce_name ] ) ) {
-			$nonce = sanitize_key( $_POST[ $this->nonce_name ] );
+		if ( ! empty( $_POST[ self::generate_random_nonce_name( self::NONCE_SALT ) ] ) ) {
+			$nonce = sanitize_key( $_POST[ self::generate_random_nonce_name( self::NONCE_SALT ) ] );
 		}
 
-		if ( ! $nonce ) {
-			return new \WP_Error(
-				'nonce_failure',
-				__( 'Login attempt timed out. Please try again.', 'alley' )
-			);
-
+		if (
+			! $nonce ||
+			! wp_verify_nonce( $nonce, self::NONCE_ACTION )
+		) {
+			// This is a login with an invalid nonce. Throw an error.
+			http_response_code( 403 );
+			die;
 		}
 
-		$nonce_validation = wp_verify_nonce( $nonce, $this->nonce_action );
-
-		if ( ! $nonce_validation ) {
-			return new \WP_Error(
-				'nonce_failure',
-				__( 'Login attempt timed out. Please try again.', 'alley' )
-			);
-		}
-
-		return $user;
+		/*
+		 * Clean up after ourselves.
+		 */
+		remove_filter( 'nonce_life', $nonce_life_filter );
 	}
 
 	/**
@@ -176,7 +128,7 @@ final class Login_Nonce implements Feature {
 	 * @param string $name The salt value.
 	 * @return string
 	 */
-	public function generate_random_nonce_name( string $name ): string {
+	public static function generate_random_nonce_name( string $name ): string {
 		$parts = [ $name ];
 		if ( ! empty( $_SERVER ) ) { // phpcs:ignore WordPressVIPMinimum.Variables.ServerVariables.UserControlledHeaders
 			foreach ( [ 'REMOTE_ADDR', 'HTTP_X_FORWARDED_FOR', 'HTTP_CLIENT_IP' ] as $key ) {
