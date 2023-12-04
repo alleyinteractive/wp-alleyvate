@@ -28,7 +28,7 @@ final class Login_Nonce implements Feature {
 	 *
 	 * @var string
 	 */
-	private const NONCE_SALT = 'wp_alleyvate_login_nonce';
+	public const NONCE_NAME = 'wp_alleyvate_login_nonce';
 
 	/**
 	 * The action to use for the nonce.
@@ -65,7 +65,7 @@ final class Login_Nonce implements Feature {
 	 * Add the nonce field to the form.
 	 */
 	public static function action__add_nonce_to_form(): void {
-		wp_nonce_field( self::NONCE_ACTION, self::generate_random_nonce_name() );
+		wp_nonce_field( self::NONCE_ACTION, self::NONCE_NAME );
 	}
 
 	/**
@@ -84,12 +84,9 @@ final class Login_Nonce implements Feature {
 		 * then skip it.
 		 */
 		if (
-			'wp-login.php' !== $GLOBALS['pagenow'] ||
+			'wp-login.php' !== ( $GLOBALS['pagenow'] ?? '' ) ||
 			empty( $_POST ) ||
-			(
-				isset( $_POST['wp-submit'] ) &&
-				'Log In' !== $_POST['wp-submit']
-			)
+			empty( $_POST['pwd'] )
 		) {
 			return;
 		}
@@ -103,8 +100,8 @@ final class Login_Nonce implements Feature {
 		add_filter( 'nonce_life', $nonce_life_filter );
 
 		$nonce = false;
-		if ( ! empty( $_POST[ self::generate_random_nonce_name() ] ) ) {
-			$nonce = sanitize_key( $_POST[ self::generate_random_nonce_name() ] );
+		if ( ! empty( $_POST[ self::NONCE_NAME ] ) ) {
+			$nonce = sanitize_key( $_POST[ self::NONCE_NAME ] );
 		}
 
 		if (
@@ -121,21 +118,5 @@ final class Login_Nonce implements Feature {
 		 * Clean up after ourselves.
 		 */
 		remove_filter( 'nonce_life', $nonce_life_filter );
-	}
-
-	/**
-	 * Randomize the nonce name using the data from the $_SERVER super global, and a provided salt.
-	 *
-	 * @return string
-	 */
-	public static function generate_random_nonce_name(): string {
-		$parts = [ self::NONCE_SALT ];
-		if ( ! empty( $_SERVER ) ) { // phpcs:ignore WordPressVIPMinimum.Variables.ServerVariables.UserControlledHeaders
-			foreach ( [ 'REMOTE_ADDR', 'HTTP_X_FORWARDED_FOR', 'HTTP_CLIENT_IP' ] as $key ) {
-				$value   = ! empty( $_SERVER[ $key ] ) ? sanitize_key( $_SERVER[ $key ] ) : '';
-				$parts[] = "{$key}={$value}";
-			}
-		}
-		return hash( 'sha256', implode( '-', $parts ) );
 	}
 }

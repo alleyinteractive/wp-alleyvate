@@ -63,7 +63,7 @@ final class Test_Login_Nonce extends Test_Case {
 		$this->feature->boot();
 
 		$_POST = [
-			'wp-submit' => 'Log In',
+			'pwd' => 'password',
 		];
 
 		$pagenow = 'wp-login.php';
@@ -82,6 +82,7 @@ final class Test_Login_Nonce extends Test_Case {
 	 */
 	public function test_logins_work_with_nonce() {
 		global $pagenow;
+
 		$this->feature->boot();
 
 		$nonce_life_filter = fn() => Login_Nonce::NONCE_TIMEOUT;
@@ -92,8 +93,8 @@ final class Test_Login_Nonce extends Test_Case {
 		 */
 		add_filter( 'nonce_life', $nonce_life_filter );
 		$_POST = [
-			'wp-submit'                               => 'Log In',
-			Login_Nonce::generate_random_nonce_name() => wp_create_nonce( Login_Nonce::NONCE_ACTION ),
+			'pwd'                   => 'password',
+			Login_Nonce::NONCE_NAME => wp_create_nonce( Login_Nonce::NONCE_ACTION ),
 		];
 
 		remove_filter( 'nonce_life', $nonce_life_filter );
