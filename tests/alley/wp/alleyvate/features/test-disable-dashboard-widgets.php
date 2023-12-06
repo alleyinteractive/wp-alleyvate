@@ -36,6 +36,9 @@ final class Test_Disable_Dashboard_Widgets extends Test_Case {
 		parent::setUp();
 
 		$this->feature = new Disable_Dashboard_Widgets();
+
+		$this->prevent_stray_requests();
+		$this->fake_request();
 	}
 
 	/**
