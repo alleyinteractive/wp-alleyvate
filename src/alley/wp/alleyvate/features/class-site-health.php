@@ -35,7 +35,7 @@ final class Site_Health implements Feature {
 	 * @return array
 	 */
 	public function add_debug_information( $info ): array {
-		if ( ! is_array( $info ) ) {
+		if ( ! \is_array( $info ) ) {
 			$info = [];
 		}
 

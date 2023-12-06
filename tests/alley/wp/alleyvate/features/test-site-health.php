@@ -43,7 +43,7 @@ final class Test_Site_Health extends Test_Case {
 	public function test_site_health_feature() {
 		$features = available_features();
 
-		$this->expectApplied( 'alleyvate_load_feature' )->times( count( $features ) );
+		$this->expectApplied( 'alleyvate_load_feature' )->times( \count( $features ) );
 
 		foreach ( $features as $handle => $class ) {
 			$this->expectApplied( "alleyvate_load_{$handle}" )->once();
@@ -56,6 +56,6 @@ final class Test_Site_Health extends Test_Case {
 
 		$this->assertNotEmpty( $data['wp-alleyvate'] ?? null );
 		$this->assertNotEmpty( $data['wp-alleyvate']['fields'] ?? null );
-		$this->assertCount( count( $features ), $data['wp-alleyvate']['fields'] );
+		$this->assertCount( \count( $features ), $data['wp-alleyvate']['fields'] );
 	}
 }
