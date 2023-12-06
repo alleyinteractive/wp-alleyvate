@@ -1,6 +1,6 @@
 <?php
 /**
- * Class file for Clean_Admin_Bar
+ * Class file for Site_Health
  *
  * (c) Alley <info@alley.com>
  *

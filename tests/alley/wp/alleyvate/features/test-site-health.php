@@ -1,6 +1,6 @@
 <?php
 /**
- * Class file for Test_Redirect_Guess_Shortcircuit
+ * Class file for Test_Site_Health
  *
  * (c) Alley <info@alley.com>
  *
