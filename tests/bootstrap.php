@@ -14,6 +14,8 @@
 	// Fires on 'muplugins_loaded'.
 	->loaded(
 		function () {
+			require_once __DIR__ . '/../wp-alleyvate.php';
+
 			/*
 			 * Turn off all features by default so that we can verify that the behavior
 			 * of WordPress changes after we turn the feature on.
