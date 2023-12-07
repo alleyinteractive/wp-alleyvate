@@ -59,5 +59,4 @@ final class Disable_Dashboard_Widgets implements Feature {
 			remove_meta_box( $widget['id'], 'dashboard', $widget['context'] );
 		}
 	}
-
 }
