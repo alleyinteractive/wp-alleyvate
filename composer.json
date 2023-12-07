@@ -23,9 +23,9 @@
     "composer/installers": "^1.0"
   },
   "require-dev": {
-    "alleyinteractive/alley-coding-standards": "^1.0",
+    "alleyinteractive/alley-coding-standards": "^2.0",
     "friendsofphp/php-cs-fixer": "^3.8",
-    "mantle-framework/testkit": "^0.11"
+    "mantle-framework/testkit": "^0.12"
   },
   "scripts": {
     "fixer": "php-cs-fixer -v fix --allow-risky=yes",
