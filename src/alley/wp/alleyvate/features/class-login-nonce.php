@@ -58,7 +58,7 @@ final class Login_Nonce implements Feature {
 	 * Add a meta refresh to the login page, so it will refresh after the nonce timeout.
 	 */
 	public static function action__add_meta_refresh(): void {
-		echo sprintf( '<meta http-equiv="refresh" content="%d">', esc_attr( self::NONCE_TIMEOUT ) );
+		printf( '<meta http-equiv="refresh" content="%d">', esc_attr( self::NONCE_TIMEOUT ) );
 	}
 
 	/**
