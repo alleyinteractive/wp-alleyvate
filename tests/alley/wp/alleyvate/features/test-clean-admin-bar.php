@@ -68,7 +68,6 @@ final class Test_Clean_Admin_Bar extends Test_Case {
 		foreach ( $disposable_nodes as $disposable_node ) {
 			$this->assertArrayNotHasKey( $disposable_node, $current_nodes, $disposable_node . ' should not exist in $wp_admin_bar global after boot.' );
 		}
-
 	}
 
 	/**
@@ -102,7 +101,6 @@ final class Test_Clean_Admin_Bar extends Test_Case {
 		$current_nodes = $admin_bar->get_nodes();
 
 		$this->assertArrayNotHasKey( $node, $current_nodes, 'The filtered node ' . $node . ' should not exist in $wp_admin_bar global after boot.' );
-
 	}
 
 	/**
@@ -122,5 +120,4 @@ final class Test_Clean_Admin_Bar extends Test_Case {
 
 		return $wp_admin_bar;
 	}
-
 }
