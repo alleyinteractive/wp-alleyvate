@@ -25,6 +25,7 @@ function available_features(): array {
 		'disable_sticky_posts'          => new Features\Disable_Sticky_Posts(),
 		'disable_trackbacks'            => new Features\Disable_Trackbacks(),
 		'disallow_file_edit'            => new Features\Disallow_File_Edit(),
+		'login_nonce'                   => new Features\Login_Nonce(),
 		'redirect_guess_shortcircuit'   => new Features\Redirect_Guess_Shortcircuit(),
 		'site_health'                   => new Features\Site_Health(),
 		'user_enumeration_restrictions' => new Features\User_Enumeration_Restrictions(),
