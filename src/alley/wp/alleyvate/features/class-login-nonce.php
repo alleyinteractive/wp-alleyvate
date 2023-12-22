@@ -72,7 +72,16 @@ final class Login_Nonce implements Feature {
 	 * Initializes the nonce fields. Is only run on `login_init` to restrict nonce data to login page.
 	 */
 	public static function action__add_nonce_life_filter(): void {
-		add_filter( 'nonce_life', fn() => self::NONCE_TIMEOUT );
+		add_filter( 'nonce_life', [ __CLASS__, 'nonce_life_filter' ] );
+	}
+
+	/**
+	 * Filter the nonce timeout.
+	 *
+	 * @return int
+	 */
+	public static function nonce_life_filter(): int {
+		return self::NONCE_TIMEOUT;
 	}
 
 	/**
@@ -85,24 +94,18 @@ final class Login_Nonce implements Feature {
 		 */
 		if (
 			'wp-login.php' !== ( $GLOBALS['pagenow'] ?? '' ) ||
-			empty( $_POST ) ||
 			empty( $_POST['pwd'] )
 		) {
 			return;
 		}
 
-		$nonce_life_filter = fn() => self::NONCE_TIMEOUT;
-
 		/*
 		 * Nonce life is used to generate the nonce value. If this differs from the form,
 		 * the nonce will not validate.
 		 */
-		add_filter( 'nonce_life', $nonce_life_filter );
+		add_filter( 'nonce_life', [ __CLASS__, 'nonce_life_filter' ] );
 
-		$nonce = false;
-		if ( ! empty( $_POST[ self::NONCE_NAME ] ) ) {
-			$nonce = sanitize_key( $_POST[ self::NONCE_NAME ] );
-		}
+		$nonce = sanitize_key( $_POST[ self::NONCE_NAME ] ?? '' );
 
 		if (
 			! $nonce ||
@@ -110,13 +113,13 @@ final class Login_Nonce implements Feature {
 		) {
 			// This is a login with an invalid nonce. Throw an error.
 			http_response_code( 403 );
-			wp_die();
+			wp_die( 'Login attempt failed. Please try again.', 'Login Error' );
 			return;
 		}
 
 		/*
 		 * Clean up after ourselves.
 		 */
-		remove_filter( 'nonce_life', $nonce_life_filter );
+		remove_filter( 'nonce_life', [ __CLASS__, 'nonce_life_filter' ] );
 	}
 }
