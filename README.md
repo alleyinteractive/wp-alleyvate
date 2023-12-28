@@ -28,9 +28,17 @@ add_filter( 'alleyvate_load_disable_comments', '__return_false' );
 
 Each feature's handle is listed below, along with a description of what it does.
 
+### `clean_admin_bar`
+
+This feature removes selected nodes from the admin bar.
+
 ### `disable_comments`
 
 This feature disables WordPress comments entirely, including the ability to post, view, edit, list, count, modify settings for, or access URLs that are related to comments completely.
+
+### `disable_dashboard_widgets`
+
+This feature removes clutter from the dashboard.
 
 ### `disable_sticky_posts`
 
@@ -52,7 +60,7 @@ This feature stops WordPress from attempting to guess a redirect URL for a 404 r
 
 The underlying behavior of `redirect_guess_404_permalink()` often confuses clients, and its database queries are non-performant on larger sites.
 
-### Restrict User Enumeration
+### `user_enumeration_restrictions`
 
 This feature requires users to be logged in before accessing data about registered users that would otherwise be publicly accessible. Its handle is `user_enumeration_restrictions`.
 
