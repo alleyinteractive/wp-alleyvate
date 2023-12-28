@@ -66,7 +66,7 @@ final class Full_Page_Cache_404 implements Feature {
 	public function boot(): void {
 
 		// Return 404 page cache on template_redirect.
-		add_action( 'template_redirect', [ $this, 'action__template_redirect' ], 9999 );
+		add_action( 'template_redirect', [ $this, 'action__template_redirect' ], 1 );
 
 		// Add HTTP header for debugging.
 		add_action( 'send_headers', [ $this, 'action__send_headers' ] );
