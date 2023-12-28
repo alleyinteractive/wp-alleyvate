@@ -1,6 +1,6 @@
 <?php
 /**
- * Class file for Full Page Cache for 404s
+ * Class file for Full Page Cache for 404s.
  *
  * (c) Alley <info@alley.com>
  *

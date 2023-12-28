@@ -92,5 +92,4 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 		$this->feature->delete_cache();
 		parent::tearDown();
 	}
-
 }
