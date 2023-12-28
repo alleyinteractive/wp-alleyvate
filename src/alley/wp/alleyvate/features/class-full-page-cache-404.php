@@ -89,10 +89,9 @@ final class Full_Page_Cache_404 implements Feature {
 	/**
 	 * Get 404 Page Cache and return early if found.
 	 */
-	public function action__template_redirect() {
+	public function action__template_redirect(): void {
 
-		// Allow 404s for the Admin.
-		if ( is_admin() ) {
+		if ( is_user_logged_in() ) {
 			return;
 		}
 
@@ -129,10 +128,15 @@ final class Full_Page_Cache_404 implements Feature {
 	/**
 	 * Send Headers.
 	 */
-	public function action__send_headers() {
+	public function action__send_headers(): void {
+		if ( is_user_logged_in() ) {
+			return;
+		}
+
 		if ( ! is_404() ) {
 			return;
 		}
+
 		if ( isset( $_SERVER['REQUEST_URI'] ) && self::GUARANTEED_404_URI === $_SERVER['REQUEST_URI'] ) {
 			return;
 		}
@@ -154,13 +158,12 @@ final class Full_Page_Cache_404 implements Feature {
 	 *
 	 * @param \WP_Query $query WP Query.
 	 */
-	public function action__pre_get_posts( $query ) {
+	public function action__pre_get_posts( $query ): void {
 		if ( isset( $_SERVER['REQUEST_URI'] ) && self::GUARANTEED_404_URI === $_SERVER['REQUEST_URI'] ) {
 			global $wp_query;
 			$wp_query->set_404();
 		}
 	}
-
 
 	/**
 	 * Start output buffering, so we can cache the 404 page.
@@ -201,7 +204,7 @@ final class Full_Page_Cache_404 implements Feature {
 	 *
 	 * @return mixed
 	 */
-	public function get_stale_cache() {
+	public function get_stale_cache(): mixed {
 		return wp_cache_get( self::STALE_CACHE_KEY, self::CACHE_GROUP );
 	}
 
@@ -220,16 +223,9 @@ final class Full_Page_Cache_404 implements Feature {
 	/**
 	 * Delete cache.
 	 */
-	public function delete_cache() {
+	public function delete_cache(): void {
 		wp_cache_delete( self::CACHE_KEY, self::CACHE_GROUP );
 		wp_cache_delete( self::STALE_CACHE_KEY, self::CACHE_GROUP );
-	}
-
-	/**
-	 * Populate cache.
-	 */
-	public function populate_cache() {
-		ob_start( [ self::class, 'finish_output_buffering' ] );
 	}
 
 	/**
