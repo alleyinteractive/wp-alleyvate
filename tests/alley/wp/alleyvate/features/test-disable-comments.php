@@ -19,8 +19,8 @@ use Mantle\Testkit\Test_Case;
  * Tests for fully disabling comment functionality.
  */
 final class Test_Disable_Comments extends Test_Case {
-	use \Mantle\Testing\Concerns\Admin_Screen,
-		\Mantle\Testing\Concerns\Refresh_Database;
+	use \Mantle\Testing\Concerns\Admin_Screen;
+	use \Mantle\Testing\Concerns\Refresh_Database;
 
 	/**
 	 * Feature instance.

@@ -2,6 +2,19 @@
 
 This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a CHANGELOG](https://keepachangelog.com/en/1.0.0/).
 
+## 2.2.0
+
+### Added
+
+* Added a feature to remove commonly unused dashboard widgets.
+* Added a feature to remove specific admin bar links (comments and themes).
+* Added a Site Health screen panel with information about the enabled/disabled features of the plugin.
+
+### Changed
+
+* Upgraded to Alley Coding Standards 2.0.
+* Upgraded to Mantle TestKit 0.12.
+
 ## 2.1.0
 
 ### Added
