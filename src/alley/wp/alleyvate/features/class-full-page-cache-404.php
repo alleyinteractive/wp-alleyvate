@@ -136,6 +136,9 @@ final class Full_Page_Cache_404 implements Feature {
 		if ( isset( $_SERVER['REQUEST_URI'] ) && self::GUARANTEED_404_URI === $_SERVER['REQUEST_URI'] ) {
 			return;
 		}
+		if ( headers_sent() ) {
+			return;
+		}
 		if ( self::get_cache() ) {
 			header( 'X-Alleyvate-404-Cache: HIT' );
 		} elseif ( self::get_stale_cache() ) {
