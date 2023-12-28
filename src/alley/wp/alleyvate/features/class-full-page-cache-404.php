@@ -181,7 +181,7 @@ final class Full_Page_Cache_404 implements Feature {
 		if ( ! $wp_query->is_404() ) {
 			return $buffer;
 		}
-		if ( ! $this->get_cache() ) {
+		if ( ! $this->get_cache() && ! empty( $buffer ) ) {
 			self::set_cache( $buffer );
 		}
 		return $buffer;
@@ -237,7 +237,8 @@ final class Full_Page_Cache_404 implements Feature {
 	 */
 	public function trigger_404_page_cache() {
 		$url = home_url( self::GUARANTEED_404_URI, 'https' );
-		// replace http with https to ensure the styles don't get blocked due to insecure content.
+
+		// Replace http with https to ensure the styles don't get blocked due to insecure content.
 		$url = str_replace( 'http://', 'https://', $url );
 
 		// This request will populate the cache using output buffering.
