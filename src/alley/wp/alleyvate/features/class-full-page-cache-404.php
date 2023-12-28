@@ -24,41 +24,41 @@ final class Full_Page_Cache_404 implements Feature {
 	 *
 	 * @var string
 	 */
-	const CACHE_GROUP = 'alleyvate';
+	public const CACHE_GROUP = 'alleyvate';
 
 	/**
 	 * Cache key.
 	 *
 	 * @var string
 	 */
-	const CACHE_KEY = 'alleyvate_404_cache';
+	public const CACHE_KEY = 'alleyvate_404_cache';
 
 	/**
 	 * Cache key for stale cache.
 	 *
 	 * @var string
 	 */
-	const STALE_CACHE_KEY = 'alleyvate_404_cache_stale';
+	public const STALE_CACHE_KEY = 'alleyvate_404_cache_stale';
 
 	/**
 	 * Cache time.
 	 *
 	 * @var int
 	 */
-	const CACHE_TIME = HOUR_IN_SECONDS;
+	public const CACHE_TIME = HOUR_IN_SECONDS;
 
 	/**
 	 * Stale cache time.
 	 *
 	 * @var int
 	 */
-	const STALE_CACHE_TIME = DAY_IN_SECONDS;
+	public const STALE_CACHE_TIME = DAY_IN_SECONDS;
 
 	/**
 	 * Guaranteed 404 URI.
 	 * Used for populating the cache.
 	 */
-	const GUARANTEED_404_URI = '/wp-alleyvate-this-is-a-404-page';
+	public const GUARANTEED_404_URI = '/wp-alleyvate-this-is-a-404-page';
 
 	/**
 	 * Boot the feature.
