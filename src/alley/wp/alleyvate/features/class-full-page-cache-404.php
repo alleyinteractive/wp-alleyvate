@@ -68,9 +68,6 @@ final class Full_Page_Cache_404 implements Feature {
 		// Return 404 page cache on template_redirect.
 		add_action( 'template_redirect', [ $this, 'action__template_redirect' ], 1 );
 
-		// Add HTTP header for debugging.
-		add_action( 'send_headers', [ $this, 'action__send_headers' ] );
-
 		// Force the Guaranteed 404 page to be a 404, because this is the page we will cache.
 		add_action( 'pre_get_posts', [ $this, 'action__pre_get_posts' ] );
 
@@ -104,13 +101,15 @@ final class Full_Page_Cache_404 implements Feature {
 		if ( isset( $_SERVER['REQUEST_URI'] ) && self::GUARANTEED_404_URI === $_SERVER['REQUEST_URI'] ) {
 			return;
 		}
-
-		$cache = self::get_cache();
+		$stale_cache_in_use = false;
+		$cache              = self::get_cache();
 
 		if ( false === $cache ) {
-			$cache = self::get_stale_cache();
+			$cache              = self::get_stale_cache();
+			$stale_cache_in_use = true;
 		}
-		if ( $cache ) {
+		if ( ! empty( $cache ) ) {
+			$this->send_header( 'HIT', $stale_cache_in_use );
 			// Cached content is already escaped.
 			echo $cache; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			exit;
@@ -119,6 +118,7 @@ final class Full_Page_Cache_404 implements Feature {
 			if ( ! wp_next_scheduled( 'alleyvate_404_cache_single' ) ) {
 				wp_schedule_single_event( time(), 'alleyvate_404_cache_single' );
 			}
+			$this->send_header( 'MISS' );
 			// If no cache, return an empty string.
 			echo '';
 			exit;
@@ -126,28 +126,22 @@ final class Full_Page_Cache_404 implements Feature {
 	}
 
 	/**
-	 * Send Headers.
+	 * Send X-Alleyvate HTTP Header.
+	 *
+	 * @param string $type HIT or MISS.
+	 * @param bool   $stale Whether the stale cache is in use. Default false.
 	 */
-	public function action__send_headers(): void {
-		if ( is_user_logged_in() ) {
-			return;
-		}
+	public function send_header( $type, $stale = false ): void {
 
-		if ( ! is_404() ) {
-			return;
-		}
-
-		if ( isset( $_SERVER['REQUEST_URI'] ) && self::GUARANTEED_404_URI === $_SERVER['REQUEST_URI'] ) {
-			return;
-		}
 		if ( headers_sent() ) {
 			return;
 		}
-		if ( self::get_cache() ) {
+
+		if ( ! $stale && 'HIT' === $type ) {
 			header( 'X-Alleyvate-404-Cache: HIT' );
-		} elseif ( self::get_stale_cache() ) {
+		} elseif ( $stale && 'HIT' === $type ) {
 			header( 'X-Alleyvate-404-Cache: HIT (stale)' );
-		} else {
+		} elseif ( 'MISS' === $type ) {
 			header( 'X-Alleyvate-404-Cache: MISS' );
 		}
 	}
