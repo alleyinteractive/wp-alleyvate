@@ -74,9 +74,11 @@ final class Disable_Comments implements Feature {
 	}
 
 	/**
-	 * Removes post type support for comments and filters REST responses for each post type to remove comment support.
+	 * Add actions and filters to run on the init hook.
 	 */
 	public static function action__init(): void {
+
+		// Removes post type support for comments and filters REST responses for each post type to remove comment support.
 		foreach ( get_post_types() as $post_type ) {
 			if ( post_type_supports( $post_type, 'comments' ) ) {
 				remove_post_type_support( $post_type, 'comments' );
@@ -85,6 +87,9 @@ final class Disable_Comments implements Feature {
 			// The REST API filters don't have a generic form, so they need to be registered for each post type.
 			add_filter( "rest_prepare_{$post_type}", [ self::class, 'filter__rest_prepare' ], 9999 );
 		}
+
+		// Removes the Akismet comments section from the dashboard.
+		remove_action( 'rightnow_end', [ 'Akismet_Admin', 'rightnow_stats' ] );
 	}
 
 	/**
