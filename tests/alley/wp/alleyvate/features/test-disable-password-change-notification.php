@@ -37,7 +37,10 @@ final class Test_Disable_Password_Change_Notification extends Test_Case {
 		$this->feature = new Disable_Password_Change_Notification();
 	}
 
-	public function test_disable_password_change_notification() {
+	/**
+	 * Test that the feature.
+	 */
+	public function test_disable_password_change_notification_hook() {
 		$this->acting_as( 'administrator' );
 
 		$this->assertTrue(
