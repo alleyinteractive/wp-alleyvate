@@ -36,6 +36,10 @@ This feature removes selected nodes from the admin bar.
 
 This feature disables WordPress comments entirely, including the ability to post, view, edit, list, count, modify settings for, or access URLs that are related to comments completely.
 
+### `disable_custom_fields_meta_box`
+
+This feature removes the custom fields meta box from the post editor.
+
 ### `disable_dashboard_widgets`
 
 This feature removes clutter from the dashboard.
