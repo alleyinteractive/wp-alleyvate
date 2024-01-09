@@ -67,4 +67,18 @@ final class Test_Disable_Attachment_Routing extends Test_Case {
 
 		$this->get( $permalink )->assertNotFound();
 	}
+
+	/**
+	 * Test that the attachment pages are disabled using the new
+	 * 'wp_attachment_pages_enabled' option from WordPress 6.4.
+	 */
+	public function test_attachment_pages_disabled_using_option() {
+		update_option( 'wp_attachment_pages_enabled', '1' );
+
+		$this->assertEquals( '1', get_option( 'wp_attachment_pages_enabled' ) );
+
+		$this->feature->boot();
+
+		$this->assertEquals( '0', get_option( 'wp_attachment_pages_enabled' ) );
+	}
 }

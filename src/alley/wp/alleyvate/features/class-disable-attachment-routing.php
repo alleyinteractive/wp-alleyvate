@@ -22,6 +22,7 @@ final class Disable_Attachment_Routing implements Feature {
 	 * Boot the feature.
 	 */
 	public function boot(): void {
+		add_filter( 'pre_option_wp_attachment_pages_enabled', '__return_zero' );
 		add_filter( 'rewrite_rules_array', [ self::class, 'filter__rewrite_rules_array' ] );
 		add_filter( 'attachment_link', [ self::class, 'filter__attachment_link' ] );
 		add_action( 'pre_get_posts', [ self::class, 'action__pre_get_posts' ] );
@@ -79,7 +80,7 @@ final class Disable_Attachment_Routing implements Feature {
 	 * @param \WP_Admin_Bar $wp_admin_bar Admin bar class.
 	 */
 	public static function action__admin_bar_menu( \WP_Admin_Bar $wp_admin_bar ) {
-		if ( 'attachment' == get_post_type() ) {
+		if ( 'attachment' === get_post_type() ) {
 			$wp_admin_bar->remove_node( 'view' );
 		}
 	}
