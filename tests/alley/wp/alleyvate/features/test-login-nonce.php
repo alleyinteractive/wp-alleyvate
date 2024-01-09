@@ -32,6 +32,19 @@ final class Test_Login_Nonce extends Test_Case {
 	private Login_Nonce $feature;
 
 	/**
+	 * Setup the test case.
+	 *
+	 * @param array ...$args The array of arguments passed to the class.
+	 */
+	public function __construct( ...$args ) {
+		parent::__construct( ...$args );
+
+		// Run the test in isolation to allow us to use http_response_code().
+		$this->setPreserveGlobalState( false );
+		$this->setRunClassInSeparateProcess( true );
+	}
+
+	/**
 	 * Set up.
 	 */
 	protected function setUp(): void {
