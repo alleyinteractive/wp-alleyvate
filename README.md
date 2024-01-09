@@ -40,6 +40,10 @@ This feature disables WordPress comments entirely, including the ability to post
 
 This feature removes clutter from the dashboard.
 
+### `disable_password_change_notification`
+
+This feature disables the sending of password change notification emails.
+
 ### `disable_sticky_posts`
 
 This feature disables WordPress sticky posts entirely, including the ability to set and query sticky posts.
