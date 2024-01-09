@@ -1,6 +1,6 @@
 <?php
 /**
- * Class file for Test_Disable_Custom_Fields_Meta_Box
+ * Trait file for Remove_Meta_Box
  *
  * (c) Alley <info@alley.com>
  *
@@ -41,7 +41,7 @@ trait Remove_Meta_Box {
 		require_once ABSPATH . 'wp-admin/includes/theme.php';
 		require_once ABSPATH . 'wp-admin/includes/meta-boxes.php';
 
-		// Setup metaboxes global and confirm 'custom fields' are in it.
+		// Setup metaboxes global and confirm that the metabox is registered.
 		set_current_screen( $screen );
 		register_and_do_post_meta_boxes( $post );
 
