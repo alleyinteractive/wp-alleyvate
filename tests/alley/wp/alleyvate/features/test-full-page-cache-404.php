@@ -82,7 +82,9 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 	 * @return string
 	 */
 	private function get_404_html() {
-		return '<html><head></head><body><h1>404 Not Found</h1><p>The requested URL was not found on this server.</p></body></html>';
+		return '<html><head>
+		<title>404 Not Found</title>
+</head><body><h1>404 Not Found</h1><p>The requested URL was not found on this server.</p></body></html>';
 	}
 
 	/**
