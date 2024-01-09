@@ -8,6 +8,11 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 
 * Added a feature to disable the custom fields meta box.
 
+### Changed
+
+* Removes the `commentstatusdiv` meta box when comments are disabled.
+  Previously, only `commentsdiv` was removed.
+
 ## 2.2.1
 
 ### Added
