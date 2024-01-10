@@ -20,6 +20,7 @@ namespace Alley\WP\Alleyvate;
 function available_features(): array {
 	return [
 		'clean_admin_bar'                      => new Features\Clean_Admin_Bar(),
+		'disable_attachment_routing'           => new Features\Disable_Attachment_Routing(),
 		'disable_comments'                     => new Features\Disable_Comments(),
 		'disable_custom_fields_meta_box'       => new Features\Disable_Custom_Fields_Meta_Box(),
 		'disable_dashboard_widgets'            => new Features\Disable_Dashboard_Widgets(),

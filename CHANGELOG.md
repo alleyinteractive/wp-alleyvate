@@ -6,6 +6,7 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 
 ### Added
 
+* `disable_attachment_routing`: Added a feature to disable attachment routing.
 * `disable_custom_fields_meta_box`: Added a feature to disable the custom fields meta box.
 * `disable_password_change_notification`: Added a feature that disables sending password change notification emails to site admins.
 
