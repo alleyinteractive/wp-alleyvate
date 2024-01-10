@@ -79,7 +79,7 @@ final class Disable_Attachment_Routing implements Feature {
 	 *
 	 * @param \WP_Admin_Bar $wp_admin_bar Admin bar class.
 	 */
-	public static function action__admin_bar_menu( \WP_Admin_Bar $wp_admin_bar ) {
+	public static function action__admin_bar_menu( $wp_admin_bar ): void {
 		if ( 'attachment' === get_post_type() ) {
 			$wp_admin_bar->remove_node( 'view' );
 		}
