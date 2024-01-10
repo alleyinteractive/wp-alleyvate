@@ -29,9 +29,14 @@
   },
   "scripts": {
     "fixer": "php-cs-fixer -v fix --allow-risky=yes",
+    "lint": "@phpcs",
     "phpcbf": "phpcbf",
     "phpcs": "phpcs",
-    "phpunit": "phpunit"
+    "phpunit": "phpunit",
+    "test": [
+      "@phpcs",
+      "@phpunit"
+    ]
   },
   "extra": {
     "wordpress-autoloader": {

@@ -42,6 +42,7 @@ final class Disable_Comments implements Feature {
 	 */
 	public static function action__add_meta_boxes( string $post_type ): void {
 		remove_meta_box( 'commentsdiv', $post_type, 'normal' );
+		remove_meta_box( 'commentstatusdiv', $post_type, 'normal' );
 	}
 
 	/**

@@ -40,9 +40,17 @@ This feature disables WordPress attachment pages entirely from the front end of 
 
 This feature disables WordPress comments entirely, including the ability to post, view, edit, list, count, modify settings for, or access URLs that are related to comments completely.
 
+### `disable_custom_fields_meta_box`
+
+This feature removes the custom fields meta box from the post editor.
+
 ### `disable_dashboard_widgets`
 
 This feature removes clutter from the dashboard.
+
+### `disable_password_change_notification`
+
+This feature disables sending password change notification emails to site admins.
 
 ### `disable_sticky_posts`
 
