@@ -6,7 +6,13 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 
 ### Added
 
+* `disable_custom_fields_meta_box`: Added a feature to disable the custom fields meta box.
 * `disable_password_change_notification`: Added a feature that disables sending password change notification emails to site admins.
+
+### Changed
+
+* `disable_comments`: Removes the `commentstatusdiv` meta box when comments are
+  disabled. Previously, only `commentsdiv` was removed.
 
 ## 2.2.1
 

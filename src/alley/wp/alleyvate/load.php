@@ -21,6 +21,7 @@ function available_features(): array {
 	return [
 		'clean_admin_bar'                      => new Features\Clean_Admin_Bar(),
 		'disable_comments'                     => new Features\Disable_Comments(),
+		'disable_custom_fields_meta_box'       => new Features\Disable_Custom_Fields_Meta_Box(),
 		'disable_dashboard_widgets'            => new Features\Disable_Dashboard_Widgets(),
 		'disable_password_change_notification' => new Features\Disable_Password_Change_Notification(),
 		'disable_sticky_posts'                 => new Features\Disable_Sticky_Posts(),
