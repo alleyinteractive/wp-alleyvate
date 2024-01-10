@@ -42,7 +42,7 @@ final class Test_Disable_Attachment_Routing extends Test_Case {
 	 * Test that the attachment permalink is empty.
 	 */
 	public function test_attachment_permalink(): void {
-		$attachment_id = $this->factory()->attachment->create();
+		$attachment_id = self::factory()->attachment->create();
 
 		$this->assertNotEmpty( get_permalink( $attachment_id ) );
 
@@ -55,7 +55,7 @@ final class Test_Disable_Attachment_Routing extends Test_Case {
 	 * Test that the attachment page returns a 404.
 	 */
 	public function test_attachment_page(): void {
-		$attachment_id = $this->factory()->attachment->create();
+		$attachment_id = self::factory()->attachment->create();
 		$permalink     = get_permalink( $attachment_id );
 
 		$this
