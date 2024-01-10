@@ -6,7 +6,7 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 
 ### Added
 
-* Added a feature to disable password change notification emails.
+* `disable_password_change_notification`: Added a feature that disables sending password change notification emails to site admins.
 
 ## 2.2.1
 

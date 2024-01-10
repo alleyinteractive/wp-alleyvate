@@ -42,7 +42,7 @@ This feature removes clutter from the dashboard.
 
 ### `disable_password_change_notification`
 
-This feature disables the sending of password change notification emails.
+This feature disables sending password change notification emails to site admins.
 
 ### `disable_sticky_posts`
 
