@@ -48,9 +48,8 @@ final class Login_Nonce implements Feature {
 	 * Boot the feature.
 	 */
 	public function boot(): void {
-		add_action( 'login_init', [ self::class, 'action__add_nonce_life_filter' ] );
+		add_action( 'login_form_login', [ self::class, 'action__add_nonce_life_filter' ] );
 		add_action( 'login_head', [ self::class, 'action__add_meta_refresh' ] );
-		add_action( 'login_form', [ self::class, 'action__add_nonce_to_form' ] );
 		add_action( 'after_setup_theme', [ self::class, 'action__pre_validate_login_nonce' ], 9999 );
 	}
 
@@ -63,16 +62,24 @@ final class Login_Nonce implements Feature {
 
 	/**
 	 * Add the nonce field to the form.
+	 *
+	 * @see action__add_nonce_life_filter()
 	 */
 	public static function action__add_nonce_to_form(): void {
 		wp_nonce_field( self::NONCE_ACTION, self::NONCE_NAME );
 	}
 
 	/**
-	 * Initializes the nonce fields. Is only run on `login_init` to restrict nonce data to login page.
+	 * Add a filter to change the nonce lifetime.
+	 *
+	 * Changing the lifetime of the nonce changes the actual nonce value. It all comes down to how WordPress actually generates the nonce.
+	 * So only run on `login_form_login` to restrict to the login action, without affecting other wp-login actions.
+	 *
+	 * @see <https://github.com/WordPress/wordpress-develop/blob/94b70f1ae065f10937c22b2d4b180ceade1ddeee/src/wp-login.php#L482-L495>
 	 */
 	public static function action__add_nonce_life_filter(): void {
 		add_filter( 'nonce_life', [ __CLASS__, 'nonce_life_filter' ] );
+		add_action( 'login_form', [ __CLASS__, 'action__add_nonce_to_form' ] );
 	}
 
 	/**
