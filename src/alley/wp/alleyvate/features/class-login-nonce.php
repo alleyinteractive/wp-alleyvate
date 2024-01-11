@@ -64,7 +64,7 @@ final class Login_Nonce implements Feature {
 	/**
 	 * Add the nonce field to the form.
 	 *
-	 * This adds the nonce to all form actions, but we verify the nonce only while loging in.
+	 * This adds the nonce to all form actions, but we verify the nonce only while logging in.
 	 *
 	 * @see action__add_nonce_life_filter()
 	 */
@@ -76,7 +76,7 @@ final class Login_Nonce implements Feature {
 	 * Add a filter to change the nonce lifetime.
 	 *
 	 * Changing the lifetime of the nonce changes the actual nonce value. It all comes down to how WordPress actually generates the nonce.
-	 * So only run on `login_form_login` to restrict to the login page, without affecting other login actions.
+	 * So only run on `login_form_login` to restrict to the login action, without affecting other wp-login actions.
 	 *
 	 * @see <https://github.com/WordPress/wordpress-develop/blob/94b70f1ae065f10937c22b2d4b180ceade1ddeee/src/wp-login.php#L482-L495>
 	 */

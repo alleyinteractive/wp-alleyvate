@@ -7,7 +7,7 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 ### Changed
 
 * `login_nonce`: make sure the nonce lifetime is run only for the login action
-  as to not affect the other `wp-login.php`` actions, e.g: logout.
+  as to not affect the other `wp-login.php` actions, e.g: logout.
 
 ## 2.3.0
 
