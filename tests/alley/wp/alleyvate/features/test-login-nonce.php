@@ -52,8 +52,6 @@ final class Test_Login_Nonce extends Test_Case {
 
 		$this->feature = new Login_Nonce();
 
-		$this->feature->boot();
-
 		/*
 		 * Prime the response code to 200 before running nonce validations.
 		 */
@@ -66,6 +64,9 @@ final class Test_Login_Nonce extends Test_Case {
 	protected function tearDown(): void {
 		$_POST = [];
 		http_response_code( 200 );
+
+		remove_action( 'nonce_life', [ Login_Nonce::class, 'nonce_life_filter' ] );
+
 		parent::tearDown();
 	}
 
@@ -124,6 +125,8 @@ final class Test_Login_Nonce extends Test_Case {
 	 * Test the login nonce doesn't affect other wp-login.php actions.
 	 */
 	public function test_login_nonce_validates(): void {
+		$this->feature->boot();
+
 		$token = wp_create_nonce( Login_Nonce::NONCE_ACTION );
 
 		$this->assertTrue( wp_validate_boolean( wp_verify_nonce( $token, Login_Nonce::NONCE_ACTION ) ) );
@@ -133,6 +136,8 @@ final class Test_Login_Nonce extends Test_Case {
 	 * Test the login nonce doesn't affect other wp-login.php actions.
 	 */
 	public function test_logout_nonce_validates(): void {
+		$this->feature->boot();
+
 		$token = wp_create_nonce( 'log-out' );
 
 		do_action( 'login_init' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
