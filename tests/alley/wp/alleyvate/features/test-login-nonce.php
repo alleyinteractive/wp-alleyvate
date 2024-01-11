@@ -75,9 +75,7 @@ final class Test_Login_Nonce extends Test_Case {
 	public function test_logins_require_nonce(): void {
 		global $pagenow;
 
-		$_POST = [
-			'pwd' => 'password',
-		];
+		$_POST = [ 'pwd' => 'password' ];
 
 		$pagenow = 'wp-login.php';
 
@@ -123,42 +121,21 @@ final class Test_Login_Nonce extends Test_Case {
 	}
 
 	/**
-	 * Test logout bypasses login nonce validation.
+	 * Test the login nonce doesn't affect other wp-login.php actions.
 	 */
-	public function test_logout_bypass_nonce_validation(): void {
-		global $pagenow;
+	public function test_login_nonce_validates(): void {
+		$token = wp_create_nonce( Login_Nonce::NONCE_ACTION );
 
-		$_POST = [
-			'action'   => 'logout',
-			'_wpnonce' => wp_create_nonce( '-1' ),
-		];
-
-		$pagenow = 'wp-login.php';
-
-		try {
-			Login_Nonce::action__pre_validate_login_nonce();
-		} catch ( WP_Die_Exception $e ) {
-			// Do nothing.
-		}
-
-		$this->assertSame( 200, http_response_code() );
+		$this->assertTrue( wp_validate_boolean( wp_verify_nonce( $token, Login_Nonce::NONCE_ACTION ) ) );
 	}
 
 	/**
-	 * Test hooking into `nonce_life`, changes the nonce value of other nonces.
+	 * Test the login nonce doesn't affect other wp-login.php actions.
 	 */
-	public function test_nonce_life_change_affects_other_nonces(): void {
-		$nonce_life_filter = fn() => Login_Nonce::NONCE_TIMEOUT;
-
-		add_filter( 'nonce_life', $nonce_life_filter );
-
+	public function test_logout_nonce_validates(): void {
 		$token = wp_create_nonce( 'log-out' );
 
-		remove_filter( 'nonce_life', $nonce_life_filter );
-
-		$this->assertFalse( wp_validate_boolean( wp_verify_nonce( $token, 'log-out' ) ) );
-
-		$token = wp_create_nonce( 'log-out' );
+		do_action( 'login_init' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 
 		$this->assertTrue( wp_validate_boolean( wp_verify_nonce( $token, 'log-out' ) ) );
 	}

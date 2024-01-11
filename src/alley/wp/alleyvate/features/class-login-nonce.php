@@ -49,7 +49,6 @@ final class Login_Nonce implements Feature {
 	 */
 	public function boot(): void {
 		add_action( 'login_form_login', [ self::class, 'action__add_nonce_life_filter' ] );
-		add_action( 'login_form', [ self::class, 'action__add_nonce_to_form' ] );
 		add_action( 'login_head', [ self::class, 'action__add_meta_refresh' ] );
 		add_action( 'after_setup_theme', [ self::class, 'action__pre_validate_login_nonce' ], 9999 );
 	}
@@ -82,6 +81,7 @@ final class Login_Nonce implements Feature {
 	 */
 	public static function action__add_nonce_life_filter(): void {
 		add_filter( 'nonce_life', [ __CLASS__, 'nonce_life_filter' ] );
+		add_action( 'login_form', [ __CLASS__, 'action__add_nonce_to_form' ] );
 	}
 
 	/**
