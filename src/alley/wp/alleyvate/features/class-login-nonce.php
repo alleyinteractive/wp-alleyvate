@@ -63,8 +63,6 @@ final class Login_Nonce implements Feature {
 	/**
 	 * Add the nonce field to the form.
 	 *
-	 * This adds the nonce to all form actions, but we verify the nonce only while logging in.
-	 *
 	 * @see action__add_nonce_life_filter()
 	 */
 	public static function action__add_nonce_to_form(): void {
