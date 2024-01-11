@@ -9,7 +9,7 @@
  *
  * @package wp-alleyvate
  *
- * @phpcs:disable WordPress.WP.GlobalVariablesOverride.Prohibited, Generic.CodeAnalysis.EmptyStatement.DetectedCatch
+ * @phpcs:disable WordPress.WP.GlobalVariablesOverride.Prohibited, Generic.CodeAnalysis.EmptyStatement.DetectedCatch, WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
  */
 
 namespace Alley\WP\Alleyvate\Features;
@@ -140,7 +140,7 @@ final class Test_Login_Nonce extends Test_Case {
 
 		$token = wp_create_nonce( 'log-out' );
 
-		do_action( 'login_init' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+		do_action( 'login_init' );
 
 		$this->assertTrue( wp_validate_boolean( wp_verify_nonce( $token, 'log-out' ) ) );
 	}
