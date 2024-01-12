@@ -41,6 +41,15 @@ final class Prevent_Framing implements Feature {
 		}
 
 		/**
+		 * Allow the X-Frame-Options header to be disabled.
+		 *
+		 * @param bool $prevent_framing Whether to prevent framing. Default false.
+		 */
+		if ( apply_filters( 'alleyvate_prevent_framing_disable', false ) ) {
+			return $headers;
+		}
+
+		/**
 		 * Filter the X-Frame-Options header value.
 		 *
 		 * @param string $value The value of the X-Frame-Options header.

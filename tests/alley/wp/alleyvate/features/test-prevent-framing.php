@@ -69,4 +69,15 @@ final class Test_Prevent_Framing extends Test_Case {
 
 		$this->get( '/' )->assertHeader( 'X-Frame-Options', 'CUSTOM' );
 	}
+
+	/**
+	 * Test that the X-Frame-Options header is not output if the feature is disabled.
+	 */
+	public function test_x_frame_options_header_disabled(): void {
+		add_filter( 'alleyvate_prevent_framing_disable', fn () => true );
+
+		$this->feature->boot();
+
+		$this->get( '/' )->assertHeaderMissing( 'X-Frame-Options' );
+	}
 }

@@ -66,6 +66,17 @@ This feature prevents the editing of themes and plugins directly from the admin.
 
 Such editing can introduce unexpected and undocumented code changes.
 
+### `login_nonce`
+
+This feature adds a nonce to the login form to prevent CSRF attacks.
+
+### `prevent_framing`
+
+This feature prevents the site from being framed by other sites by outputting a
+`X-Frame-Options: SAMEORIGIN` header. The header can be disabled by filtering
+`alleyvate_prevent_framing_disable` to return true. The value of the header can
+be filtered using the `alleyvate_prevent_framing_x_frame_options` filter.
+
 ### `redirect_guess_shortcircuit`
 
 This feature stops WordPress from attempting to guess a redirect URL for a 404 request.
