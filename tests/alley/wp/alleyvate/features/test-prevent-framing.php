@@ -80,4 +80,74 @@ final class Test_Prevent_Framing extends Test_Case {
 
 		$this->get( '/' )->assertHeaderMissing( 'X-Frame-Options' );
 	}
+
+	/**
+	 * Test that the CSP header is not output unless enabled.
+	 */
+	public function test_csp_header_default(): void {
+		$this->expectApplied( 'alleyvate_prevent_framing_csp' )->andReturnFalse();
+
+		$this->feature->boot();
+
+		$this->get( '/' )->assertHeaderMissing( 'Content-Security-Policy' );
+	}
+
+	/**
+	 * Test the default value of the CSP header when enabled.
+	 */
+	public function test_csp_header_enabled(): void {
+		$this->expectApplied( 'alleyvate_prevent_framing_csp' )->andReturnTrue();
+
+		add_filter( 'alleyvate_prevent_framing_csp', fn () => true );
+
+		$this->feature->boot();
+
+		$this->get( '/' )->assertHeader( 'Content-Security-Policy', "frame-ancestors 'self'" );
+	}
+
+	/**
+	 * Test that the CSP header is not output if it already exists.
+	 */
+	public function test_csp_header_already_exists(): void {
+		add_filter( 'wp_headers', fn () => [ 'Content-Security-Policy' => 'CUSTOM' ] );
+
+		$this->feature->boot();
+
+		$this->get( '/' )->assertHeader( 'Content-Security-Policy', 'CUSTOM' );
+	}
+
+	/**
+	 * Test the CSP header with custom frame ancestors.
+	 */
+	public function test_csp_header_custom_frame_ancestors(): void {
+		$this->expectApplied( 'alleyvate_prevent_framing_csp_frame_ancestors' )->andReturnArray();
+
+		add_filter( 'alleyvate_prevent_framing_csp', fn () => true );
+
+		add_filter(
+			'alleyvate_prevent_framing_csp_frame_ancestors',
+			fn () => [
+				'example.com',
+				'example.org',
+			]
+		);
+
+		$this->feature->boot();
+
+		$this->get( '/' )->assertHeader( 'Content-Security-Policy', 'frame-ancestors example.com example.org' );
+	}
+
+	/**
+	 * Test the CSP header being overridden completely.
+	 */
+	public function test_csp_header_override(): void {
+		$this->expectApplied( 'alleyvate_prevent_framing_csp_header' )->andReturnString();
+
+		add_filter( 'alleyvate_prevent_framing_csp', fn () => true );
+		add_filter( 'alleyvate_prevent_framing_csp_header', fn () => 'custom-value' );
+
+		$this->feature->boot();
+
+		$this->get( '/' )->assertHeader( 'Content-Security-Policy', 'custom-value' );
+	}
 }
