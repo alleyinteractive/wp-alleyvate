@@ -60,6 +60,20 @@ final class Test_Prevent_Framing extends Test_Case {
 	}
 
 	/**
+	 * Test that the X-Frame-Options header can be filtered to an invalid value
+	 * while throwing a _doing_it_wrong() notice.
+	 */
+	public function test_filter_x_frame_options_invalid_header(): void {
+		$this->setExpectedIncorrectUsage( Prevent_Framing::class . '::filter__wp_headers' );
+
+		add_filter( 'alleyvate_prevent_framing_x_frame_options', fn () => 'INVALID' );
+
+		$this->feature->boot();
+
+		$this->get( '/' )->assertHeader( 'X-Frame-Options', 'INVALID' );
+	}
+
+	/**
 	 * Test that the X-Frame-Options header is not output if it already exists.
 	 */
 	public function test_x_frame_options_header_already_exists(): void {
