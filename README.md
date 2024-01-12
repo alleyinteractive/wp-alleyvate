@@ -77,6 +77,14 @@ This feature prevents the site from being framed by other sites by outputting a
 `alleyvate_prevent_framing_disable` to return true. The value of the header can
 be filtered using the `alleyvate_prevent_framing_x_frame_options` filter.
 
+The feature can also output a `Content-Security-Policy` header instead of
+`X-Frame-Options` by filtering `alleyvate_prevent_framing_csp` to return true.
+By default, it will output `Content-Security-Policy: frame-ancestors 'self'`.
+The value of the header can be filtered using
+`alleyvate_prevent_framing_csp_frame_ancestors` to filter the allowed
+frame-ancestors. The entire header can be filtered using
+`alleyvate_prevent_framing_csp_header`.
+
 ### `redirect_guess_shortcircuit`
 
 This feature stops WordPress from attempting to guess a redirect URL for a 404 request.
