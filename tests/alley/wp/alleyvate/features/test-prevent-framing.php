@@ -46,6 +46,7 @@ final class Test_Prevent_Framing extends Test_Case {
 		$this->feature->boot();
 
 		$this->get( '/' )->assertHeader( 'X-Frame-Options', 'SAMEORIGIN' );
+		$this->get( '/wp-json/wp/v2/posts' )->assertHeader( 'X-Frame-Options', 'SAMEORIGIN' );
 	}
 
 	/**
