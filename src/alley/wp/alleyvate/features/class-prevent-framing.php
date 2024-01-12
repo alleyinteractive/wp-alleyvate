@@ -78,12 +78,12 @@ final class Prevent_Framing implements Feature {
 		 */
 		$headers['X-Frame-Options'] = apply_filters( 'alleyvate_prevent_framing_x_frame_options', 'SAMEORIGIN' );
 
-		if ( ! in_array( $headers['X-Frame-Options'], [ 'DENY', 'SAMEORIGIN' ], true ) && 0 !== strpos( $headers['X-Frame-Options'], 'ALLOW-FROM' ) ) {
+		if ( ! \in_array( $headers['X-Frame-Options'], [ 'DENY', 'SAMEORIGIN' ], true ) && 0 !== strpos( $headers['X-Frame-Options'], 'ALLOW-FROM' ) ) {
 			_doing_it_wrong(
 				__METHOD__,
-				\sprintf(
+				sprintf(
 					/* translators: %s: The value of the X-Frame-Options header. */
-					\esc_html__( 'Invalid value for %s. Must be DENY, SAMEORIGIN, or ALLOW-FROM uri.', 'alley' ),
+					esc_html__( 'Invalid value for %s. Must be DENY, SAMEORIGIN, or ALLOW-FROM uri.', 'alley' ),
 					'X-Frame-Options'
 				),
 				'2.4.0'
