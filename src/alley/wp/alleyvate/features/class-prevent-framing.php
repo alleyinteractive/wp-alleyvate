@@ -41,8 +41,10 @@ final class Prevent_Framing implements Feature {
 
 		/**
 		 * Optionally allow the Content-Security-Policy header to be used
-		 * instead of X-Frame-Options. The Content-Security-Policy header
-		 * obsoletes the X-Frame-Options header when used.
+		 * instead of X-Frame-Options.
+		 *
+		 * The Content-Security-Policy header obsoletes the X-Frame-Options
+		 * header when used.
 		 */
 		if ( apply_filters( 'alleyvate_prevent_framing_csp', false ) ) {
 			if ( isset( $headers['Content-Security-Policy'] ) ) {
@@ -100,7 +102,7 @@ final class Prevent_Framing implements Feature {
 		/**
 		 * Filter the value of the Content-Security-Policy header.
 		 *
-		 * @param string $value The value of the Content-Security-Policy header. Default 'frame-ancestors \'self\''
+		 * @param string $value The value of the Content-Security-Policy header. Defaults to 'frame-ancestors \'self\''
 		 */
 		return apply_filters(
 			'alleyvate_prevent_framing_csp_header',
