@@ -31,7 +31,7 @@
     "fixer": "php-cs-fixer -v fix --allow-risky=yes",
     "phpcbf": "phpcbf",
     "phpcs": "phpcs",
-    "phpunit": "phpunit"
+    "phpunit": "phpunit --testdox"
   },
   "extra": {
     "wordpress-autoloader": {
