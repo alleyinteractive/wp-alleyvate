@@ -58,7 +58,7 @@ final class Full_Page_Cache_404 implements Feature {
 	 * Guaranteed 404 URI.
 	 * Used for populating the cache.
 	 */
-	public const TEMPLATE_GENERATOR_URI = '/wp-alleyvate/404-template-generator';
+	public const TEMPLATE_GENERATOR_URI = '/wp-alleyvate/404-template-generator/?generate=1&uri=1';
 
 	/**
 	 * Boot the feature.
@@ -221,7 +221,22 @@ final class Full_Page_Cache_404 implements Feature {
 	 * @return string
 	 */
 	public static function prepare_response( string $content ): string {
-		// @todo Replace 404 generator URI with the actual 404 page URI.
+		// To avoid analytics issues, replace the Generator URI with the requested URI.
+		$uri = $_SERVER['REQUEST_URI'] ?? '';
+		$content = str_replace(
+			[
+				self::TEMPLATE_GENERATOR_URI,
+				wp_json_encode( self::TEMPLATE_GENERATOR_URI ),
+				esc_html( self::TEMPLATE_GENERATOR_URI ),
+				esc_url( self::TEMPLATE_GENERATOR_URI ),
+			],
+			[
+				$uri,
+				wp_json_encode( $uri ),
+				esc_html( $uri ),
+				esc_url( $uri ),
+			],
+			$content );
 		return $content;
 	}
 

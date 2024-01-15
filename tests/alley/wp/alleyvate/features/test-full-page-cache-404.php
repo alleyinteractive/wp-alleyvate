@@ -68,6 +68,32 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 		$response->assertSee( 'Hello World' );
 	}
 
+	public function test_prepare_content() {
+		$raw_html = $this->get_404_html();
+		$_SERVER['REQUEST_URI'] = '/news/breaking_story/?_ga=2.123456789.123456789.123456789.123456789&_gl=1*123456789*123456789*123456789*1';
+		$expected_html = <<<HTML
+<html>
+<head>
+	<title>404 Not Found</title>
+	<script type="text/javascript">
+    	window.dataLayer = window.dataLayer || [];
+    	dataLayer.push({"pagename":"\/news\/breaking_story\/?_ga=2.123456789.123456789.123456789.123456789&_gl=1*123456789*123456789*123456789*1"});
+	</script>
+</head>
+<body>
+	<h1>404 Not Found</h1>
+	<p>The <a href="/news/breaking_story/?_ga=2.123456789.123456789.123456789.123456789&#038;_gl=1*123456789*123456789*123456789*1">requested URL</a> was not found on this server.</p>
+	<p>This test includes different ways the URI may be output in the content. Above shows the use of esc_url and
+	wp_json_encode.</p>
+	<p>So that we can do content aware replacement of the URI for security and analytics reporting.</p>
+	<p>esc_html would output: /news/breaking_story/?_ga=2.123456789.123456789.123456789.123456789&amp;_gl=1*123456789*123456789*123456789*1</p>
+</body>
+</html>
+HTML;
+	$actual = $this->feature::prepare_response( $raw_html );
+	$this->assertEquals( $expected_html, $actual );
+	}
+
 	/**
 	 * Set the cache.
 	 */
@@ -82,9 +108,27 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 	 * @return string
 	 */
 	private function get_404_html() {
-		return '<html><head>
-		<title>404 Not Found</title>
-</head><body><h1>404 Not Found</h1><p>The requested URL was not found on this server.</p></body></html>';
+		return
+		// heredoc
+		<<<HTML
+<html>
+<head>
+	<title>404 Not Found</title>
+	<script type="text/javascript">
+    	window.dataLayer = window.dataLayer || [];
+    	dataLayer.push({"pagename":"\/wp-alleyvate\/404-template-generator\/?generate=1&uri=1"});
+	</script>
+</head>
+<body>
+	<h1>404 Not Found</h1>
+	<p>The <a href="/wp-alleyvate/404-template-generator/?generate=1&#038;uri=1">requested URL</a> was not found on this server.</p>
+	<p>This test includes different ways the URI may be output in the content. Above shows the use of esc_url and
+	wp_json_encode.</p>
+	<p>So that we can do content aware replacement of the URI for security and analytics reporting.</p>
+	<p>esc_html would output: /wp-alleyvate/404-template-generator/?generate=1&amp;uri=1</p>
+</body>
+</html>
+HTML;
 	}
 
 	/**
