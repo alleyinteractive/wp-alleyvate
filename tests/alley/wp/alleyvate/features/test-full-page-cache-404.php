@@ -34,13 +34,13 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 	protected function setUp(): void {
 		parent::setUp();
 		$this->feature = new Full_Page_Cache_404();
+		$this->feature->boot();
 	}
 
 	/**
 	 * Test full page cache 404.
 	 */
 	public function test_full_page_cache_404_returns_cache() {
-		$this->feature->boot();
 		$response = $this->get( '/this-is-a-404-page' );
 
 		// Expect empty string if cache isn't set.
@@ -61,7 +61,6 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 	 * Test that a post request returns the correct content.
 	 */
 	public function test_full_page_cache_not_returned_for_non_404() {
-		$this->feature->boot();
 		$post_id  = self::factory()->post->create( [ 'post_title' => 'Hello World' ] );
 		$response = $this->get( get_the_permalink( $post_id ) );
 		$response->assertHeaderMissing( 'X-Alleyvate-404-Cache' );
@@ -104,7 +103,7 @@ HTML;
 	 */
 	private function set_404_cache() {
 		$html = $this->get_404_html();
-		$this->feature->set_cache( $html );
+		$this->feature::set_cache( $html );
 	}
 
 	/**
@@ -138,7 +137,7 @@ HTML;
 	 * Tear down.
 	 */
 	public function tearDown(): void {
-		$this->feature->delete_cache();
+		$this->feature::delete_cache();
 		parent::tearDown();
 	}
 }
