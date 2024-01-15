@@ -19,6 +19,7 @@ use Mantle\Testkit\Test_Case;
  * Tests for fully disabling comment functionality.
  */
 final class Test_Disable_Comments extends Test_Case {
+	use Concerns\Remove_Meta_Box;
 	use \Mantle\Testing\Concerns\Admin_Screen;
 	use \Mantle\Testing\Concerns\Refresh_Database;
 
@@ -163,29 +164,14 @@ final class Test_Disable_Comments extends Test_Case {
 	}
 
 	/**
-	 * Test that the comments metaboxes are removed.
+	 * Test that the comments meta boxes are removed.
 	 */
-	public function test_remove_metaboxes(): void {
-		$post = self::factory()->post->create_and_get();
-
-		// Load files required to get $wp_meta_boxes global.
-		require_once ABSPATH . 'wp-admin/includes/misc.php';
-		require_once ABSPATH . 'wp-admin/includes/template.php';
-		require_once ABSPATH . 'wp-admin/includes/theme.php';
-		require_once ABSPATH . 'wp-admin/includes/meta-boxes.php';
-
-		// Setup metaboxes global and confirm comments are in it.
-		set_current_screen( 'post' );
-		register_and_do_post_meta_boxes( $post );
-		global $wp_meta_boxes;
-		$this->assertNotEmpty( $wp_meta_boxes['post']['normal']['core']['commentsdiv'] );
-
-		// Activate feature.
-		$this->feature->boot();
-
-		// Confirm metaboxes are removed.
-		register_and_do_post_meta_boxes( $post );
-		$this->assertFalse( $wp_meta_boxes['post']['normal']['core']['commentsdiv'] );
+	public function test_remove_meta_boxes(): void {
+		$this->assertMetaBoxRemoval(
+			feature: $this->feature,
+			id: 'commentsdiv',
+			priority: 'core',
+		);
 	}
 
 	/**

@@ -2,6 +2,36 @@
 
 This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a CHANGELOG](https://keepachangelog.com/en/1.0.0/).
 
+## 2.3.1
+
+### Changed
+
+* `login_nonce`: make sure the nonce lifetime is run only for the login action
+  as to not affect the other `wp-login.php` actions, e.g: logout.
+
+## 2.3.0
+
+### Added
+
+* `disable_attachment_routing`: Added a feature to disable attachment routing.
+* `disable_custom_fields_meta_box`: Added a feature to disable the custom fields meta box.
+* `disable_password_change_notification`: Added a feature that disables sending password change notification emails to site admins.
+
+### Changed
+
+* `disable_comments`: Removes the `commentstatusdiv` meta box when comments are
+  disabled. Previously, only `commentsdiv` was removed.
+
+## 2.2.1
+
+### Added
+
+* `login_nonce`: Added a feature to add a nonce to wp-login
+
+### Changed
+
+* `disable_comments`: Akismet: Removed the comment spam queue section from the WP dashboard
+
 ## 2.2.0
 
 ### Added
