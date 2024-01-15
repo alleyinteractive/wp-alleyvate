@@ -68,10 +68,15 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 		$response->assertSee( 'Hello World' );
 	}
 
+	/**
+	 * Test that the content manipulation works.
+	 *
+	 * @return void
+	 */
 	public function test_prepare_content() {
-		$raw_html = $this->get_404_html();
+		$raw_html               = $this->get_404_html();
 		$_SERVER['REQUEST_URI'] = '/news/breaking_story/?_ga=2.123456789.123456789.123456789.123456789&_gl=1*123456789*123456789*123456789*1';
-		$expected_html = <<<HTML
+		$expected_html          = <<<HTML
 <html>
 <head>
 	<title>404 Not Found</title>
@@ -90,8 +95,8 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 </body>
 </html>
 HTML;
-	$actual = $this->feature::prepare_response( $raw_html );
-	$this->assertEquals( $expected_html, $actual );
+		$actual                 = $this->feature::prepare_response( $raw_html );
+		$this->assertEquals( $expected_html, $actual );
 	}
 
 	/**
@@ -108,9 +113,7 @@ HTML;
 	 * @return string
 	 */
 	private function get_404_html() {
-		return
-		// heredoc
-		<<<HTML
+		return <<<HTML
 <html>
 <head>
 	<title>404 Not Found</title>
