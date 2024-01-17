@@ -2,6 +2,13 @@
 
 This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a CHANGELOG](https://keepachangelog.com/en/1.0.0/).
 
+## Unreleased
+
+### Added
+
+* `prevent_framing`: Added a feature to prevent framing of the site via the
+  `X-Frame-Options` header.
+
 ## 2.3.1
 
 ### Changed
