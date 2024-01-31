@@ -48,5 +48,4 @@ final class Disable_Login_Cache implements Feature {
 
 		return $headers;
 	}
-
 }
