@@ -28,7 +28,6 @@ function available_features(): array {
 		'disable_sticky_posts'                 => new Features\Disable_Sticky_Posts(),
 		'disable_trackbacks'                   => new Features\Disable_Trackbacks(),
 		'disallow_file_edit'                   => new Features\Disallow_File_Edit(),
-		'disable_login_cache'                  => new Features\Disable_Login_Cache(),
 		'login_nonce'                          => new Features\Login_Nonce(),
 		'prevent_framing'                      => new Features\Prevent_Framing(),
 		'redirect_guess_shortcircuit'          => new Features\Redirect_Guess_Shortcircuit(),
