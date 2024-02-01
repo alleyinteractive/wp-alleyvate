@@ -15,6 +15,8 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 * Unit tests: the `$feature` property uses the main feature class for better IDE intelephense support.
 * Unit tests: all test cases use `declare( strict_types=1 );`.
 * Unit tests: added test to confirm the attachment rewrite rules are removed
+* Unit tests: support for `convertDeprecationsToExceptions="true"` added. Tests
+  will fail if there are PHP deprecation warnings.
 
 ## 2.3.1
 
