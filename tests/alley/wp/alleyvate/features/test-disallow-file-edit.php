@@ -10,21 +10,23 @@
  * @package wp-alleyvate
  */
 
+declare( strict_types=1 );
+
 namespace Alley\WP\Alleyvate\Features;
 
-use Alley\WP\Alleyvate\Feature;
 use Mantle\Testkit\Test_Case;
 
 /**
  * Tests for the disallowing of file editing.
  */
 final class Test_Disallow_File_Edit extends Test_Case {
+
 	/**
 	 * Feature instance.
 	 *
-	 * @var Feature
+	 * @var Disallow_File_Edit
 	 */
-	private Feature $feature;
+	private Disallow_File_Edit $feature;
 
 	/**
 	 * Set up.
@@ -38,7 +40,7 @@ final class Test_Disallow_File_Edit extends Test_Case {
 	/**
 	 * Test that the feature disallows file editing.
 	 */
-	public function test_disallow_file_editing() {
+	public function test_disallow_file_editing(): void {
 		$this->assertFalse( \defined( 'DISALLOW_FILE_EDIT' ), 'DISALLOW_FILE_EDIT should not be defined prior to boot.' );
 		$this->feature->boot();
 		$this->assertTrue( \defined( 'DISALLOW_FILE_EDIT' ), 'DISALLOW_FILE_EDIT should be defined after boot.' );

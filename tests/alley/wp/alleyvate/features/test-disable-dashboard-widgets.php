@@ -10,24 +10,26 @@
  * @package wp-alleyvate
  */
 
+declare( strict_types=1 );
+
 namespace Alley\WP\Alleyvate\Features;
 
-use Alley\WP\Alleyvate\Feature;
+use Mantle\Testing\Concerns\{Admin_Screen, Refresh_Database};
 use Mantle\Testkit\Test_Case;
 
 /**
  * Tests for disabling selected unpopular dashboard widgets.
  */
 final class Test_Disable_Dashboard_Widgets extends Test_Case {
-	use \Mantle\Testing\Concerns\Admin_Screen;
-	use \Mantle\Testing\Concerns\Refresh_Database;
+	use Admin_Screen;
+	use Refresh_Database;
 
 	/**
 	 * Feature instance.
 	 *
-	 * @var Feature
+	 * @var Disable_Dashboard_Widgets
 	 */
-	private Feature $feature;
+	private Disable_Dashboard_Widgets $feature;
 
 	/**
 	 * Set up.
@@ -44,7 +46,7 @@ final class Test_Disable_Dashboard_Widgets extends Test_Case {
 	/**
 	 * Test that widgets have been removed.
 	 */
-	public function test_action__disable_dashboard_widgets() {
+	public function test_action__disable_dashboard_widgets(): void {
 
 		// Load files required to get wp_meta_boxes global.
 		require_once ABSPATH . 'wp-admin/includes/misc.php';

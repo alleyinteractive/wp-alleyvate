@@ -10,25 +10,27 @@
  * @package wp-alleyvate
  */
 
+declare( strict_types=1 );
+
 namespace Alley\WP\Alleyvate\Features;
 
-use Alley\WP\Alleyvate\Feature;
 use Mantle\Testkit\Test_Case;
+use Mantle\Testing\Concerns\{Admin_Screen, Refresh_Database};
 
 /**
  * Tests for fully disabling comment functionality.
  */
 final class Test_Disable_Comments extends Test_Case {
 	use Concerns\Remove_Meta_Box;
-	use \Mantle\Testing\Concerns\Admin_Screen;
-	use \Mantle\Testing\Concerns\Refresh_Database;
+	use Admin_Screen;
+	use Refresh_Database;
 
 	/**
 	 * Feature instance.
 	 *
-	 * @var Feature
+	 * @var Disable_Comments
 	 */
-	private Feature $feature;
+	private Disable_Comments $feature;
 
 	/**
 	 * Set up.

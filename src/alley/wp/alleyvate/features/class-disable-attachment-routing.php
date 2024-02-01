@@ -12,6 +12,8 @@
 
 namespace Alley\WP\Alleyvate\Features;
 
+use WP_Admin_Bar;
+use WP_Query;
 use Alley\WP\Alleyvate\Feature;
 
 /**
@@ -48,10 +50,9 @@ final class Disable_Attachment_Routing implements Feature {
 	/**
 	 * Remove the attachment link.
 	 *
-	 * @param string $link Attachment link.
 	 * @return string
 	 */
-	public static function filter__attachment_link( $link ): string {
+	public static function filter__attachment_link(): string {
 		return '';
 	}
 
@@ -60,7 +61,7 @@ final class Disable_Attachment_Routing implements Feature {
 	 *
 	 * @param WP_Query $query WP_Query object.
 	 */
-	public static function action__pre_get_posts( $query ) {
+	public static function action__pre_get_posts( $query ): void {
 		if ( is_admin() || ! $query->is_main_query() ) {
 			return;
 		}
@@ -77,7 +78,7 @@ final class Disable_Attachment_Routing implements Feature {
 	/**
 	 * Remove attachment link from admin bar.
 	 *
-	 * @param \WP_Admin_Bar $wp_admin_bar Admin bar class.
+	 * @param WP_Admin_Bar $wp_admin_bar Admin bar class.
 	 */
 	public static function action__admin_bar_menu( $wp_admin_bar ): void {
 		if ( 'attachment' === get_post_type() ) {
