@@ -51,6 +51,27 @@ final class Login_Nonce implements Feature {
 		add_action( 'login_form_login', [ self::class, 'action__add_nonce_life_filter' ] );
 		add_action( 'login_head', [ self::class, 'action__add_meta_refresh' ] );
 		add_action( 'after_setup_theme', [ self::class, 'action__pre_validate_login_nonce' ], 9999 );
+		add_filter( 'nocache_headers', [ self::class, 'add_no_store_to_login' ] );
+	}
+
+	/**
+	 * Adds the `no-store` flag to the `Cache-Control` headers.
+	 *
+	 * @param array $headers The headers array.
+	 * @return array
+	 */
+	public static function add_no_store_to_login( $headers ): array {
+		if ( ! \is_array( $headers ) ) {
+			$headers = [];
+		}
+
+		if ( 'wp-login.php' !== ( $GLOBALS['pagenow'] ?? '' ) ) {
+			return $headers;
+		}
+
+		$headers['Cache-Control'] = 'no-cache, must-revalidate, max-age=0, no-store';
+
+		return $headers;
 	}
 
 	/**

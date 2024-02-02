@@ -7,7 +7,7 @@ Alleyvate contains baseline customizations and functionality for WordPress sites
 Install the latest version with:
 
 ```bash
-$ composer require alleyinteractive/wp-alleyvate
+composer require alleyinteractive/wp-alleyvate
 ```
 
 ## Basic usage

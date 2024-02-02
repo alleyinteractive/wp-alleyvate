@@ -146,4 +146,40 @@ final class Test_Login_Nonce extends Test_Case {
 
 		$this->assertTrue( wp_validate_boolean( wp_verify_nonce( $token, 'log-out' ) ) );
 	}
+
+	/**
+	 * Verify that the no-store flag is added to the login page.
+	 *
+	 * Note: `wp_get_nocache_headers()` is used by `nocache_headers()` which
+	 * in turn is called on `wp-login.php`. We call it directly here so
+	 * we can assert against an array instead of trying to send headers.
+	 */
+	public function test_login_page_cache_is_no_stored() {
+		global $pagenow;
+
+		$pagenow = 'wp-login.php';
+
+		$this->feature->boot();
+
+		$headers = wp_get_nocache_headers();
+
+		self::assertArrayHasKey( 'Cache-Control', $headers );
+		self::assertStringContainsString( 'no-store', $headers['Cache-Control'] );
+	}
+
+	/**
+	 * Verify that the no-store flag isn't added to other pages.
+	 */
+	public function test_non_login_page_is_stored() {
+		global $pagenow;
+
+		$pagenow = 'single.php'; // Anything other than wp-login.php.
+
+		$this->feature->boot();
+
+		$headers = wp_get_nocache_headers();
+
+		self::assertArrayHasKey( 'Cache-Control', $headers );
+		self::assertStringNotContainsString( 'no-store', $headers['Cache-Control'] );
+	}
 }
