@@ -61,7 +61,7 @@ final class Login_Nonce implements Feature {
 	 * @return array
 	 */
 	public static function add_no_store_to_login( $headers ): array {
-		if ( ! is_array( $headers ) ) {
+		if ( ! \is_array( $headers ) ) {
 			$headers = [];
 		}
 

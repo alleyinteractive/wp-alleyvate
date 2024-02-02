@@ -159,7 +159,7 @@ final class Test_Login_Nonce extends Test_Case {
 
 		$this->feature->boot();
 
-		$headers = \wp_get_nocache_headers();
+		$headers = wp_get_nocache_headers();
 
 		self::assertArrayHasKey( 'Cache-Control', $headers );
 		self::assertStringContainsString( 'no-store', $headers['Cache-Control'] );
@@ -175,7 +175,7 @@ final class Test_Login_Nonce extends Test_Case {
 
 		$this->feature->boot();
 
-		$headers = \wp_get_nocache_headers();
+		$headers = wp_get_nocache_headers();
 
 		self::assertArrayHasKey( 'Cache-Control', $headers );
 		self::assertStringNotContainsString( 'no-store', $headers['Cache-Control'] );
