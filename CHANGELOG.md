@@ -6,6 +6,7 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 
 ### Added
 
+* `login_nonce`: Added a `no-store` header to the wp-login.php page.
 * `prevent_framing`: Added a feature to prevent framing of the site via the
   `X-Frame-Options` header.
 
