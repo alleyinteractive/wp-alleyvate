@@ -10,21 +10,25 @@
  * @package wp-alleyvate
  */
 
+declare( strict_types=1 );
+
 namespace Alley\WP\Alleyvate\Features;
 
-use Alley\WP\Alleyvate\Feature;
+use Mantle\Testing\Concerns\Refresh_Database;
 use Mantle\Testkit\Test_Case;
 
 /**
  * Tests for the user enumeration restrictions feature.
  */
 final class Test_User_Enumeration_Restrictions extends Test_Case {
+	use Refresh_Database;
+
 	/**
 	 * Feature instance.
 	 *
-	 * @var Feature
+	 * @var User_Enumeration_Restrictions
 	 */
-	private Feature $feature;
+	private User_Enumeration_Restrictions $feature;
 
 	/**
 	 * Set up.
@@ -43,7 +47,7 @@ final class Test_User_Enumeration_Restrictions extends Test_Case {
 	 * @param bool $logged_in       Whether a user is logged in.
 	 * @param int  $expected_status Expected response code.
 	 */
-	public function test_rest_enumeration_by_user( $logged_in, $expected_status ) {
+	public function test_rest_enumeration_by_user( bool $logged_in, int $expected_status ): void {
 		/*
 		 * Individual users can be read anonymously over the REST API only
 		 * if they're the author of a post that is itself shown in REST.
@@ -90,11 +94,11 @@ final class Test_User_Enumeration_Restrictions extends Test_Case {
 	}
 
 	/**
-	 * Data provider.
+	 * Data provider for the test_rest_enumeration_by_user test.
 	 *
 	 * @return array
 	 */
-	public function data_rest_enumeration_by_user() {
+	public function data_rest_enumeration_by_user(): array {
 		return [
 			'logged-out user' => [ false, 401 ],
 			'logged-in user'  => [ true, 200 ],

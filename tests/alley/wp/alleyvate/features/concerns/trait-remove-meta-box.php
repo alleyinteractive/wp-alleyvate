@@ -12,15 +12,18 @@
  * @package wp-alleyvate
  */
 
+declare( strict_types=1 );
+
 namespace Alley\WP\Alleyvate\Features\Concerns;
 
 use Alley\WP\Alleyvate\Feature;
+use Mantle\Testing\Concerns\Admin_Screen;
 
 /**
  * Test the removal of a meta box.
  */
 trait Remove_Meta_Box {
-	use \Mantle\Testing\Concerns\Admin_Screen;
+	use Admin_Screen;
 
 	/**
 	 * Test the removal of a meta box.
@@ -30,7 +33,6 @@ trait Remove_Meta_Box {
 	 * @param string  $screen   Screen to test on.
 	 * @param string  $context  Meta box context.
 	 * @param string  $priority Meta box priority.
-	 * @return void
 	 */
 	protected function assertMetaBoxRemoval( Feature $feature, string $id, string $screen = 'post', string $context = 'normal', string $priority = 'default' ): void {
 		$post = self::factory()->post->create_and_get();

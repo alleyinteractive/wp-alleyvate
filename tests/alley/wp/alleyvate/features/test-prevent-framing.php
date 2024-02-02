@@ -10,23 +10,25 @@
  * @package wp-alleyvate
  */
 
+declare( strict_types=1 );
+
 namespace Alley\WP\Alleyvate\Features;
 
-use Alley\WP\Alleyvate\Feature;
+use Mantle\Testing\Concerns\Refresh_Database;
 use Mantle\Testkit\Test_Case;
 
 /**
  * Tests for the preventing the iframing of a site.
  */
 final class Test_Prevent_Framing extends Test_Case {
-	use \Mantle\Testing\Concerns\Refresh_Database;
+	use Refresh_Database;
 
 	/**
 	 * Feature instance.
 	 *
-	 * @var Feature
+	 * @var Prevent_Framing
 	 */
-	private Feature $feature;
+	private Prevent_Framing $feature;
 
 	/**
 	 * Set up.

@@ -10,12 +10,12 @@
  * @package wp-alleyvate
  */
 
+declare( strict_types=1 );
+
 namespace Alley\WP\Alleyvate\Features;
 
-use Alley\WP\Alleyvate\Feature;
 use Mantle\Testing\Concerns\Refresh_Database;
 use Mantle\Testkit\Test_Case;
-use WP_Query;
 
 /**
  * Tests for fully disabling sticky posts.
@@ -42,8 +42,7 @@ final class Test_Disable_Sticky_Posts extends Test_Case {
 	/**
 	 * Test that sticky posts are disabled in queries on the homepage.
 	 */
-	public function test_disable_sticky_posts_in_query() {
-
+	public function test_disable_sticky_posts_in_query(): void {
 		$posts         = self::factory()->post->create_ordered_set( 5 );
 		$stick_post_id = self::factory()->post->create(
 			[
@@ -87,22 +86,18 @@ final class Test_Disable_Sticky_Posts extends Test_Case {
 	/**
 	 * Test that sticky posts are disabled in Gutenberg.
 	 */
-	public function test_disable_action_sticky_rest_api_edit() {
+	public function test_disable_action_sticky_rest_api_edit(): void {
 		$this->acting_as( 'administrator' );
 
 		$post_id = self::factory()->post->create();
 
-		$this->get(
-			rest_url( 'wp/v2/posts/' . $post_id . '?context=edit' ),
-		)
-				->assertJsonPathExists( '_links.wp:action-sticky' );
+		$this->get( rest_url( 'wp/v2/posts/' . $post_id . '?context=edit' ) )
+			->assertJsonPathExists( '_links.wp:action-sticky' );
 
 		// Activate the disable sticky post feature.
 		$this->feature->boot();
 
-		$this->get(
-			rest_url( 'wp/v2/posts/' . $post_id . '?context=edit' ),
-		)
-				->assertJsonPathMissing( '_links.wp:action-sticky' );
+		$this->get( rest_url( 'wp/v2/posts/' . $post_id . '?context=edit' ) )
+			->assertJsonPathMissing( '_links.wp:action-sticky' );
 	}
 }
