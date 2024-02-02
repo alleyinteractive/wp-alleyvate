@@ -13,6 +13,8 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 * Unit tests: support for `convertDeprecationsToExceptions="true"` added. Tests
   will fail if there are PHP deprecation warnings.
 
+## 2.4.0
+
 ### Added
 
 * `login_nonce`: Added a `no-store` header to the wp-login.php page.
