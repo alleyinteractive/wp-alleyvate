@@ -10,9 +10,10 @@
  * @package wp-alleyvate
  */
 
+declare( strict_types=1 );
+
 namespace Alley\WP\Alleyvate\Features;
 
-use Alley\WP\Alleyvate\Feature;
 use Mantle\Testkit\Test_Case;
 
 use function Alley\WP\Alleyvate\available_features;
@@ -21,12 +22,13 @@ use function Alley\WP\Alleyvate\available_features;
  * Test for site health feature.
  */
 final class Test_Site_Health extends Test_Case {
+
 	/**
 	 * Feature instance.
 	 *
-	 * @var Feature
+	 * @var Site_Health
 	 */
-	private Feature $feature;
+	private Site_Health $feature;
 
 	/**
 	 * Set up.
@@ -40,7 +42,7 @@ final class Test_Site_Health extends Test_Case {
 	/**
 	 * Test the site health feature.
 	 */
-	public function test_site_health_feature() {
+	public function test_site_health_feature(): void {
 		$features = available_features();
 
 		$this->expectApplied( 'alleyvate_load_feature' )->times( \count( $features ) );
