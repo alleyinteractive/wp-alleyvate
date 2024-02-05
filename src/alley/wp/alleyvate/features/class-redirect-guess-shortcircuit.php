@@ -12,7 +12,7 @@
 
 namespace Alley\WP\Alleyvate\Features;
 
-use Alley\WP\Alleyvate\Feature;
+use Alley\WP\Types\Feature;
 
 /**
  * Disable `redirect_guess_404_permalink()`, whose behavior often confuses clients
