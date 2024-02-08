@@ -15,11 +15,13 @@
       "composer/installers": true,
       "dealerdirect/phpcodesniffer-composer-installer": true
     },
-    "lock": false
+    "lock": false,
+    "sort-packages": true
   },
   "require": {
-    "php": "^8.0",
+    "php": "^8.1",
     "alleyinteractive/composer-wordpress-autoloader": "^1.0",
+    "alleyinteractive/wp-type-extensions": "^1.0",
     "composer/installers": "^1.0"
   },
   "require-dev": {

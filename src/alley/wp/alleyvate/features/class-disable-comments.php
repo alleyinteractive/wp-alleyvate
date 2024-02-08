@@ -12,7 +12,7 @@
 
 namespace Alley\WP\Alleyvate\Features;
 
-use Alley\WP\Alleyvate\Feature;
+use Alley\WP\Types\Feature;
 
 /**
  * Fully disables comments.
