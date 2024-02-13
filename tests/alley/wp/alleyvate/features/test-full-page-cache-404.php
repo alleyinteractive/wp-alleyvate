@@ -64,16 +64,16 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 		$response->assertNoContent( 404 );
 
 		// Expect cron job to be scheduled.
-		$this->assertTrue( \wp_next_scheduled( 'alleyvate_404_cache_single' ) > 0 );
+		$this->assertTrue( wp_next_scheduled( 'alleyvate_404_cache_single' ) > 0 );
 
-		\add_action( 'template_redirect', [ $this, 'set_404_cache' ], 0 );
+		add_action( 'template_redirect', [ $this, 'set_404_cache' ], 0 );
 
 		// Expect the cache to be returned.
 		$response = $this->get( '/this-is-a-404-page' );
 		$response->assertSee( $this->feature::prepare_response( $this->get_404_html() ) );
 		$response->assertStatus( 404 );
 
-		\remove_action( 'template_redirect', [ $this, 'set_404_cache' ], 0 );
+		remove_action( 'template_redirect', [ $this, 'set_404_cache' ], 0 );
 	}
 
 	/**
@@ -88,9 +88,9 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 		$response->assertNoContent( 404 );
 
 		// Expect cron job to be scheduled.
-		$this->assertTrue( \wp_next_scheduled( 'alleyvate_404_cache_single' ) > 0 );
+		$this->assertTrue( wp_next_scheduled( 'alleyvate_404_cache_single' ) > 0 );
 
-		\add_action( 'template_redirect', [ $this, 'set_404_cache' ], 0 );
+		add_action( 'template_redirect', [ $this, 'set_404_cache' ], 0 );
 
 		// Expect the cache NOT be returned for logged in user.
 		$this->acting_as( self::factory()->user->create() );
@@ -101,7 +101,7 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 		$response->assertDontSee( $this->feature::prepare_response( $this->get_404_html() ) );
 		$response->assertStatus( 404 );
 
-		\remove_action( 'template_redirect', [ $this, 'set_404_cache' ], 0 );
+		remove_action( 'template_redirect', [ $this, 'set_404_cache' ], 0 );
 	}
 
 	/**
@@ -119,13 +119,13 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 		$response->assertStatus( 404 );
 
 		// Pretend to update the cache.
-		\add_action( 'template_redirect', [ $this, 'set_404_cache' ], 0 );
+		add_action( 'template_redirect', [ $this, 'set_404_cache' ], 0 );
 
 		$response = $this->get( '/this-is-a-404-page' );
 		$response->assertSee( $this->feature::prepare_response( $this->get_404_html() ) );
 		$response->assertStatus( 404 );
 
-		\remove_action( 'template_redirect', [ $this, 'set_404_cache' ], 0 );
+		remove_action( 'template_redirect', [ $this, 'set_404_cache' ], 0 );
 	}
 
 	/**
@@ -141,7 +141,7 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 		$response->assertSee( 'Hello World' );
 
 		// Expect cron job is not scheduled.
-		$this->assertFalse( \wp_next_scheduled( 'alleyvate_404_cache_single' ) > 0 );
+		$this->assertFalse( wp_next_scheduled( 'alleyvate_404_cache_single' ) > 0 );
 	}
 
 	/**
@@ -150,25 +150,26 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 	public function test_full_page_cacge_prepare_content(): void {
 		$raw_html               = $this->get_404_html();
 		$_SERVER['REQUEST_URI'] = '/news/breaking_story/?_ga=2.123456789.123456789.123456789.123456789&_gl=1*123456789*123456789*123456789*1';
-		$expected_html          = <<<HTML
-<html>
-<head>
-	<title>404 Not Found</title>
-	<script type="text/javascript">
-    	window.dataLayer = window.dataLayer || [];
-    	dataLayer.push({"pagename":"\/news\/breaking_story\/?_ga=2.123456789.123456789.123456789.123456789&_gl=1*123456789*123456789*123456789*1"});
-	</script>
-</head>
-<body>
-	<h1>404 Not Found</h1>
-	<p>The <a href="/news/breaking_story/?_ga=2.123456789.123456789.123456789.123456789&#038;_gl=1*123456789*123456789*123456789*1">requested URL</a> was not found on this server.</p>
-	<p>This test includes different ways the URI may be output in the content. Above shows the use of esc_url and
-	wp_json_encode.</p>
-	<p>So that we can do content aware replacement of the URI for security and analytics reporting.</p>
-	<p>esc_html would output: /news/breaking_story/?_ga=2.123456789.123456789.123456789.123456789&amp;_gl=1*123456789*123456789*123456789*1</p>
-</body>
-</html>
-HTML;
+
+$expected_html          = <<<HTML
+    <html>
+    <head>
+    	<title>404 Not Found</title>
+    	<script type="text/javascript">
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({"pagename":"\/news\/breaking_story\/?_ga=2.123456789.123456789.123456789.123456789&_gl=1*123456789*123456789*123456789*1"});
+    	</script>
+    </head>
+    <body>
+    	<h1>404 Not Found</h1>
+    	<p>The <a href="/news/breaking_story/?_ga=2.123456789.123456789.123456789.123456789&#038;_gl=1*123456789*123456789*123456789*1">requested URL</a> was not found on this server.</p>
+    	<p>This test includes different ways the URI may be output in the content. Above shows the use of esc_url and
+    	wp_json_encode.</p>
+    	<p>So that we can do content aware replacement of the URI for security and analytics reporting.</p>
+    	<p>esc_html would output: /news/breaking_story/?_ga=2.123456789.123456789.123456789.123456789&amp;_gl=1*123456789*123456789*123456789*1</p>
+    </body>
+    </html>
+    HTML;
 		$this->assertEquals( $expected_html, $this->feature::prepare_response( $raw_html ) );
 	}
 
@@ -187,13 +188,13 @@ HTML;
 		$response->assertNoContent( 404 );
 
 		// Expect cron job to be scheduled.
-		$this->assertTrue( \wp_next_scheduled( 'alleyvate_404_cache_single' ) > 0 );
+		$this->assertTrue( wp_next_scheduled( 'alleyvate_404_cache_single' ) > 0 );
 
 		// Run the cron job.
-		\do_action( 'alleyvate_404_cache' );
+		do_action( 'alleyvate_404_cache' );
 
 		// This is a hourly cron job, so we expect it to be scheduled again.
-		$this->assertTrue( \wp_next_scheduled( 'alleyvate_404_cache_single' ) > 0 );
+		$this->assertTrue( wp_next_scheduled( 'alleyvate_404_cache_single' ) > 0 );
 	}
 
 	/**
@@ -209,24 +210,24 @@ HTML;
 	 * @return string
 	 */
 	private function get_404_html(): string {
-		return <<<HTML
-<html>
-<head>
-	<title>404 Not Found</title>
-	<script type="text/javascript">
-    	window.dataLayer = window.dataLayer || [];
-    	dataLayer.push({"pagename":"\/wp-alleyvate\/404-template-generator\/?generate=1&uri=1"});
-	</script>
-</head>
-<body>
-	<h1>404 Not Found</h1>
-	<p>The <a href="/wp-alleyvate/404-template-generator/?generate=1&#038;uri=1">requested URL</a> was not found on this server.</p>
-	<p>This test includes different ways the URI may be output in the content. Above shows the use of esc_url and
-	wp_json_encode.</p>
-	<p>So that we can do content aware replacement of the URI for security and analytics reporting.</p>
-	<p>esc_html would output: /wp-alleyvate/404-template-generator/?generate=1&amp;uri=1</p>
-</body>
-</html>
-HTML;
+return <<<HTML
+    <html>
+    <head>
+    	<title>404 Not Found</title>
+    	<script type="text/javascript">
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({"pagename":"\/wp-alleyvate\/404-template-generator\/?generate=1&uri=1"});
+    	</script>
+    </head>
+    <body>
+    	<h1>404 Not Found</h1>
+    	<p>The <a href="/wp-alleyvate/404-template-generator/?generate=1&#038;uri=1">requested URL</a> was not found on this server.</p>
+    	<p>This test includes different ways the URI may be output in the content. Above shows the use of esc_url and
+    	wp_json_encode.</p>
+    	<p>So that we can do content aware replacement of the URI for security and analytics reporting.</p>
+    	<p>esc_html would output: /wp-alleyvate/404-template-generator/?generate=1&amp;uri=1</p>
+    </body>
+    </html>
+    HTML;
 	}
 }

@@ -28,7 +28,7 @@
     "mantle-framework/testkit": "^0.12"
   },
   "scripts": {
-    "fixer": "php-cs-fixer -v fix --allow-risky=yes",
+    "fixer": "php-cs-fixer -vvv fix --allow-risky=yes",
     "lint": "@phpcs",
     "phpcbf": "phpcbf",
     "phpcs": "phpcs",
