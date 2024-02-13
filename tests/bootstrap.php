@@ -12,6 +12,7 @@
 
 \Mantle\Testing\manager()
 	// Fires on 'muplugins_loaded'.
+	->with_object_cache()
 	->loaded(
 		function () {
 			require_once __DIR__ . '/../wp-alleyvate.php';
