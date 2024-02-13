@@ -12,10 +12,9 @@ jobs:
         wp_version: [ "latest" ]
         multisite: [ false, true ]
     name: WordPress ${{ matrix.wp_version }} @ PHP ${{ matrix.php }} (WP_MULTISITE=${{ matrix.multisite }})
-    env:
-      INSTALL_OBJECT_CACHE: true
     uses: alleyinteractive/.github/.github/workflows/php-tests.yml@main
     with:
+      INSTALL_OBJECT_CACHE: true
       command: "phpunit"
       php: ${{ matrix.php }}
       wordpress: ${{ matrix.wp_version }}
