@@ -10,6 +10,7 @@
  * @package wp-alleyvate
  */
 
+define( 'INSTALL_OBJECT_CACHE', true );
 define( 'MANTLE_REQUIRE_OBJECT_CACHE', true );
 define( 'MANTLE_TESTING_DEBUG', true );
 
