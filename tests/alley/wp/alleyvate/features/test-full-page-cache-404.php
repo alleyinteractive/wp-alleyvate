@@ -56,6 +56,11 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 	 * Test that the feature is disabled if the object cache is not in use.
 	 */
 	public function test_feature_is_disabled_if_object_cache_is_not_in_use(): void {
+
+		if ( ! (bool) wp_using_ext_object_cache() ) {
+			$this->markTestSkipped( 'This test requires that an external object cache is in use.' );
+		}
+
 		$this->assertTrue( (bool) wp_using_ext_object_cache() );
 
 		// Disable the object cache.
@@ -83,7 +88,7 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 	 */
 	public function test_full_page_cache_404_returns_cache(): void {
 
-		if ( ! wp_using_ext_object_cache() ) {
+		if ( ! (bool) wp_using_ext_object_cache() ) {
 			$this->markTestSkipped( 'This test requires that an external object cache is in use.' );
 		}
 
@@ -112,7 +117,7 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 	 */
 	public function test_full_page_cache_404_does_not_return_cache_for_logged_in_user(): void {
 
-		if ( ! wp_using_ext_object_cache() ) {
+		if ( ! (bool) wp_using_ext_object_cache() ) {
 			$this->markTestSkipped( 'This test requires that an external object cache is in use.' );
 		}
 
@@ -145,7 +150,7 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 	 */
 	public function test_full_page_cache_404_does_not_return_cache_for_generator_uri(): void {
 
-		if ( ! wp_using_ext_object_cache() ) {
+		if ( ! (bool) wp_using_ext_object_cache() ) {
 			$this->markTestSkipped( 'This test requires that an external object cache is in use.' );
 		}
 
@@ -174,7 +179,7 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 	 */
 	public function test_full_page_cache_not_returned_for_non_404(): void {
 
-		if ( ! wp_using_ext_object_cache() ) {
+		if ( ! (bool) wp_using_ext_object_cache() ) {
 			$this->markTestSkipped( 'This test requires that an external object cache is in use.' );
 		}
 
@@ -225,7 +230,7 @@ $expected_html = <<<HTML
 	 */
 	public function test_full_page_cache_404_cron(): void {
 
-		if ( ! wp_using_ext_object_cache() ) {
+		if ( ! (bool) wp_using_ext_object_cache() ) {
 			$this->markTestSkipped( 'This test requires that an external object cache is in use.' );
 		}
 
