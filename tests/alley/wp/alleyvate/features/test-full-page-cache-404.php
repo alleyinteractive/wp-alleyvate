@@ -37,6 +37,7 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 	 */
 	protected function setUp(): void {
 		parent::setUp();
+
 		$this->feature = new Full_Page_Cache_404();
 
 		$this->prevent_stray_requests();
@@ -46,8 +47,9 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 	 * Tear down.
 	 */
 	public function tearDown(): void {
-		$this->feature::delete_cache();
 		parent::tearDown();
+
+		$this->feature::delete_cache();
 	}
 
 	/**
@@ -62,16 +64,16 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 		$response->assertNoContent( 404 );
 
 		// Expect cron job to be scheduled.
-		$this->assertTrue( wp_next_scheduled( 'alleyvate_404_cache_single' ) > 0 );
+		$this->assertTrue( \wp_next_scheduled( 'alleyvate_404_cache_single' ) > 0 );
 
-		add_action( 'template_redirect', [ $this, 'set_404_cache' ], 0 );
+		\add_action( 'template_redirect', [ $this, 'set_404_cache' ], 0 );
 
 		// Expect the cache to be returned.
 		$response = $this->get( '/this-is-a-404-page' );
 		$response->assertSee( $this->feature::prepare_response( $this->get_404_html() ) );
 		$response->assertStatus( 404 );
 
-		remove_action( 'template_redirect', [ $this, 'set_404_cache' ], 0 );
+		\remove_action( 'template_redirect', [ $this, 'set_404_cache' ], 0 );
 	}
 
 	/**
@@ -86,9 +88,9 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 		$response->assertNoContent( 404 );
 
 		// Expect cron job to be scheduled.
-		$this->assertTrue( wp_next_scheduled( 'alleyvate_404_cache_single' ) > 0 );
+		$this->assertTrue( \wp_next_scheduled( 'alleyvate_404_cache_single' ) > 0 );
 
-		add_action( 'template_redirect', [ $this, 'set_404_cache' ], 0 );
+		\add_action( 'template_redirect', [ $this, 'set_404_cache' ], 0 );
 
 		// Expect the cache NOT be returned for logged in user.
 		$this->acting_as( self::factory()->user->create() );
@@ -99,7 +101,7 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 		$response->assertDontSee( $this->feature::prepare_response( $this->get_404_html() ) );
 		$response->assertStatus( 404 );
 
-		remove_action( 'template_redirect', [ $this, 'set_404_cache' ], 0 );
+		\remove_action( 'template_redirect', [ $this, 'set_404_cache' ], 0 );
 	}
 
 	/**
@@ -117,13 +119,13 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 		$response->assertStatus( 404 );
 
 		// Pretend to update the cache.
-		add_action( 'template_redirect', [ $this, 'set_404_cache' ], 0 );
+		\add_action( 'template_redirect', [ $this, 'set_404_cache' ], 0 );
 
 		$response = $this->get( '/this-is-a-404-page' );
 		$response->assertSee( $this->feature::prepare_response( $this->get_404_html() ) );
 		$response->assertStatus( 404 );
 
-		remove_action( 'template_redirect', [ $this, 'set_404_cache' ], 0 );
+		\remove_action( 'template_redirect', [ $this, 'set_404_cache' ], 0 );
 	}
 
 	/**
@@ -139,7 +141,7 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 		$response->assertSee( 'Hello World' );
 
 		// Expect cron job is not scheduled.
-		$this->assertFalse( wp_next_scheduled( 'alleyvate_404_cache_single' ) > 0 );
+		$this->assertFalse( \wp_next_scheduled( 'alleyvate_404_cache_single' ) > 0 );
 	}
 
 	/**
@@ -185,13 +187,13 @@ HTML;
 		$response->assertNoContent( 404 );
 
 		// Expect cron job to be scheduled.
-		$this->assertTrue( wp_next_scheduled( 'alleyvate_404_cache_single' ) > 0 );
+		$this->assertTrue( \wp_next_scheduled( 'alleyvate_404_cache_single' ) > 0 );
 
 		// Run the cron job.
-		do_action( 'alleyvate_404_cache' );
+		\do_action( 'alleyvate_404_cache' );
 
 		// This is a hourly cron job, so we expect it to be scheduled again.
-		$this->assertTrue( wp_next_scheduled( 'alleyvate_404_cache_single' ) > 0 );
+		$this->assertTrue( \wp_next_scheduled( 'alleyvate_404_cache_single' ) > 0 );
 	}
 
 	/**

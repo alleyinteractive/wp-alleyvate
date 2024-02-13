@@ -107,7 +107,7 @@ final class Full_Page_Cache_404 implements Feature {
 
 		echo self::get_cached_response_with_headers(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-		if ( defined( 'MANTLE_IS_TESTING' ) && MANTLE_IS_TESTING ) {
+		if ( \defined( 'MANTLE_IS_TESTING' ) && MANTLE_IS_TESTING ) {
 			wp_die( '', '', [ 'response' => 404 ] );
 		}
 
@@ -288,8 +288,8 @@ final class Full_Page_Cache_404 implements Feature {
 		$url = str_replace( 'http://', 'https://', $url );
 
 		// This request will populate the cache using output buffering.
-		if ( function_exists( 'wpcom_vip_file_get_contents' ) ) {
-			\wpcom_vip_file_get_contents( $url );
+		if ( \function_exists( 'wpcom_vip_file_get_contents' ) ) {
+			wpcom_vip_file_get_contents( $url );
 		} else {
 			wp_remote_get( $url ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.wp_remote_get_wp_remote_get
 		}
