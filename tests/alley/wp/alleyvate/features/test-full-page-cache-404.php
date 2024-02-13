@@ -151,7 +151,8 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 		$raw_html               = $this->get_404_html();
 		$_SERVER['REQUEST_URI'] = '/news/breaking_story/?_ga=2.123456789.123456789.123456789.123456789&_gl=1*123456789*123456789*123456789*1';
 
-$expected_html          = <<<HTML
+// phpcs:ignore Generic.WhiteSpace.ScopeIndent.Incorrect
+$expected_html = <<<HTML
     <html>
     <head>
     	<title>404 Not Found</title>
@@ -210,6 +211,7 @@ $expected_html          = <<<HTML
 	 * @return string
 	 */
 	private function get_404_html(): string {
+		// phpcs:ignore Generic.WhiteSpace.ScopeIndent.Incorrect
 return <<<HTML
     <html>
     <head>
