@@ -69,6 +69,15 @@ final class Full_Page_Cache_404 implements Feature {
 	 */
 	public function boot(): void {
 
+		/**
+		 * Only boot feature if external object cache is being used.
+		 *
+		 * We don't want to store the cached 404 page in the database.
+		 */
+		if ( ! (bool) wp_using_ext_object_cache() ) {
+			return;
+		}
+
 		// Return 404 page cache on template_redirect.
 		add_action( 'template_redirect', [ self::class, 'action__template_redirect' ], 1 );
 

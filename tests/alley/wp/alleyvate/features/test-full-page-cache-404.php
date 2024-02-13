@@ -38,9 +38,9 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 	protected function setUp(): void {
 		parent::setUp();
 
-		$this->feature = new Full_Page_Cache_404();
-
 		$this->prevent_stray_requests();
+
+		$this->feature = new Full_Page_Cache_404();
 	}
 
 	/**
@@ -50,6 +50,32 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 		parent::tearDown();
 
 		$this->feature::delete_cache();
+	}
+
+	/**
+	 * Test that the feature is disabled if the object cache is not in use.
+	 */
+	public function test_feature_is_disabled_if_object_cache_is_not_in_use(): void {
+		$this->assertTrue( (bool) wp_using_ext_object_cache() );
+
+		// Disable the object cache.
+		wp_using_ext_object_cache( false );
+
+		$this->feature->boot();
+
+		$this->assertFalse( (bool) wp_using_ext_object_cache() );
+
+		$response = $this->get( '/this-is-a-404-page' );
+		$response->assertDontSee( $this->feature::prepare_response( $this->get_404_html() ) );
+		$response->assertStatus( 404 );
+
+		// Expect cron job to be scheduled.
+		$this->assertFalse( wp_next_scheduled( 'alleyvate_404_cache_single' ) > 0 );
+
+		// Re-enable the object cache.
+		wp_using_ext_object_cache( true );
+
+		$this->assertTrue( (bool) wp_using_ext_object_cache() );
 	}
 
 	/**
