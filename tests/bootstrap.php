@@ -10,6 +10,8 @@
  * @package wp-alleyvate
  */
 
+define( 'MANTLE_REQUIRE_OBJECT_CACHE', true );
+
 \Mantle\Testing\manager()
 	// Fires on 'muplugins_loaded'.
 	->with_object_cache()
