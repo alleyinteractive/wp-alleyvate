@@ -82,6 +82,11 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 	 * Test full page cache 404.
 	 */
 	public function test_full_page_cache_404_returns_cache(): void {
+
+		if ( ! wp_using_ext_object_cache() ) {
+			$this->markTestSkipped( 'This test requires that an external object cache is in use.' );
+		}
+
 		$this->feature->boot();
 
 		$response = $this->get( '/this-is-a-404-page' );
@@ -106,6 +111,11 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 	 * Test full page cache 404 does not return cache for logged in user.
 	 */
 	public function test_full_page_cache_404_does_not_return_cache_for_logged_in_user(): void {
+
+		if ( ! wp_using_ext_object_cache() ) {
+			$this->markTestSkipped( 'This test requires that an external object cache is in use.' );
+		}
+
 		$this->feature->boot();
 
 		$response = $this->get( '/this-is-a-404-page' );
@@ -134,6 +144,11 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 	 * Test full page cache 404 does not return cache for generator URI.
 	 */
 	public function test_full_page_cache_404_does_not_return_cache_for_generator_uri(): void {
+
+		if ( ! wp_using_ext_object_cache() ) {
+			$this->markTestSkipped( 'This test requires that an external object cache is in use.' );
+		}
+
 		$this->feature->boot();
 
 		$response = $this->get( '/this-is-a-404-page' );
@@ -158,6 +173,11 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 	 * Test that the 404 cache is not returned for non-404 pages.
 	 */
 	public function test_full_page_cache_not_returned_for_non_404(): void {
+
+		if ( ! wp_using_ext_object_cache() ) {
+			$this->markTestSkipped( 'This test requires that an external object cache is in use.' );
+		}
+
 		$this->feature->boot();
 
 		$post_id  = self::factory()->post->create( [ 'post_title' => 'Hello World' ] );
@@ -204,6 +224,11 @@ $expected_html = <<<HTML
 	 * Test full page cache 404 cron.
 	 */
 	public function test_full_page_cache_404_cron(): void {
+
+		if ( ! wp_using_ext_object_cache() ) {
+			$this->markTestSkipped( 'This test requires that an external object cache is in use.' );
+		}
+
 		$this->fake_request( 'https://example.org/*' )
 			->with_response_code( 400 );
 
