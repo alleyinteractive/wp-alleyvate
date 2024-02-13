@@ -11,6 +11,7 @@
  */
 
 define( 'MANTLE_REQUIRE_OBJECT_CACHE', true );
+define( 'MANTLE_TESTING_DEBUG', true );
 
 \Mantle\Testing\manager()
 	// Fires on 'muplugins_loaded'.
