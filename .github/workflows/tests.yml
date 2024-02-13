@@ -14,7 +14,6 @@ jobs:
     name: WordPress ${{ matrix.wp_version }} @ PHP ${{ matrix.php }} (WP_MULTISITE=${{ matrix.multisite }})
     uses: alleyinteractive/.github/.github/workflows/php-tests.yml@main
     with:
-      INSTALL_OBJECT_CACHE: true
       command: "phpunit"
       php: ${{ matrix.php }}
       wordpress: ${{ matrix.wp_version }}
