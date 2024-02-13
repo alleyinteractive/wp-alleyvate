@@ -12,10 +12,16 @@ jobs:
         wp_version: [ "latest" ]
         multisite: [ false, true ]
     name: WordPress ${{ matrix.wp_version }} @ PHP ${{ matrix.php }} (WP_MULTISITE=${{ matrix.multisite }})
-    uses: niden/actions-memcached@v7
-    uses: alleyinteractive/.github/.github/workflows/php-tests.yml@main
-    with:
-      command: "phpunit"
-      php: ${{ matrix.php }}
-      wordpress: ${{ matrix.wp_version }}
-      multisite: ${{ matrix.multisite }}
+
+    steps:
+      - name: Set up a Memcached server
+        uses: niden/actions-memcached@v7
+
+      - name: Tests
+        uses: alleyinteractive/.github/.github/workflows/php-tests.yml@main
+        with:
+          command: "phpunit"
+          php: ${{ matrix.php }}
+          wordpress: ${{ matrix.wp_version }}
+          multisite: ${{ matrix.multisite }}
+
