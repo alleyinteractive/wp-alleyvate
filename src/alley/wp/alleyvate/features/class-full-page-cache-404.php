@@ -105,9 +105,9 @@ final class Full_Page_Cache_404 implements Feature {
 			return;
 		}
 
-		echo self::get_cached_response_with_headers();
+		echo self::get_cached_response_with_headers(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-		if ( defined( 'MANTLE_IS_TESTING') && MANTLE_IS_TESTING ) {
+		if ( defined( 'MANTLE_IS_TESTING' ) && MANTLE_IS_TESTING ) {
 			wp_die( '', '', [ 'response' => 404 ] );
 		}
 

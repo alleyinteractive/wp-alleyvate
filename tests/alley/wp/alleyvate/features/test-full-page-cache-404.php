@@ -91,7 +91,7 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 		add_action( 'template_redirect', [ $this, 'set_404_cache' ], 0 );
 
 		// Expect the cache NOT be returned for logged in user.
-		$this->acting_as( static::factory()->user->create() );
+		$this->acting_as( self::factory()->user->create() );
 		$this->assertAuthenticated();
 
 		// Expect the cache to be returned.
