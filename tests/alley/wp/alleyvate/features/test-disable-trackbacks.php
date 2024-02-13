@@ -12,19 +12,21 @@
 
 namespace Alley\WP\Alleyvate\Features;
 
-use Alley\WP\Alleyvate\Feature;
+use Mantle\Testing\Concerns\Refresh_Database;
 use Mantle\Testkit\Test_Case;
 
 /**
  * Tests for fully disabling pingback and trackback functionality.
  */
 final class Test_Disable_Trackbacks extends Test_Case {
+	use Refresh_Database;
+
 	/**
 	 * Feature instance.
 	 *
-	 * @var Feature
+	 * @var Disable_Trackbacks
 	 */
-	private Feature $feature;
+	private Disable_Trackbacks $feature;
 
 	/**
 	 * Set up.

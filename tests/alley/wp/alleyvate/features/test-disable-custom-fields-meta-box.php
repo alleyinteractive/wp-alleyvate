@@ -10,9 +10,10 @@
  * @package wp-alleyvate
  */
 
+declare( strict_types=1 );
+
 namespace Alley\WP\Alleyvate\Features;
 
-use Alley\WP\Alleyvate\Feature;
 use Mantle\Testkit\Test_Case;
 
 /**
@@ -24,9 +25,9 @@ final class Test_Disable_Custom_Fields_Meta_Box extends Test_Case {
 	/**
 	 * Feature instance.
 	 *
-	 * @var Feature
+	 * @var Disable_Custom_Fields_Meta_Box
 	 */
-	private Feature $feature;
+	private Disable_Custom_Fields_Meta_Box $feature;
 
 	/**
 	 * Set up.

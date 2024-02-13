@@ -10,23 +10,25 @@
  * @package wp-alleyvate
  */
 
+declare( strict_types=1 );
+
 namespace Alley\WP\Alleyvate\Features;
 
-use Alley\WP\Alleyvate\Feature;
+use Mantle\Testing\Concerns\Refresh_Database;
 use Mantle\Testkit\Test_Case;
 
 /**
  * Tests for disabling the password change notification.
  */
 final class Test_Disable_Password_Change_Notification extends Test_Case {
-	use \Mantle\Testing\Concerns\Refresh_Database;
+	use Refresh_Database;
 
 	/**
 	 * Feature instance.
 	 *
-	 * @var Feature
+	 * @var Disable_Password_Change_Notification
 	 */
-	private Feature $feature;
+	private Disable_Password_Change_Notification $feature;
 
 	/**
 	 * Set up.
@@ -38,9 +40,9 @@ final class Test_Disable_Password_Change_Notification extends Test_Case {
 	}
 
 	/**
-	 * Test that the feature.
+	 * Test disable password change notification hook.
 	 */
-	public function test_disable_password_change_notification_hook() {
+	public function test_disable_password_change_notification_hook(): void {
 		$this->acting_as( 'administrator' );
 
 		$this->assertTrue(

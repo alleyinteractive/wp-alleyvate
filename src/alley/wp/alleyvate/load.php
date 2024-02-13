@@ -29,6 +29,7 @@ function available_features(): array {
 		'disable_trackbacks'                   => new Features\Disable_Trackbacks(),
 		'disallow_file_edit'                   => new Features\Disallow_File_Edit(),
 		'login_nonce'                          => new Features\Login_Nonce(),
+		'prevent_framing'                      => new Features\Prevent_Framing(),
 		'redirect_guess_shortcircuit'          => new Features\Redirect_Guess_Shortcircuit(),
 		'site_health'                          => new Features\Site_Health(),
 		'user_enumeration_restrictions'        => new Features\User_Enumeration_Restrictions(),

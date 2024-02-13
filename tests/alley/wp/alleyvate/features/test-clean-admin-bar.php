@@ -10,23 +10,26 @@
  * @package wp-alleyvate
  */
 
+declare( strict_types=1 );
+
 namespace Alley\WP\Alleyvate\Features;
 
-use Alley\WP\Alleyvate\Feature;
+use WP_Admin_Bar;
 use Mantle\Testkit\Test_Case;
+use Mantle\Testing\Concerns\Refresh_Database;
 
 /**
  * Tests for the cleaning of the admin bar.
  */
 final class Test_Clean_Admin_Bar extends Test_Case {
-	use \Mantle\Testing\Concerns\Refresh_Database;
+	use Refresh_Database;
 
 	/**
 	 * Feature instance.
 	 *
-	 * @var Feature
+	 * @var Clean_Admin_Bar
 	 */
-	private Feature $feature;
+	private Clean_Admin_Bar $feature;
 
 	/**
 	 * Set up.
@@ -40,8 +43,7 @@ final class Test_Clean_Admin_Bar extends Test_Case {
 	/**
 	 * Test default admin bar cleaning.
 	 */
-	public function test_remove_admin_bar_nodes() {
-
+	public function test_remove_admin_bar_nodes(): void {
 		$admin_bar = $this->apply_admin_bar();
 
 		// Get nodes to compare.
@@ -73,8 +75,7 @@ final class Test_Clean_Admin_Bar extends Test_Case {
 	/**
 	 * Test admin bar cleaning using filter.
 	 */
-	public function test_filter() {
-
+	public function test_filter(): void {
 		$admin_bar = $this->apply_admin_bar();
 		$node      = 'my-account';
 
@@ -105,8 +106,12 @@ final class Test_Clean_Admin_Bar extends Test_Case {
 
 	/**
 	 * Apply the admin bar.
+	 *
+	 * @global WP_Admin_Bar $wp_admin_bar Core class used to implement the Toolbar API.
+	 *
+	 * @return WP_Admin_Bar
 	 */
-	public function apply_admin_bar() {
+	public function apply_admin_bar(): WP_Admin_Bar {
 		// Load file required to work with the admin bar.
 		require_once ABSPATH . WPINC . '/class-wp-admin-bar.php';
 

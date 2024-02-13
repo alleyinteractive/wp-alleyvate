@@ -10,21 +10,25 @@
  * @package wp-alleyvate
  */
 
+declare( strict_types=1 );
+
 namespace Alley\WP\Alleyvate\Features;
 
-use Alley\WP\Alleyvate\Feature;
+use Mantle\Testing\Concerns\Refresh_Database;
 use Mantle\Testkit\Test_Case;
 
 /**
  * Tests for short-circuiting the redirect URL guessing for 404 requests.
  */
 final class Test_Redirect_Guess_Shortcircuit extends Test_Case {
+	use Refresh_Database;
+
 	/**
 	 * Feature instance.
 	 *
-	 * @var Feature
+	 * @var Redirect_Guess_Shortcircuit
 	 */
-	private Feature $feature;
+	private Redirect_Guess_Shortcircuit $feature;
 
 	/**
 	 * Set up.
@@ -38,7 +42,7 @@ final class Test_Redirect_Guess_Shortcircuit extends Test_Case {
 	/**
 	 * Test that the feature short-circuits a redirect that would otherwise occur.
 	 */
-	public function test_no_redirect_guess() {
+	public function test_no_redirect_guess(): void {
 		$post_name = 'foo';
 		$actual    = self::factory()->post->create(
 			[
