@@ -268,7 +268,7 @@ final class Full_Page_Cache_404 implements Feature {
 	 */
 	public static function prepare_response( string $content ): string {
 		// To avoid analytics issues, replace the Generator URI with the requested URI.
-		$uri = sanitize_text_field( $_SERVER['REQUEST_URI'] ?? '' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$uri = sanitize_text_field( $_SERVER['REQUEST_URI'] ?? '' );
 
 		return str_replace(
 			[

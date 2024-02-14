@@ -74,8 +74,10 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 		$response->assertDontSee( $this->feature::prepare_response( $this->get_404_html() ) );
 		$response->assertStatus( 404 );
 
-		// Expect cron job to be scheduled.
-		$this->assertFalse( wp_next_scheduled( 'alleyvate_404_cache_single' ) > 0 );
+		$this->assertFalse(
+			wp_next_scheduled( 'alleyvate_404_cache_single' ),
+			'Cron job to generate cached 404 page is scheduled and should not be.'
+		);
 
 		// Re-enable the object cache.
 		wp_using_ext_object_cache( true );
@@ -191,14 +193,16 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 		$response->assertHeaderMissing( 'X-Alleyvate-404-Cache' );
 		$response->assertSee( 'Hello World' );
 
-		// Expect cron job is not scheduled.
-		$this->assertFalse( wp_next_scheduled( 'alleyvate_404_cache_single' ) > 0 );
+		$this->assertFalse(
+			wp_next_scheduled( 'alleyvate_404_cache_single' ),
+			'Cron job to generate cached 404 page is scheduled and should not be.'
+		);
 	}
 
 	/**
 	 * Test that the content manipulation works.
 	 */
-	public function test_full_page_cacge_prepare_content(): void {
+	public function test_full_page_cache_prepare_content(): void {
 		$raw_html               = $this->get_404_html();
 		$_SERVER['REQUEST_URI'] = '/news/breaking_story/?_ga=2.123456789.123456789.123456789.123456789&_gl=1*123456789*123456789*123456789*1';
 
