@@ -139,7 +139,6 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 		$this->acting_as( self::factory()->user->create() );
 		$this->assertAuthenticated();
 
-		// Expect the cache to be returned.
 		$response = $this->get( '/this-is-a-404-page' );
 		$response->assertDontSee( $this->feature::prepare_response( $this->get_404_html() ) );
 		$response->assertStatus( 404 );
@@ -177,7 +176,7 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 	}
 
 	/**
-	 * Test that the 404 cache is not returned for non-404 pages.
+	 * Test that the 404 page cache is not returned for non-404 pages.
 	 */
 	public function test_full_page_cache_not_returned_for_non_404(): void {
 
