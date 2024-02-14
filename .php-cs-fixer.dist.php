@@ -24,11 +24,10 @@ $config->setRules(
 		// Enabled by '@PHP81Migration' but generates invalid spacing for WordPress.
 		'method_argument_space' => false,
 
-		'final_class'                             => true,
-		'native_constant_invocation'              => true,
-		'native_function_casing'                  => true,
-		'native_function_invocation'              => true,
-		'native_function_type_declaration_casing' => true,
+		'final_class'                => true,
+		'native_constant_invocation' => true,
+		'native_function_casing'     => true,
+		'native_function_invocation' => true,
 	]
 );
 $config->setFinder( $finder );

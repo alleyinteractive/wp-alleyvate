@@ -32,7 +32,7 @@
     "lint": "@phpcs",
     "phpcbf": "phpcbf",
     "phpcs": "phpcs",
-    "phpunit": "phpunit --testdox",
+    "phpunit": "phpunit",
     "test": [
       "@phpcs",
       "@phpunit"
