@@ -12,6 +12,8 @@
 
 namespace Alley\WP\Alleyvate;
 
+use Alley\WP\Features\Group;
+
 /**
  * Load plugin features.
  */
@@ -21,7 +23,7 @@ function load(): void {
 		return;
 	}
 
-	$plugin = new \Alley\WP\Features\Features(
+	$plugin = new Group(
 		new Site_Health_Panel(),
 		new Feature(
 			'clean_admin_bar',
