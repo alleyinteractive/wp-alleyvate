@@ -14,7 +14,7 @@ namespace Alley\WP\Alleyvate\Features;
 
 use WP_Admin_Bar;
 use WP_Query;
-use Alley\WP\Alleyvate\Feature;
+use Alley\WP\Types\Feature;
 
 /**
  * Disable attachment routing.

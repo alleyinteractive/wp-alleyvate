@@ -12,7 +12,7 @@
 
 namespace Alley\WP\Alleyvate\Features;
 
-use Alley\WP\Alleyvate\Feature;
+use Alley\WP\Types\Feature;
 
 /**
  * Disallow theme/plugin editing in the filesystem to safeguard against unexpected code changes.

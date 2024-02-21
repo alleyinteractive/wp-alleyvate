@@ -16,7 +16,7 @@ declare( strict_types=1 );
 
 namespace Alley\WP\Alleyvate\Features\Concerns;
 
-use Alley\WP\Alleyvate\Feature;
+use Alley\WP\Types\Feature;
 use Mantle\Testing\Concerns\Admin_Screen;
 
 /**

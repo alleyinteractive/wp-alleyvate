@@ -25,12 +25,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Load Composer dependencies.
-if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
-	require_once __DIR__ . '/vendor/autoload.php';
+if ( file_exists( __DIR__ . '/vendor/wordpress-autoload.php' ) ) {
+	require_once __DIR__ . '/vendor/wordpress-autoload.php';
 }
 
 // Load the feature loader.
 require_once __DIR__ . '/src/alley/wp/alleyvate/load.php';
 
-// Alleyvate features load after all plugins and themes have had a chance to add filters.
-add_action( 'after_setup_theme', 'Alley\WP\Alleyvate\load' );
+\Alley\WP\Alleyvate\load();
