@@ -14,7 +14,7 @@ declare( strict_types=1 );
 
 namespace Alley\WP\Alleyvate\Features;
 
-use Alley\WP\Alleyvate\Feature;
+use Alley\WP\Types\Feature;
 
 /**
  * Full Page Cache for 404s.
@@ -192,9 +192,6 @@ final class Full_Page_Cache_404 implements Feature {
 			}
 
 			ob_start( [ self::class, 'finish_output_buffering' ] );
-
-			// Clean up the buffer.
-			ob_get_clean();
 		}
 	}
 

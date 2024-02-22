@@ -77,6 +77,10 @@ function load(): void {
 			'user_enumeration_restrictions',
 			new Features\User_Enumeration_Restrictions(),
 		),
+		new Feature(
+			'full_page_cache_404',
+			new Features\Full_Page_Cache_404(),
+		),
 	);
 
 	$plugin->boot();
