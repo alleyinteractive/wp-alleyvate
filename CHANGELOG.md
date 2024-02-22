@@ -4,14 +4,25 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 
 ## Unreleased
 
+### Added
+
+* `Alley\WP\Alleyvate\Feature` class implementing the `Alley\WP\Types\Feature` interface.
+
 ### Changed
 
+* The minimum PHP version is now 8.1.
+* Feature classes now implement the `Alley\WP\Types\Feature` interface instead of `Alley\WP\Alleyvate\Feature`.
 * Unit tests: misc changes and fixes.
 * Unit tests: the `$feature` property uses the main feature class for better IDE intelephense support.
 * Unit tests: all test cases use `declare( strict_types=1 );`.
 * Unit tests: added test to confirm the attachment rewrite rules are removed
 * Unit tests: support for `convertDeprecationsToExceptions="true"` added. Tests
   will fail if there are PHP deprecation warnings.
+
+### Removed
+
+* `site_health`: Removed as a dedicated feature and now implemented directly in the plugin.
+* `Alley\WP\Alleyvate\Feature` interface. 
 
 ## 2.4.0
 
