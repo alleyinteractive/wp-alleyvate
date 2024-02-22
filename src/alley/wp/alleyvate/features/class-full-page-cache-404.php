@@ -191,6 +191,9 @@ final class Full_Page_Cache_404 implements Feature {
 				return;
 			}
 
+			// Clean up any buffer first.
+			ob_end_clean();
+
 			ob_start( [ self::class, 'finish_output_buffering' ] );
 		}
 	}
