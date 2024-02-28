@@ -128,7 +128,7 @@ final class Disable_Comments implements Feature {
 	public static function filter__rest_prepare( \WP_REST_Response $response ): \WP_REST_Response {
 		$response->remove_link( 'replies' );
 
-		if ( is_array( $response->data ) && isset( $response->data['comment_status'] ) ) {
+		if ( \is_array( $response->data ) && isset( $response->data['comment_status'] ) ) {
 			$response->data['comment_status'] = 'closed';
 		}
 

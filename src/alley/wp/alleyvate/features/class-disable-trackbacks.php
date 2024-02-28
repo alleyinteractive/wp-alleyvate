@@ -49,7 +49,7 @@ final class Disable_Trackbacks implements Feature {
 	 * @return \WP_REST_Response Filtered response.
 	 */
 	public static function filter__rest_prepare( \WP_REST_Response $response ): \WP_REST_Response {
-		if ( is_array( $response->data ) && isset( $response->data['ping_status'] ) ) {
+		if ( \is_array( $response->data ) && isset( $response->data['ping_status'] ) ) {
 			$response->data['ping_status'] = 'closed';
 		}
 
