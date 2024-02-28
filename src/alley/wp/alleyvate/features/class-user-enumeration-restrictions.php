@@ -38,7 +38,7 @@ final class User_Enumeration_Restrictions implements Feature {
 	 * if any, since the result of a permission callback is not filterable.
 	 *
 	 * @param WP_REST_Response|WP_HTTP_Response|WP_Error|mixed $response Result to send to the client.
-	 * @param array                                            $handler  Route handler used for the request.
+	 * @param array<mixed>                                     $handler  Route handler used for the request.
 	 * @param WP_REST_Request                                  $request  Request used to generate the response.
 	 * @return WP_REST_Response|WP_HTTP_Response|WP_Error|mixed The updated result.
 	 */
