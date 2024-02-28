@@ -96,8 +96,9 @@ final class Disable_Comments implements Feature {
 	/**
 	 * Short-circuits the comments query to return an empty array or 0 (if count was requested).
 	 *
-	 * @param array|int|null    $comment_data  Not used.
-	 * @param \WP_Comment_Query $comment_query The comment query object to filter results for.
+	 * @param array<mixed>|int|null $comment_data  Not used.
+	 * @param \WP_Comment_Query     $comment_query The comment query object to filter results for.
+	 * @return int|array<mixed>
 	 */
 	public static function filter__comments_pre_query( $comment_data, \WP_Comment_Query $comment_query ) {
 		return $comment_query->query_vars['count'] ? 0 : [];
@@ -106,9 +107,9 @@ final class Disable_Comments implements Feature {
 	/**
 	 * Removes REST endpoints related to comments.
 	 *
-	 * @param array $endpoints REST endpoints to be filtered.
+	 * @param array<string> $endpoints REST endpoints to be filtered.
 	 *
-	 * @return array Filtered endpoints.
+	 * @return array<string> Filtered endpoints.
 	 */
 	public static function filter__rest_endpoints( array $endpoints ): array {
 		unset( $endpoints['/wp/v2/comments'] );
@@ -126,7 +127,8 @@ final class Disable_Comments implements Feature {
 	 */
 	public static function filter__rest_prepare( \WP_REST_Response $response ): \WP_REST_Response {
 		$response->remove_link( 'replies' );
-		if ( isset( $response->data['comment_status'] ) ) {
+
+		if ( is_array( $response->data ) && isset( $response->data['comment_status'] ) ) {
 			$response->data['comment_status'] = 'closed';
 		}
 
@@ -136,9 +138,9 @@ final class Disable_Comments implements Feature {
 	/**
 	 * Removes rewrite rules related to comments.
 	 *
-	 * @param array $rules Rewrite rules to be filtered.
+	 * @param array<string> $rules Rewrite rules to be filtered.
 	 *
-	 * @return array Filtered rewrite rules.
+	 * @return array<string> Filtered rewrite rules.
 	 */
 	public static function filter__rewrite_rules_array( array $rules ): array {
 		foreach ( $rules as $regex => $rewrite ) {

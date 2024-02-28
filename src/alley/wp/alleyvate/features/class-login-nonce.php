@@ -57,8 +57,8 @@ final class Login_Nonce implements Feature {
 	/**
 	 * Adds the `no-store` flag to the `Cache-Control` headers.
 	 *
-	 * @param array $headers The headers array.
-	 * @return array
+	 * @param array<string, string> $headers The headers array.
+	 * @return array<string, string>
 	 */
 	public static function add_no_store_to_login( $headers ): array {
 		if ( ! \is_array( $headers ) ) {
@@ -78,7 +78,7 @@ final class Login_Nonce implements Feature {
 	 * Add a meta refresh to the login page, so it will refresh after the nonce timeout.
 	 */
 	public static function action__add_meta_refresh(): void {
-		printf( '<meta http-equiv="refresh" content="%d">', esc_attr( self::NONCE_TIMEOUT ) );
+		printf( '<meta http-equiv="refresh" content="%d">', esc_attr( (string) self::NONCE_TIMEOUT ) );
 	}
 
 	/**
@@ -142,7 +142,6 @@ final class Login_Nonce implements Feature {
 			// This is a login with an invalid nonce. Throw an error.
 			http_response_code( 403 );
 			wp_die( 'Login attempt failed. Please try again.', 'Login Error' );
-			return;
 		}
 
 		/*

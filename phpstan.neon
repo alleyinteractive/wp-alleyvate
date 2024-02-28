@@ -8,3 +8,6 @@ parameters:
 	paths:
 		- src/
 		- wp-alleyvate.php
+
+	ignoreErrors:
+		- '#WP_REST_Request but does not specify its#'

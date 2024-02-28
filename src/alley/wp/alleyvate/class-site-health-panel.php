@@ -23,8 +23,8 @@ final class Site_Health_Panel implements Feature {
 	/**
 	 * Add debug information for the feature.
 	 *
-	 * @param array $info Debug information.
-	 * @return array
+	 * @param array<string, array{label: string, description: string, fields: array<int, mixed>}> $info Debug information.
+	 * @return array<string, array{label: string, description: string, fields: array<int, mixed>}> Debug information.
 	 */
 	public function add_debug_panel( $info ): array {
 		if ( ! \is_array( $info ) ) {
