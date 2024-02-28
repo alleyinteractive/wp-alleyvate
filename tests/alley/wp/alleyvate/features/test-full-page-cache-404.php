@@ -59,11 +59,11 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 	 * Test that the feature is disabled if SSL is off.
 	 */
 	public function test_feature_is_disabled_if_ssl_is_off(): void {
-		$this->assertTrue( \is_ssl() );
+		$this->assertTrue( is_ssl() );
 
 		$_SERVER['HTTPS'] = 'off';
 
-		$this->assertFalse( \is_ssl() );
+		$this->assertFalse( is_ssl() );
 
 		$this->feature->boot();
 
