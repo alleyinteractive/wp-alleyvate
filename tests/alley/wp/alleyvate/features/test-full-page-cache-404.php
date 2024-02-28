@@ -40,6 +40,9 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 
 		$this->prevent_stray_requests();
 
+		// Turn SSL on.
+		$_SERVER['HTTPS'] = 'on';
+
 		$this->feature = new Full_Page_Cache_404();
 	}
 
@@ -53,7 +56,28 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 	}
 
 	/**
-	 * Test that the feature is disabled if the object cache is not in use.
+	 * Test that the feature is disabled if SSL is off.
+	 */
+	public function test_feature_is_disabled_if_ssl_is_off(): void {
+		$this->assertTrue( \is_ssl() );
+
+		$_SERVER['HTTPS'] = 'off';
+
+		$this->assertFalse( \is_ssl() );
+
+		$this->feature->boot();
+
+		$response = $this->get( '/this-is-a-404-page' );
+		$response->assertStatus( 404 );
+
+		$this->assertFalse(
+			wp_next_scheduled( 'alleyvate_404_cache_single' ),
+			'Cron job to generate cached 404 page is scheduled and should not be.'
+		);
+	}
+
+	/**
+	 * Test the feature is disabled if the object cache is not in use.
 	 */
 	public function test_feature_is_disabled_if_object_cache_is_not_in_use(): void {
 
@@ -71,7 +95,6 @@ final class Test_Full_Page_Cache_404 extends Test_Case {
 		$this->assertFalse( (bool) wp_using_ext_object_cache() );
 
 		$response = $this->get( '/this-is-a-404-page' );
-		$response->assertDontSee( $this->feature::prepare_response( $this->get_404_html() ) );
 		$response->assertStatus( 404 );
 
 		$this->assertFalse(

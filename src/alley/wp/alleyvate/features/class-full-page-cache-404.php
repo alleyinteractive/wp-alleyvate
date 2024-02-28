@@ -73,8 +73,10 @@ final class Full_Page_Cache_404 implements Feature {
 		 * Only boot feature if external object cache is being used.
 		 *
 		 * We don't want to store the cached 404 page in the database.
+		 *
+		 * And only boot feature if the site is using SSL.
 		 */
-		if ( ! (bool) wp_using_ext_object_cache() ) {
+		if ( ! (bool) wp_using_ext_object_cache() || ! is_ssl() ) {
 			return;
 		}
 
@@ -116,6 +118,7 @@ final class Full_Page_Cache_404 implements Feature {
 
 		echo self::get_cached_response_with_headers(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
+		// If we're testing, don't exit, die instead.
 		if ( \defined( 'MANTLE_IS_TESTING' ) && MANTLE_IS_TESTING ) {
 			wp_die( '', '', [ 'response' => 404 ] );
 		}
