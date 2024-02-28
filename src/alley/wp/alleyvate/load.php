@@ -77,6 +77,10 @@ function load(): void {
 			'user_enumeration_restrictions',
 			new Features\User_Enumeration_Restrictions(),
 		),
+		new Feature(
+			'remove_shortlink',
+			new Features\Remove_Shortlink(),
+		),
 	);
 
 	$plugin->boot();
