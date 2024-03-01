@@ -6,6 +6,7 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 
 ### Added
 
+* Added PHPStan to the development dependencies.
 * `Alley\WP\Alleyvate\Feature` class implementing the `Alley\WP\Types\Feature` interface.
 
 ### Changed
@@ -22,7 +23,7 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 ### Removed
 
 * `site_health`: Removed as a dedicated feature and now implemented directly in the plugin.
-* `Alley\WP\Alleyvate\Feature` interface. 
+* `Alley\WP\Alleyvate\Feature` interface.
 
 ## 2.4.0
 

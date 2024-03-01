@@ -71,8 +71,8 @@ final class Feature implements \Alley\WP\Types\Feature {
 	/**
 	 * Add debug information to the Site Health screen.
 	 *
-	 * @param array $info Debug information.
-	 * @return array
+	 * @param array<string, array{label: string, description: string, fields: array<int, mixed>}> $info Debug information.
+	 * @return array<string, array{label: string, description: string, fields: array<int, mixed>}> $info Debug information. Debug information.
 	 */
 	public function add_debug_information( $info ): array {
 		if ( ! \is_array( $info ) ) {

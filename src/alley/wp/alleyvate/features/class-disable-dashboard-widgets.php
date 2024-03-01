@@ -22,7 +22,7 @@ final class Disable_Dashboard_Widgets implements Feature {
 	/**
 	 * Array of widgets to be removed.
 	 *
-	 * @var array|\string[][]
+	 * @var array<array{context: string, priority: string, id: string}>
 	 */
 	public array $widgets = [
 		[

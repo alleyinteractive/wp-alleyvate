@@ -49,7 +49,7 @@ final class Disable_Trackbacks implements Feature {
 	 * @return \WP_REST_Response Filtered response.
 	 */
 	public static function filter__rest_prepare( \WP_REST_Response $response ): \WP_REST_Response {
-		if ( isset( $response->data['ping_status'] ) ) {
+		if ( \is_array( $response->data ) && isset( $response->data['ping_status'] ) ) {
 			$response->data['ping_status'] = 'closed';
 		}
 
@@ -59,9 +59,9 @@ final class Disable_Trackbacks implements Feature {
 	/**
 	 * Removes rewrite rules related to trackbacks.
 	 *
-	 * @param array $rules Rewrite rules to be filtered.
+	 * @param array<string, string> $rules Rewrite rules to be filtered.
 	 *
-	 * @return array Filtered rewrite rules.
+	 * @return array<string, string> Filtered rewrite rules.
 	 */
 	public static function filter__rewrite_rules_array( array $rules ): array {
 		foreach ( $rules as $regex => $rewrite ) {

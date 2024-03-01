@@ -27,16 +27,21 @@
   "require-dev": {
     "alleyinteractive/alley-coding-standards": "^2.0",
     "friendsofphp/php-cs-fixer": "^3.8",
-    "mantle-framework/testkit": "^0.12"
+    "mantle-framework/testkit": "^0.12",
+    "szepeviktor/phpstan-wordpress": "^1.3"
   },
   "scripts": {
     "fixer": "php-cs-fixer -v fix --allow-risky=yes",
-    "lint": "@phpcs",
+    "lint": [
+      "@phpcs",
+      "@phpstan"
+    ],
     "phpcbf": "phpcbf",
     "phpcs": "phpcs",
+    "phpstan": "phpstan --memory-limit=512M",
     "phpunit": "phpunit",
     "test": [
-      "@phpcs",
+      "@lint",
       "@phpunit"
     ]
   },
