@@ -91,6 +91,12 @@ This feature stops WordPress from attempting to guess a redirect URL for a 404 r
 
 The underlying behavior of `redirect_guess_404_permalink()` often confuses clients, and its database queries are non-performant on larger sites.
 
+### `remove_shortlink`
+
+This feature removes the shortlink from the head of the site. By default,
+WordPress adds a shortlink to the head of the site, which is not used by most
+sites.
+
 ### `user_enumeration_restrictions`
 
 This feature requires users to be logged in before accessing data about registered users that would otherwise be publicly accessible. Its handle is `user_enumeration_restrictions`.
