@@ -31,22 +31,22 @@ final class Cache_Slow_Queries implements Feature {
 	/**
 	 * Filter the pre months dropdown query to return the cached result.
 	 *
-	 * @param object[]|false $months 'Months' drop-down results. Default false.
-	 * @param string         $post_type The post type.
-	 * @return object[]|false
+	 * @param object|false $months 'Months' drop-down results. Default false.
+	 * @param string       $post_type The post type.
+	 * @return object|false
 	 */
 	public function filter__pre_months_dropdown_query( $months, $post_type ) {
 		$cache = wp_cache_get( $post_type, 'alleyvate_months_dropdown' );
 
-		return $cache ?: $months;
+		return false !== $cache && is_object( $cache ) ? $cache : $months;
 	}
 
 	/**
 	 * Filter the months dropdown results.
 	 *
-	 * @param object[] $months    Array of the months drop-down query results.
-	 * @param string   $post_type The post type.
-	 * @return object[]|false
+	 * @param object $months    Array of the months drop-down query results.
+	 * @param string $post_type The post type.
+	 * @return object|false
 	 */
 	public function filter__months_dropdown_results( $months, $post_type ) {
 		wp_cache_set( $post_type, $months, 'alleyvate_months_dropdown' );
