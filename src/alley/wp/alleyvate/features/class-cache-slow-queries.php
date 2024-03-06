@@ -49,7 +49,7 @@ final class Cache_Slow_Queries implements Feature {
 	 * @return object|false
 	 */
 	public function filter__months_dropdown_results( $months, $post_type ) {
-		wp_cache_set( $post_type, $months, 'alleyvate_months_dropdown' );
+		wp_cache_set( $post_type, $months, 'alleyvate_months_dropdown', DAY_IN_SECONDS );
 
 		return $months;
 	}

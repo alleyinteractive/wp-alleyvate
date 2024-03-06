@@ -28,6 +28,14 @@ add_filter( 'alleyvate_load_disable_comments', '__return_false' );
 
 Each feature's handle is listed below, along with a description of what it does.
 
+### `cache_slow_queries`
+
+This feature caches/optimizes slow queries to the database to improve
+performance. It is enabled by default and currently includes the following slow
+queries:
+
+- `months_dropdown`: The dropdown for selecting a month in the post list table.
+
 ### `clean_admin_bar`
 
 This feature removes selected nodes from the admin bar.
