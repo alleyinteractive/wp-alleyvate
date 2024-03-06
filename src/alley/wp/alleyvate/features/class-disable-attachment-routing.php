@@ -34,8 +34,8 @@ final class Disable_Attachment_Routing implements Feature {
 	/**
 	 * Remove support for the attachment rewrite rule.
 	 *
-	 * @param array $rules Rewrite rules.
-	 * @return array
+	 * @param array<string, string> $rules Rewrite rules.
+	 * @return array<string, string>
 	 */
 	public static function filter__rewrite_rules_array( $rules ): array {
 		foreach ( $rules as $regex => $query ) {

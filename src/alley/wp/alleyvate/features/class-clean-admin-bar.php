@@ -27,10 +27,8 @@ final class Clean_Admin_Bar implements Feature {
 
 	/**
 	 * Disables specified menus in admin bar.
-	 *
-	 * @return void
 	 */
-	public function before_admin_bar_render() {
+	public function before_admin_bar_render(): void {
 		global $wp_admin_bar;
 
 		foreach ( $this->get_disposable_nodes() as $node ) {
@@ -41,9 +39,9 @@ final class Clean_Admin_Bar implements Feature {
 	/**
 	 * Set menus to be disabled.
 	 *
-	 * @return mixed|void
+	 * @return array<string>
 	 */
-	public function get_disposable_nodes() {
+	public function get_disposable_nodes(): array {
 		$disposable_nodes = [
 			'comments',
 			'themes',
@@ -51,6 +49,11 @@ final class Clean_Admin_Bar implements Feature {
 			'wp-logo',
 		];
 
-		return apply_filters( 'alleyvate_clean_admin_bar_menus', $disposable_nodes );
+		/**
+		 * Filters the admin bar menus to be removed.
+		 *
+		 * @param array<string> $disposable_nodes Admin bar menus to be removed.
+		 */
+		return (array) apply_filters( 'alleyvate_clean_admin_bar_menus', $disposable_nodes );
 	}
 }

@@ -31,8 +31,8 @@ final class Prevent_Framing implements Feature {
 	/**
 	 * Output the X-Frame-Options header to prevent sites from being able to be iframe'd.
 	 *
-	 * @param array $headers The headers to be sent.
-	 * @return array The headers to be sent.
+	 * @param array<string, string> $headers The headers to be sent.
+	 * @return array<string, string> The headers to be sent.
 	 */
 	public static function filter__wp_headers( $headers ): array {
 		if ( ! \is_array( $headers ) ) {

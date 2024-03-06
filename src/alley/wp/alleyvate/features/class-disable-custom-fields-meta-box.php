@@ -31,6 +31,7 @@ final class Disable_Custom_Fields_Meta_Box implements Feature {
 	 * It generates an expensive query and is almost never used in practice.
 	 */
 	public static function action__add_meta_boxes(): void {
+		// @phpstan-ignore-next-line
 		remove_meta_box( 'postcustom', null, 'normal' );
 	}
 }
