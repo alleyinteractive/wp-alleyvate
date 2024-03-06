@@ -90,4 +90,31 @@ final class Test_Cache_Slow_Queries extends Test_Case {
 
 		$this->assertNotEmpty( wp_cache_get( 'post', 'alleyvate_months_dropdown' ) );
 	}
+
+	/**
+	 * Test that the cache is cleared for the months dropdown query when the post is published.
+	 */
+	public function test_optimize_months_dropdown_cache_cleared_on_publish() {
+		self::factory()->post->create( [ 'post_date' => '2020-01-05 00:00:00' ] );
+
+		// Prime the cache with some old months.
+		wp_cache_set(
+			'post',
+			[
+				(object) [
+					'year'  => 2020,
+					'month' => 1,
+				],
+			],
+			'alleyvate_months_dropdown'
+		);
+
+		// Boot feature.
+		$this->feature->boot();
+
+		// Publish a post which should clear the cache.
+		self::factory()->post->create( [ 'post_date' => '2022-02-05 00:00:00' ] );
+
+		$this->assertEmpty( wp_cache_get( 'post', 'alleyvate_months_dropdown' ) );
+	}
 }
