@@ -32,9 +32,9 @@ Each feature's handle is listed below, along with a description of what it does.
 
 This feature caches/optimizes slow queries to the database to improve
 performance. It is enabled by default and currently includes the following slow
-queries:
+queries with the relevant filters to disable them:
 
-- `months_dropdown`: The dropdown for selecting a month in the post list table.
+- `alleyvate_cache_months_dropdown`: The dropdown for selecting a month in the post list table.
 
 ### `clean_admin_bar`
 

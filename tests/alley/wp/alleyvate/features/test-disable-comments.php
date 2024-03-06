@@ -155,6 +155,7 @@ final class Test_Disable_Comments extends Test_Case {
 		// Build the admin bar menu and ensure comments are in it by default.
 		$this->get( admin_url() );
 		global $wp_admin_bar;
+		set_current_screen( 'dashboard' );
 		do_action( 'admin_bar_menu', $wp_admin_bar ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 		$this->assertNotEmpty( $wp_admin_bar->get_node( 'comments' ) );
 

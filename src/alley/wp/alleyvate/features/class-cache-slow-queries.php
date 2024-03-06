@@ -38,7 +38,7 @@ final class Cache_Slow_Queries implements Feature {
 	public function filter__pre_months_dropdown_query( $months, $post_type ) {
 		$cache = wp_cache_get( $post_type, 'alleyvate_months_dropdown' );
 
-		return false !== $cache && is_object( $cache ) ? $cache : $months;
+		return false !== $cache && \is_object( $cache ) ? $cache : $months;
 	}
 
 	/**
