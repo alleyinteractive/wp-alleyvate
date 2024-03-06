@@ -26,6 +26,10 @@ function load(): void {
 	$plugin = new Group(
 		new Site_Health_Panel(),
 		new Feature(
+			'cache_slow_queries',
+			new Features\Cache_Slow_Queries(),
+		),
+		new Feature(
 			'clean_admin_bar',
 			new Features\Clean_Admin_Bar(),
 		),
