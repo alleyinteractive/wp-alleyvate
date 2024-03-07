@@ -94,7 +94,7 @@ final class Test_Cache_Slow_Queries extends Test_Case {
 	/**
 	 * Test that the cache is cleared for the months dropdown query when the post is published.
 	 */
-	public function test_optimize_months_dropdown_cache_cleared_on_publish() {
+	public function test_optimize_months_dropdown_cache_cleared_on_publish(): void {
 		self::factory()->post->create( [ 'post_date' => '2020-01-05 00:00:00' ] );
 
 		// Prime the cache with some old months.

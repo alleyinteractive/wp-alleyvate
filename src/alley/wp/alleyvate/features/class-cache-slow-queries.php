@@ -10,6 +10,8 @@
  * @package wp-alleyvate
  */
 
+declare( strict_types=1 );
+
 namespace Alley\WP\Alleyvate\Features;
 
 use Alley\WP\Types\Feature;
@@ -38,6 +40,7 @@ final class Cache_Slow_Queries implements Feature {
 			add_filter( 'pre_months_dropdown_query', [ $this, 'filter__pre_months_dropdown_query' ], 10, 2 );
 			add_filter( 'months_dropdown_results', [ $this, 'filter__months_dropdown_results' ], 10, 2 );
 			add_action( 'save_post', [ $this, 'action__save_post' ], 10, 2 );
+			add_action( 'delete_post', [ $this, 'action__delete_post' ], 10, 2 );
 		}
 	}
 
@@ -51,7 +54,7 @@ final class Cache_Slow_Queries implements Feature {
 	public function filter__pre_months_dropdown_query( $months, $post_type ) {
 		$cache = wp_cache_get( $post_type, 'alleyvate_months_dropdown' );
 
-		if ( is_array( $cache ) ) {
+		if ( \is_array( $cache ) ) {
 			return $cache;
 		}
 
@@ -69,7 +72,7 @@ final class Cache_Slow_Queries implements Feature {
 	 * @return object[]|false
 	 */
 	public function filter__months_dropdown_results( $months, $post_type ) {
-		if ( $this->cache_months_dropdown ) {
+		if ( $this->cache_months_dropdown && \is_array( $months ) ) {
 			wp_cache_set( $post_type, $months, 'alleyvate_months_dropdown', DAY_IN_SECONDS );
 
 			$this->cache_months_dropdown = false;
@@ -91,7 +94,7 @@ final class Cache_Slow_Queries implements Feature {
 
 		$cache = wp_cache_get( $post->post_type, 'alleyvate_months_dropdown' );
 
-		if ( ! is_array( $cache ) ) {
+		if ( ! \is_array( $cache ) ) {
 			return;
 		}
 
@@ -102,8 +105,18 @@ final class Cache_Slow_Queries implements Feature {
 		);
 
 		// Clear the month dropdown cache if the post's month is not in the cache.
-		if ( ! in_array( get_the_date( 'Y-n', $post ), $cache, true ) ) {
+		if ( ! \in_array( get_the_date( 'Y-n', $post ), $cache, true ) ) {
 			wp_cache_delete( $post->post_type, 'alleyvate_months_dropdown' );
 		}
+	}
+
+	/**
+	 * Handle a post being deleted.
+	 *
+	 * @param int      $post_id The post ID.
+	 * @param \WP_Post $post    The post object.
+	 */
+	public function action__delete_post( $post_id, $post ): void {
+		wp_cache_delete( $post->post_type, 'alleyvate_months_dropdown' );
 	}
 }
