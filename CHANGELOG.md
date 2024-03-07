@@ -9,6 +9,7 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 * Added PHPStan to the development dependencies.
 * `Alley\WP\Alleyvate\Feature` class implementing the `Alley\WP\Types\Feature` interface.
 * `remove_shortlink`: Added a feature to remove the shortlink from the head of the site.
+* `cache_slow_queries`: Added a feature to cache slow queries for performance.
 
 ### Changed
 
