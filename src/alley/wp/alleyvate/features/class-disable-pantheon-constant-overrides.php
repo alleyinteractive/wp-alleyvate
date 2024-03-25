@@ -35,5 +35,4 @@ final class Disable_Pantheon_Constant_Overrides implements Feature {
 			remove_filter( 'option_home', '_config_wp_home' );
 		}
 	}
-
 }
