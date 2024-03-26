@@ -27,8 +27,8 @@ final class Disable_Pantheon_Constant_Overrides implements Feature {
 		if (
 			isset( $_ENV['PANTHEON_ENVIRONMENT'] ) &&
 			(
-				( defined( 'WP_CLI' ) && WP_CLI ) ||
-				( defined( 'DOING_CRON' ) && DOING_CRON )
+				( \defined( 'WP_CLI' ) && WP_CLI ) ||
+				( \defined( 'DOING_CRON' ) && DOING_CRON )
 			)
 		) {
 			remove_filter( 'option_siteurl', '_config_wp_siteurl' );
