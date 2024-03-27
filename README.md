@@ -74,6 +74,11 @@ This feature prevents the editing of themes and plugins directly from the admin.
 
 Such editing can introduce unexpected and undocumented code changes.
 
+### `disable_pantheon_constant_overrides`
+
+This feature prevents Pantheon environments from forcing CLI and Cron runs to use the `WP_HOME` or `WP_SITEURL` constants,
+which have been shown to force those environments to use an insecure protocol at times.
+
 ### `login_nonce`
 
 This feature adds a nonce to the login form to prevent CSRF attacks.

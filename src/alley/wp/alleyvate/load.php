@@ -85,6 +85,10 @@ function load(): void {
 			'remove_shortlink',
 			new Features\Remove_Shortlink(),
 		),
+		new Feature(
+			'disable_pantheon_constant_overrides',
+			new Features\Disable_Pantheon_Constant_Overrides(),
+		)
 	);
 
 	$plugin->boot();
