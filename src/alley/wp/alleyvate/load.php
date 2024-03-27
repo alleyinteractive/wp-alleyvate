@@ -86,7 +86,7 @@ function load(): void {
 			new Features\Remove_Shortlink(),
 		),
 		new Feature(
-			'pantheon_constant_overrides',
+			'disable_pantheon_constant_overrides',
 			new Features\Disable_Pantheon_Constant_Overrides(),
 		)
 	);
