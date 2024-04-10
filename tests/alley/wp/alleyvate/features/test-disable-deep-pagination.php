@@ -17,9 +17,7 @@ namespace Alley\WP\Alleyvate\Features;
 use Mantle\Testing\Concerns\Admin_Screen;
 use Mantle\Testkit\Test_Case;
 use Mantle\Testing\Concerns\Refresh_Database;
-use Mantle\Testing\Exceptions\WP_Die_Exception;
 use WP_Query;
-use WP_REST_Request;
 
 /**
  * Tests for fully disabling comment functionality.
@@ -66,8 +64,8 @@ final class Test_Disable_Deep_Pagination extends Test_Case {
 			return fn( $message, $title, $args ) => self::assertSame( 400, $args['response'] );
 		};
 
-		add_filter( 'wp_die_handler', $this->handler, PHP_INT_MAX );
-		add_filter( 'wp_die_json_handler', $this->handler, PHP_INT_MAX );
+		add_filter( 'wp_die_handler', $this->handler, \PHP_INT_MAX );
+		add_filter( 'wp_die_json_handler', $this->handler, \PHP_INT_MAX );
 
 		$this->feature = new Disable_Deep_Pagination();
 	}
