@@ -14,6 +14,8 @@ namespace Alley\WP\Alleyvate\Features;
 
 use Alley\WP\Types\Feature;
 
+use WP_Query;
+
 /**
  * Disables Pagination beyond a filterable maximum. Beyond that return
  * a 400 error describing why the issue has arisen.
@@ -30,9 +32,9 @@ final class Disable_Deep_Pagination implements Feature {
 	/**
 	 * Filter the query to force no results if beyond page maximum.
 	 *
-	 * @param WP_Post[]|int[]|null $where    The posts array if set, null otherwise.
-	 * @param WP_Query             $wp_query The WP_Query object, passed by reference.
-	 * @return WP_Post[]|int[]|null
+	 * @param string   $where    The WHERE clause.
+	 * @param WP_Query $wp_query The WP_Query object, passed by reference.
+	 * @return string
 	 */
 	public static function filter__posts_where( $where, $wp_query ) {
 		$max_pages = ! empty( $wp_query->query['__dangerously_set_max_pages'] ) ? $wp_query->query['__dangerously_set_max_pages'] : 100;
