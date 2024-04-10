@@ -62,7 +62,7 @@ final class Test_Disable_Deep_Pagination extends Test_Case {
 		$this->admin_screen_tear_down();
 		unset( $GLOBALS['current_screen'] );
 
-		$this->handler = function() {
+		$this->handler = function () {
 			return fn( $message, $title, $args ) => self::assertSame( 400, $args['response'] );
 		};
 
@@ -99,21 +99,12 @@ final class Test_Disable_Deep_Pagination extends Test_Case {
 		// Make sure we are actually filtering where.
 		self::assertFalse( is_admin() );
 
-		try {
-			new WP_Query(
-				[
-					'posts_per_page' => 1,
-					'paged'          => 101,
-				]
-			);
-		} catch ( WP_Die_Exception $e ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
-
-			/*
-			 * Intentionally left blank. Assertions happen
-			 * in the WP_Die_Exception handler.
-			 */
-
-		}
+		new WP_Query(
+			[
+				'posts_per_page' => 1,
+				'paged'          => 101,
+			]
+		);
 	}
 
 	/**
@@ -152,21 +143,12 @@ final class Test_Disable_Deep_Pagination extends Test_Case {
 		// Make sure we are actually filtering where.
 		self::assertFalse( is_admin() );
 
-		try {
-			new WP_Query(
-				[
-					'posts_per_page' => 1,
-					'paged'          => 101,
-				]
-			);
-		} catch ( WP_Die_Exception $e ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
-
-			/*
-			 * Intentionally left blank. Assertions happen
-			 * in the WP_Die_Exception handler.
-			 */
-
-		}
+		new WP_Query(
+			[
+				'posts_per_page' => 1,
+				'paged'          => 101,
+			]
+		);
 
 		$this->filter_max_pages( 101 );
 
@@ -238,12 +220,8 @@ final class Test_Disable_Deep_Pagination extends Test_Case {
 	public function test_unauthenticated_rest_queries_are_filtered() {
 		$this->feature->boot();
 
-		try {
-			$this->get_json( rest_url( '/wp/v2/posts?per_page=1&page=101' ) )
-				->assertExactJson( [] );
-		} catch ( Exception $e ) {
-
-		}
+		$this->get_json( rest_url( '/wp/v2/posts?per_page=1&page=101' ) )
+			->assertExactJson( [] );
 
 		$body = $this->get_json( rest_url( '/wp/v2/posts?per_page=1&page=100' ) )
 			->get_content();
@@ -261,13 +239,10 @@ final class Test_Disable_Deep_Pagination extends Test_Case {
 
 		$this->acting_as( 'administrator' );
 
-		try {
-			$body = $this->get_json( rest_url( '/wp/v2/posts?per_page=1&page=101' ) )
-				->get_content();
-		} catch ( Exception $e ) {}
+		$body = $this->get_json( rest_url( '/wp/v2/posts?per_page=1&page=101' ) )
+			->get_content();
 
 		$this->assertCount( 1, json_decode( $body ) );
-
 	}
 
 	/**
@@ -285,7 +260,7 @@ final class Test_Disable_Deep_Pagination extends Test_Case {
 			return;
 		}
 
-		$this->filter = function() use ( $max ) {
+		$this->filter = function () use ( $max ) {
 			return $max;
 		};
 
