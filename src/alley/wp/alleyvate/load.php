@@ -88,7 +88,11 @@ function load(): void {
 		new Feature(
 			'disable_pantheon_constant_overrides',
 			new Features\Disable_Pantheon_Constant_Overrides(),
-		)
+		),
+		new Feature(
+			'disable_deep_pagination',
+			new Features\Disable_Deep_Pagination(),
+		),
 	);
 
 	$plugin->boot();

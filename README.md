@@ -56,6 +56,31 @@ This feature removes the custom fields meta box from the post editor.
 
 This feature removes clutter from the dashboard.
 
+### `disable_deep_pagination`
+
+This feature restricts pagination queries to, at most, 100 pages by default. This value is filterable using the `alleyvate_deep_pagination_max_pages` filter, or by passing the  `__dangerously_set_max_pages` argument to `WP_Query`.
+
+```php
+// An example.
+$query = new WP_Query(
+  [
+    'paged' => 102,
+    '__dangerously_set_max_pages' => 150,
+  ]
+);
+```
+
+### `disable_file_edit`
+
+This feature prevents the editing of themes and plugins directly from the admin.
+
+Such editing can introduce unexpected and undocumented code changes.
+
+### `disable_pantheon_constant_overrides`
+
+This feature prevents Pantheon environments from forcing CLI and Cron runs to use the `WP_HOME` or `WP_SITEURL` constants,
+which have been shown to force those environments to use an insecure protocol at times.
+
 ### `disable_password_change_notification`
 
 This feature disables sending password change notification emails to site admins.
@@ -68,16 +93,6 @@ This feature disables WordPress sticky posts entirely, including the ability to 
 
 This feature disables WordPress from sending or receiving trackbacks or pingbacks.
 
-### `disable_file_edit`
-
-This feature prevents the editing of themes and plugins directly from the admin.
-
-Such editing can introduce unexpected and undocumented code changes.
-
-### `disable_pantheon_constant_overrides`
-
-This feature prevents Pantheon environments from forcing CLI and Cron runs to use the `WP_HOME` or `WP_SITEURL` constants,
-which have been shown to force those environments to use an insecure protocol at times.
 
 ### `login_nonce`
 
