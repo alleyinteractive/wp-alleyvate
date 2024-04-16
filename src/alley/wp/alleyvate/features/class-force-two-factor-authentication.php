@@ -49,10 +49,11 @@ final class Force_Two_Factor_Authentication implements Feature {
 	/**
 	 * Filter the user capabilities to restrict them to just those capabilities required to enabled two factor authentication.
 	 *
-	 * @param array  $caps    The user capabilities.
-	 * @param string $cap     The currently active user capability.
-	 * @param int    $user_id The user ID.
-	 * @param array  $args    Context to the capability check.
+	 * @param array<string> $caps    The user capabilities.
+	 * @param string        $cap     The currently active user capability.
+	 * @param int           $user_id The user ID.
+	 * @param array<mixed>  $args    Context to the capability check.
+	 * @return array<string>
 	 */
 	public static function filter__map_meta_cap( $caps, $cap, $user_id, $args ): array {
 		if ( ! self::should_use_two_factor_authentication() ) {
@@ -67,7 +68,7 @@ final class Force_Two_Factor_Authentication implements Feature {
 		if (
 			'edit_user' === $cap &&
 			! empty( $args ) &&
-			(int) $user_id === (int) $args[0]
+			(int) $user_id === (int) $args[0] // @phpstan-ignore-line
 		) {
 			$subscriber_caps[] = 'edit_user';
 		}
@@ -184,7 +185,7 @@ final class Force_Two_Factor_Authentication implements Feature {
 	 * @return bool
 	 */
 	private static function two_factor_already_in_use(): bool {
-		return self::two_factor_plugin_active() && \Two_Factor_Core::is_user_using_two_factor();
+		return self::two_factor_plugin_active() && \Two_Factor_Core::is_user_using_two_factor(); // @phpstan-ignore-line
 	}
 
 	/**
