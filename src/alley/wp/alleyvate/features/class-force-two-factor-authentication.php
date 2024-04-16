@@ -31,9 +31,9 @@ final class Force_Two_Factor_Authentication implements Feature {
 		}
 
 		// For non-VIP environments, we do the forcing ourselves.
-		add_filter( 'map_meta_cap', [ static::class, 'filter__map_meta_cap' ], 0, 4 );
+		add_filter( 'map_meta_cap', [ self::class, 'filter__map_meta_cap' ], 0, 4 );
 
-		add_action( 'admin_notices', [ static::class, 'action__admin_notices' ] );
+		add_action( 'admin_notices', [ self::class, 'action__admin_notices' ] );
 	}
 
 	/**
@@ -163,11 +163,11 @@ final class Force_Two_Factor_Authentication implements Feature {
 		$capability_min = apply_filters( 'alleyvate_force_2fa_capability', 'publish_posts' );
 
 		// Remove the filter to avoid infinite loops.
-		remove_filter( 'map_meta_cap', [ static::class, 'filter__map_meta_cap' ], 0 );
+		remove_filter( 'map_meta_cap', [ self::class, 'filter__map_meta_cap' ], 0 );
 
 		$result = current_user_can( $capability_min );
 
-		add_filter( 'map_meta_cap', [ static::class, 'filter__map_meta_cap' ], 0, 4 );
+		add_filter( 'map_meta_cap', [ self::class, 'filter__map_meta_cap' ], 0, 4 );
 
 		return $result;
 	}
