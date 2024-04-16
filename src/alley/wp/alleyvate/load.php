@@ -93,7 +93,7 @@ function load(): void {
 			'force_two_factor_authentication',
 			new Features\Force_Two_Factor_Authentication(),
 		),
-    new Feature(
+		new Feature(
 			'disable_deep_pagination',
 			new Features\Disable_Deep_Pagination(),
 		),
