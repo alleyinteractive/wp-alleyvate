@@ -7,6 +7,7 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 ### Added
 
 * `disable_pantheon_constant_overrides`: Added a feature to disable forcing use of `WP_SITEURL` and `WP_HOME` on Pantheon environments.
+* `force_two_factor_authentication`: Added a feature to force Two Factor Authentication for users with `edit_posts` permissions.
 
 ## 3.0.1
 

@@ -79,6 +79,10 @@ Such editing can introduce unexpected and undocumented code changes.
 This feature prevents Pantheon environments from forcing CLI and Cron runs to use the `WP_HOME` or `WP_SITEURL` constants,
 which have been shown to force those environments to use an insecure protocol at times.
 
+### `force_two_factor_authentication`
+
+This feature forces users with `edit_posts` permissions to use two factor authentication (2fa) for their accounts.
+
 ### `login_nonce`
 
 This feature adds a nonce to the login form to prevent CSRF attacks.
