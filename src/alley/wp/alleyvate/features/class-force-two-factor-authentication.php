@@ -139,6 +139,10 @@ final class Force_Two_Factor_Authentication implements Feature {
 	/**
 	 * Returns true if Two Factor Authentication should be enforced, false otherwise.
 	 *
+	 * This will be false if the environment is a local environment, if the user is not
+	 * logged in, if the Two Factor plugin is not activated, or if the Two Factor plugin
+	 * is active and 2fa is already enabled for this user account.
+	 *
 	 * @return bool
 	 */
 	private static function should_use_two_factor_authentication(): bool {
@@ -151,7 +155,7 @@ final class Force_Two_Factor_Authentication implements Feature {
 				is_user_logged_in() &&
 				self::force_to_enable_2fa() &&
 				self::two_factor_plugin_active() &&
-				! self::two_factor_plugin_in_use();
+				! self::two_factor_already_in_use();
 	}
 
 	/**
@@ -175,19 +179,16 @@ final class Force_Two_Factor_Authentication implements Feature {
 	}
 
 	/**
-	 * Returns true if the user is using the Two Factor plugin already.
+	 * Returns true if the user is using the Two Factor plugin, and 2fa is already enabled for the user.
 	 *
 	 * @return bool
 	 */
-	private static function two_factor_plugin_in_use(): bool {
+	private static function two_factor_already_in_use(): bool {
 		return self::two_factor_plugin_active() && \Two_Factor_Core::is_user_using_two_factor();
 	}
 
 	/**
-	 * Returns true if:
-	 *   - The environment is not VIP.
-	 *   - Jetpack SSO with 2FA is not enabled.
-	 *   - The Two Factor plugin is not found.
+	 * Determine if the Two Factor plugin is activated.
 	 *
 	 * @return bool
 	 */
@@ -196,7 +197,7 @@ final class Force_Two_Factor_Authentication implements Feature {
 	}
 
 	/**
-	 * Is this environment a VIP environment?
+	 * Determine if the site is loaded in a VIP environment.
 	 *
 	 * @return bool
 	 */
