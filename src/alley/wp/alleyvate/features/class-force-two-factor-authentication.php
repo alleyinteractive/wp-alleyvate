@@ -26,7 +26,7 @@ final class Force_Two_Factor_Authentication implements Feature {
 	 */
 	public function boot(): void {
 		if ( self::is_vip_environment() ) {
-			add_filter( 'wpcom_vip_is_two_factor_forced', [ self::class, 'filter__wpcom_vip_is_two_factor_forced' ], PHP_INT_MAX );
+			add_filter( 'wpcom_vip_is_two_factor_forced', [ self::class, 'filter__wpcom_vip_is_two_factor_forced' ], \PHP_INT_MAX );
 			return;
 		}
 
@@ -73,7 +73,7 @@ final class Force_Two_Factor_Authentication implements Feature {
 			$subscriber_caps[] = 'edit_user';
 		}
 
-		return in_array( $cap, $subscriber_caps, true ) ? $caps : [ 'do_not_allow' ];
+		return \in_array( $cap, $subscriber_caps, true ) ? $caps : [ 'do_not_allow' ];
 	}
 
 	/**
@@ -203,6 +203,6 @@ final class Force_Two_Factor_Authentication implements Feature {
 	 * @return bool
 	 */
 	private static function is_vip_environment(): bool {
-		return defined( 'VIP_GO_APP_ENVIRONMENT' );
+		return \defined( 'VIP_GO_APP_ENVIRONMENT' );
 	}
 }
