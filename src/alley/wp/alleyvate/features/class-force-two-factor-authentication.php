@@ -43,7 +43,7 @@ final class Force_Two_Factor_Authentication implements Feature {
 	 * @return bool
 	 */
 	public static function filter__wpcom_vip_is_two_factor_forced(): bool {
-		return current_user_can( 'edit_posts' );
+		return self::force_to_enable_2fa();
 	}
 
 	/**
@@ -160,14 +160,16 @@ final class Force_Two_Factor_Authentication implements Feature {
 	 * @return bool
 	 */
 	private static function force_to_enable_2fa(): bool {
-		$capability_min = apply_filters( 'alleyvate_force_2fa_capability', 'publish_posts' );
+		$capability_min = apply_filters( 'alleyvate_force_2fa_capability', 'edit_posts' );
 
 		// Remove the filter to avoid infinite loops.
-		remove_filter( 'map_meta_cap', [ self::class, 'filter__map_meta_cap' ], 0 );
+		$removed = remove_filter( 'map_meta_cap', [ self::class, 'filter__map_meta_cap' ], 0 );
 
 		$result = current_user_can( $capability_min );
 
-		add_filter( 'map_meta_cap', [ self::class, 'filter__map_meta_cap' ], 0, 4 );
+		if ( $removed ) {
+			add_filter( 'map_meta_cap', [ self::class, 'filter__map_meta_cap' ], 0, 4 );
+		}
 
 		return $result;
 	}
