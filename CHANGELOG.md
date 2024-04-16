@@ -8,6 +8,7 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 
 * `disable_pantheon_constant_overrides`: Added a feature to disable forcing use of `WP_SITEURL` and `WP_HOME` on Pantheon environments.
 * `force_two_factor_authentication`: Added a feature to force Two Factor Authentication for users with `edit_posts` permissions.
+* `disable_deep_pagination`: Added a feature to restrict pagination to at most 100 pages, by default. This includes a filter `alleyvate_deep_pagination_max_pages` to override this limit, as well as a new `WP_Query` argument to override the limit: `__dangerously_set_max_pages`.
 
 ## 3.0.1
 
