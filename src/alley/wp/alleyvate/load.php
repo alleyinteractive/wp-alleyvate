@@ -90,6 +90,10 @@ function load(): void {
 			new Features\Disable_Pantheon_Constant_Overrides(),
 		),
 		new Feature(
+			'force_two_factor_authentication',
+			new Features\Force_Two_Factor_Authentication(),
+		),
+		new Feature(
 			'disable_deep_pagination',
 			new Features\Disable_Deep_Pagination(),
 		),
