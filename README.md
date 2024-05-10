@@ -44,6 +44,16 @@ This feature removes selected nodes from the admin bar.
 
 This feature disables WordPress attachment pages entirely from the front end of the site.
 
+### `disable_block_editor_rest_api_preload_paths`
+
+This feature enhances the stability and performance of the block edit screen by disabling the preloading of Synced
+Patterns (Reusable Blocks). Typically, preloading triggers `the_content` filter for each block, along with
+additional processing. This can lead to unexpected behavior and performance degradation, especially on sites with
+hundreds of synced patterns. Notably, an error in a single block can propagate issues across all block edit screens.
+Disabling preloading makes the system more resilient—less susceptible to cascading failures—thus improving overall
+admin stability. For technical details on how WP core implements preloading, refer to
+`wp-admin/edit-form-blocks.php.`
+
 ### `disable_comments`
 
 This feature disables WordPress comments entirely, including the ability to post, view, edit, list, count, modify settings for, or access URLs that are related to comments completely.
@@ -135,16 +145,6 @@ This feature requires users to be logged in before accessing data about register
 WordPress core ["doesn't consider usernames or user IDs to be private or secure information"][1] and therefore allows users to be listed through some of its APIs.
 
 Our clients tend to not want information about the registered users on their sites to be discoverable; such lists can even disclose Alley's relationship with a client.
-
-### `disable_block_editor_rest_api_preload_paths`
-
-This feature enhances the stability and performance of the block edit screen by disabling the preloading of Synced
-Patterns (Reusable Blocks). Typically, preloading triggers `the_content` filter for each block, along with
-additional processing. This can lead to unexpected behavior and performance degradation, especially on sites with
-hundreds of synced patterns. Notably, an error in a single block can propagate issues across all block edit screens.
-Disabling preloading makes the system more resilient—less susceptible to cascading failures—thus improving overall
-admin stability. For technical details on how WP core implements preloading, refer to
-`wp-admin/edit-form-blocks.php.`
 
 ## About
 
