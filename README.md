@@ -138,7 +138,13 @@ Our clients tend to not want information about the registered users on their sit
 
 ### `disable_block_editor_rest_api_preload_paths`
 
-This feature disables preloading Synced Patterns (Reusable Blocks) on the block edit screen to improve performance on sites with many patterns.
+This feature enhances the stability and performance of the block edit screen by disabling the preloading of Synced
+Patterns (Reusable Blocks). Typically, preloading triggers `the_content` filter for each block, along with
+additional processing. This can lead to unexpected behavior and performance degradation, especially on sites with
+hundreds of synced patterns. Notably, an error in a single block can propagate issues across all block edit screens.
+Disabling preloading makes the system more resilient—less susceptible to cascading failures—thus improving overall
+admin stability. For technical details on how WP core implements preloading, refer to
+`wp-admin/edit-form-blocks.php.`
 
 ## About
 
