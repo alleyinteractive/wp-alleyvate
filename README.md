@@ -136,6 +136,10 @@ WordPress core ["doesn't consider usernames or user IDs to be private or secure 
 
 Our clients tend to not want information about the registered users on their sites to be discoverable; such lists can even disclose Alley's relationship with a client.
 
+### `disable_block_editor_rest_api_preload_paths`
+
+This feature disables preloading Synced Patterns (Reusable Blocks) on the block edit screen to improve performance on sites with many patterns.
+
 ## About
 
 ### License
