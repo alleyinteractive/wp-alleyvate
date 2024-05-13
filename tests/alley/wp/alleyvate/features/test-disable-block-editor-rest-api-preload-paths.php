@@ -75,8 +75,14 @@ final class Test_Disable_Block_Editor_Rest_Api_Preload_Paths extends Test_Case {
 			[ '/wp/v2/settings', 'OPTIONS' ],
 		];
 
+		// Apply the filter that modifies the preload paths before the feature is activated.
+		$preload_paths = apply_filters( 'block_editor_rest_api_preload_paths', $preload_paths ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+
 		// Assert that the blocks rest path is in the preload paths.
 		$this->assertContains( '/wp/v2/blocks?context=edit&per_page=-1', $preload_paths );
+
+		// Check the other preload paths to ensure they are present.
+		$this->check_preloads_paths( $preload_paths, $rest_path, $post_type );
 
 		// Activate feature.
 		$this->feature->boot();
@@ -87,6 +93,20 @@ final class Test_Disable_Block_Editor_Rest_Api_Preload_Paths extends Test_Case {
 		// The blocks rest path should no longer be in the preload paths.
 		$this->assertNotContains( '/wp/v2/blocks?context=edit&per_page=-1', $preload_paths );
 
+		// Check the other preload paths to ensure they are present.
+		$this->check_preloads_paths( $preload_paths, $rest_path, $post_type );
+	}
+
+	/**
+	 * Check the preload paths.
+	 *
+	 * @param mixed  $preload_paths The preload paths.
+	 * @param string $rest_path The rest path.
+	 * @param string $post_type The post type.
+	 *
+	 * @return void
+	 */
+	public function check_preloads_paths( mixed $preload_paths, string $rest_path, string $post_type ): void {
 		// The other preload paths should still be present.
 		$this->assertContains( '/wp/v2/types?context=view', $preload_paths );
 		$this->assertContains( '/wp/v2/taxonomies?context=view', $preload_paths );
