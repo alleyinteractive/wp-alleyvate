@@ -40,7 +40,7 @@ final class Disable_Block_Editor_Rest_Api_Preload_Paths implements Feature {
 	 */
 	public static function filter__block_editor_rest_api_preload_paths( $paths ) {
 		if ( ! \is_array( $paths ) ) {
-			return [];
+			return $paths;
 		}
 		return array_values(
 			array_filter(
