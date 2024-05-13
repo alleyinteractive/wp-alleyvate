@@ -86,5 +86,19 @@ final class Test_Disable_Block_Editor_Rest_Api_Preload_Paths extends Test_Case {
 
 		// The blocks rest path should no longer be in the preload paths.
 		$this->assertNotContains( '/wp/v2/blocks?context=edit&per_page=-1', $preload_paths );
+
+		// The other preload paths should still be present.
+		$this->assertContains( '/wp/v2/types?context=view', $preload_paths );
+		$this->assertContains( '/wp/v2/taxonomies?context=view', $preload_paths );
+		$this->assertContains( add_query_arg( 'context', 'edit', $rest_path ), $preload_paths );
+		$this->assertContains( sprintf( '/wp/v2/types/%s?context=edit', $post_type ), $preload_paths );
+		$this->assertContains( '/wp/v2/users/me', $preload_paths );
+		$this->assertContains( [ rest_get_route_for_post_type_items( 'attachment' ), 'OPTIONS' ], $preload_paths );
+		$this->assertContains( [ rest_get_route_for_post_type_items( 'page' ), 'OPTIONS' ], $preload_paths );
+		$this->assertContains( [ rest_get_route_for_post_type_items( 'wp_block' ), 'OPTIONS' ], $preload_paths );
+		$this->assertContains( [ rest_get_route_for_post_type_items( 'wp_template' ), 'OPTIONS' ], $preload_paths );
+		$this->assertContains( sprintf( '%s/autosaves?context=edit', $rest_path ), $preload_paths );
+		$this->assertContains( '/wp/v2/settings', $preload_paths );
+		$this->assertContains( [ '/wp/v2/settings', 'OPTIONS' ], $preload_paths );
 	}
 }
