@@ -97,6 +97,10 @@ function load(): void {
 			'disable_deep_pagination',
 			new Features\Disable_Deep_Pagination(),
 		),
+		new Feature(
+			'disable_block_editor_rest_api_preload_paths',
+			new Features\Disable_Block_Editor_Rest_Api_Preload_Paths(),
+		),
 	);
 
 	$plugin->boot();

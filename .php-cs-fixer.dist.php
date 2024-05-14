@@ -28,7 +28,7 @@ $config->setRules(
 		'native_constant_invocation'              => true,
 		'native_function_casing'                  => true,
 		'native_function_invocation'              => true,
-		'native_function_type_declaration_casing' => true,
+		'native_type_declaration_casing'          => true,
 	]
 );
 $config->setFinder( $finder );
