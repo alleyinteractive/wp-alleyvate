@@ -4,6 +4,10 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 
 ## Unreleased
 
+Nothing yet.
+
+## 3.1.0
+
 ### Added
 
 * `disable_pantheon_constant_overrides`: Added a feature to disable forcing use of `WP_SITEURL` and `WP_HOME` on Pantheon environments.
@@ -14,7 +18,9 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 
 ## 3.0.1
 
-- Removing `composer/installers` from Composer dependencies.
+### Changed
+
+* Removed `composer/installers` from Composer dependencies.
 
 ## 3.0.0
 
