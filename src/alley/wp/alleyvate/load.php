@@ -35,7 +35,7 @@ function load(): void {
 		),
 		new Feature(
 			'disable_apple_news_non_prod_push',
-			new Features\Disable_Apple_News_Non_Prod_push(),
+			new Features\Disable_Apple_News_Non_Prod_Push(),
 		),
 		new Feature(
 			'disable_attachment_routing',
