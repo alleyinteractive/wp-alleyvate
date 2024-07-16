@@ -15,7 +15,7 @@
  * the method caches the initial result and always returns it, even if
  * we modify the environment variable.
  */
-define( 'WP_RUN_CORE_TESTS', true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound
+\define( 'WP_RUN_CORE_TESTS', true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound
 
 \Mantle\Testing\manager()
 	// Fires on 'muplugins_loaded'.
