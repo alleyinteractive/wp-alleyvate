@@ -34,13 +34,23 @@ final class Disable_Apple_News_Non_Prod_Push_Test extends Test_Case {
 	}
 
 	/**
+	 * Set the current environment value.
+	 *
+	 * @param string $environment The environment name to use.
+	 */
+	protected function setEnvironment( string $environment ): void {
+		// Required because `wp_get_environment_type` uses `getenv` to retrieve the value.
+		putenv( 'WP_ENVIRONMENT_TYPE=' . $environment ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.runtime_configuration_putenv
+		$_ENV['WP_ENVIRONMENT_TYPE'] = $environment;
+	}
+
+	/**
 	 * Test that the filter_apple_news_skip_push method returns false when passed false on a production_ environment.
 	 */
 	public function testFalseFilterAppleNewsSkipPushProductionEnvironment() {
 		$skip = false;
 
-		putenv( 'WP_ENVIRONMENT_TYPE=production' );
-		$_ENV['WP_ENVIRONMENT_TYPE'] = 'production';
+		$this->setEnvironment( 'production' );
 
 		$result = $this->feature->filter_apple_news_skip_push( $skip );
 
@@ -53,8 +63,7 @@ final class Disable_Apple_News_Non_Prod_Push_Test extends Test_Case {
 	public function testTrueFilterAppleNewsSkipPushProductionEnvironment() {
 		$skip = true;
 
-		putenv( 'WP_ENVIRONMENT_TYPE=production' );
-		$_ENV['WP_ENVIRONMENT_TYPE'] = 'production';
+		$this->setEnvironment( 'production' );
 
 		$result = $this->feature->filter_apple_news_skip_push( $skip );
 
@@ -67,8 +76,7 @@ final class Disable_Apple_News_Non_Prod_Push_Test extends Test_Case {
 	public function testFalseFilterAppleNewsSkipPushOtherEnvironments() {
 		$skip = false;
 
-		putenv( 'WP_ENVIRONMENT_TYPE=local' );
-		$_ENV['WP_ENVIRONMENT_TYPE'] = 'local';
+		$this->setEnvironment( 'local' );
 
 		$result = $this->feature->filter_apple_news_skip_push( $skip );
 
@@ -81,12 +89,10 @@ final class Disable_Apple_News_Non_Prod_Push_Test extends Test_Case {
 	public function testTrueFilterAppleNewsSkipPushOtherEnvironments() {
 		$skip = true;
 
-		putenv( 'WP_ENVIRONMENT_TYPE=local' );
-		$_ENV['WP_ENVIRONMENT_TYPE'] = 'local';
+		$this->setEnvironment( 'local' );
 
 		$result = $this->feature->filter_apple_news_skip_push( $skip );
 
 		$this->assertTrue( $result );
 	}
-
 }
