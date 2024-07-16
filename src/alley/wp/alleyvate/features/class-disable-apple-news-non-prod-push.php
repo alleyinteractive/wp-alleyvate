@@ -19,18 +19,10 @@ use Alley\WP\Types\Feature;
  */
 final class Disable_Apple_News_Non_Prod_Push implements Feature {
 	/**
-	 * Store if this is a production environment.
-	 *
-	 * @var bool
-	 */
-	private $is_production;
-
-	/**
 	 * Boot the feature.
 	 */
 	public function boot(): void {
 		add_filter( 'apple_news_skip_push', [ $this, 'filter_apple_news_skip_push' ], 1, 100 );
-		$this->is_production = $this->is_production_environment();
 	}
 
 	/**
@@ -40,35 +32,11 @@ final class Disable_Apple_News_Non_Prod_Push implements Feature {
 	 */
 	public function filter_apple_news_skip_push( bool $skip ): bool {
 		// If we are on a production environment, don't modify the value.
-		if ( $this->is_production ) {
+		if ( 'production' === wp_get_environment_type() ) {
 			return $skip;
 		}
+
 		// All other cases, return true.
-
 		return true;
-	}
-
-	/**
-	 * Detect if we are on a production environment.
-	 *
-	 * Note: I thought about using https://developer.wordpress.org/reference/functions/wp_get_environment_type/
-	 * but it defaults to 'production' if no value is set, which did not seem ideal for this use case.
-	 *
-	 * @return boolean
-	 */
-	protected function is_production_environment(): bool {
-		// If we are not on a production environment according to WP_ENV, return true.
-		if ( \defined( 'WP_ENV' ) && 'production' === WP_ENV ) {
-			return true;
-		}
-		// If we are on Pantheon LIVE, return true.
-		if ( isset( $_ENV['PANTHEON_ENVIRONMENT'] ) && 'live' === $_ENV['PANTHEON_ENVIRONMENT'] ) {
-			return true;
-		}
-		// If we are on VIP Production, don't modify the value.
-		if ( \defined( 'VIP_GO_ENV' ) && VIP_GO_ENV === 'production' ) {
-			return true;
-		}
-		return false;
 	}
 }
