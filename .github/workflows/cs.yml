@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: [ 8.0 ]
+        php: [ 8.3 ]
     steps:
       - name: Cancel previous runs of this workflow (pull requests only)
         if: ${{ github.event_name == 'pull_request' }}
@@ -28,8 +28,8 @@ jobs:
       - name: Install composer dependencies
         uses: ramsey/composer-install@v2
 
-      - name: Run PHPCS
-        run: composer run-script phpcs
+      - name: Run Linting
+        run: composer lint
 
       - name: Run PHP-CS-Fixer
         run: vendor/bin/php-cs-fixer fix -v --dry-run --stop-on-violation --using-cache=no --allow-risky=yes

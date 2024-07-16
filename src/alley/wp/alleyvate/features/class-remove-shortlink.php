@@ -1,6 +1,6 @@
 <?php
 /**
- * Class file for Redirect_Guess_Shortcircuit
+ * Class file for Remove_Shortlink
  *
  * (c) Alley <info@alley.com>
  *
@@ -15,14 +15,13 @@ namespace Alley\WP\Alleyvate\Features;
 use Alley\WP\Types\Feature;
 
 /**
- * Disable `redirect_guess_404_permalink()`, whose behavior often confuses clients
- * and is non-performant on larger sites.
+ * Remove the shortlink link tag from the head of pages.
  */
-final class Redirect_Guess_Shortcircuit implements Feature {
+final class Remove_Shortlink implements Feature {
 	/**
 	 * Boot the feature.
 	 */
 	public function boot(): void {
-		add_filter( 'do_redirect_guess_404_permalink', '__return_false' );
+		remove_action( 'wp_head', 'wp_shortlink_wp_head', 10 );
 	}
 }

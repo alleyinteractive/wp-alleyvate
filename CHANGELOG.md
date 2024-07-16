@@ -2,6 +2,102 @@
 
 This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a CHANGELOG](https://keepachangelog.com/en/1.0.0/).
 
+## Unreleased
+
+Nothing yet.
+
+## 3.1.0
+
+### Added
+
+* `disable_pantheon_constant_overrides`: Added a feature to disable forcing use of `WP_SITEURL` and `WP_HOME` on Pantheon environments.
+* `force_two_factor_authentication`: Added a feature to force Two Factor Authentication for users with `edit_posts` permissions.
+* `disable_deep_pagination`: Added a feature to restrict pagination to at most 100 pages, by default. This includes a filter `alleyvate_deep_pagination_max_pages` to override this limit, as well as a new `WP_Query` argument to override the limit: `__dangerously_set_max_pages`.
+* `disable_block_editor_rest_api_preload_paths` Added a feature to disable preloading Synced Patterns (Reusable
+  Blocks) on the block edit screen to improve performance on sites with many patterns.
+
+## 3.0.1
+
+### Changed
+
+* Removed `composer/installers` from Composer dependencies.
+
+## 3.0.0
+
+### Added
+
+* Added PHPStan to the development dependencies.
+* `Alley\WP\Alleyvate\Feature` class implementing the `Alley\WP\Types\Feature` interface.
+* `remove_shortlink`: Added a feature to remove the shortlink from the head of the site.
+* `cache_slow_queries`: Added a feature to cache slow queries for performance.
+
+### Changed
+
+* The minimum PHP version is now 8.1.
+* Feature classes now implement the `Alley\WP\Types\Feature` interface instead of `Alley\WP\Alleyvate\Feature`.
+* Unit tests: misc changes and fixes.
+* Unit tests: the `$feature` property uses the main feature class for better IDE intelephense support.
+* Unit tests: all test cases use `declare( strict_types=1 );`.
+* Unit tests: added test to confirm the attachment rewrite rules are removed
+* Unit tests: support for `convertDeprecationsToExceptions="true"` added. Tests
+  will fail if there are PHP deprecation warnings.
+
+### Removed
+
+* `site_health`: Removed as a dedicated feature and now implemented directly in the plugin.
+* `Alley\WP\Alleyvate\Feature` interface.
+
+## 2.4.0
+
+### Added
+
+* `login_nonce`: Added a `no-store` header to the wp-login.php page.
+* `prevent_framing`: Added a feature to prevent framing of the site via the
+  `X-Frame-Options` header.
+
+## 2.3.1
+
+### Changed
+
+* `login_nonce`: make sure the nonce lifetime is run only for the login action
+  as to not affect the other `wp-login.php` actions, e.g: logout.
+
+## 2.3.0
+
+### Added
+
+* `disable_attachment_routing`: Added a feature to disable attachment routing.
+* `disable_custom_fields_meta_box`: Added a feature to disable the custom fields meta box.
+* `disable_password_change_notification`: Added a feature that disables sending password change notification emails to site admins.
+
+### Changed
+
+* `disable_comments`: Removes the `commentstatusdiv` meta box when comments are
+  disabled. Previously, only `commentsdiv` was removed.
+
+## 2.2.1
+
+### Added
+
+* `login_nonce`: Added a feature to add a nonce to wp-login
+
+### Changed
+
+* `disable_comments`: Akismet: Removed the comment spam queue section from the WP dashboard
+
+## 2.2.0
+
+### Added
+
+* Added a feature to remove commonly unused dashboard widgets.
+* Added a feature to remove specific admin bar links (comments and themes).
+* Added a Site Health screen panel with information about the enabled/disabled features of the plugin.
+
+### Changed
+
+* Upgraded to Alley Coding Standards 2.0.
+* Upgraded to Mantle TestKit 0.12.
+
 ## 2.1.0
 
 ### Added

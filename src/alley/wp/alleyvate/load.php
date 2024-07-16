@@ -12,53 +12,100 @@
 
 namespace Alley\WP\Alleyvate;
 
+use Alley\WP\Features\Group;
+
 /**
  * Load plugin features.
  */
 function load(): void {
-	// Bail if the Alleyvate feature interface isn't loaded to prevent a fatal error.
-	if ( ! interface_exists( Feature::class ) ) {
+	// Bail if the Alleyvate feature class isn't loaded to prevent a fatal error.
+	if ( ! class_exists( Feature::class ) ) {
 		return;
 	}
 
-	/**
-	 * Features to load.
-	 *
-	 * @var Feature[] $features
-	 */
-	$features = [
-		'disable_apple_news_non_prod_push' => new Features\Disable_Apple_News_Non_Prod_Push(),
-		'disable_comments'                 => new Features\Disable_Comments(),
-		'disable_sticky_posts'             => new Features\Disable_Sticky_Posts(),
-		'disable_trackbacks'               => new Features\Disable_Trackbacks(),
-		'disallow_file_edit'               => new Features\Disallow_File_Edit(),
-		'redirect_guess_shortcircuit'      => new Features\Redirect_Guess_Shortcircuit(),
-		'user_enumeration_restrictions'    => new Features\User_Enumeration_Restrictions(),
-	];
+	$plugin = new Group(
+		new Site_Health_Panel(),
+		new Feature(
+			'cache_slow_queries',
+			new Features\Cache_Slow_Queries(),
+		),
+		new Feature(
+			'clean_admin_bar',
+			new Features\Clean_Admin_Bar(),
+		),
+		new Feature(
+			'disable_apple_news_non_prod_push',
+			new Features\Disable_Apple_News_Non_Prod_push(),
+		),
+		new Feature(
+			'disable_attachment_routing',
+			new Features\Disable_Attachment_Routing(),
+		),
+		new Feature(
+			'disable_comments',
+			new Features\Disable_Comments(),
+		),
+		new Feature(
+			'disable_custom_fields_meta_box',
+			new Features\Disable_Custom_Fields_Meta_Box(),
+		),
+		new Feature(
+			'disable_dashboard_widgets',
+			new Features\Disable_Dashboard_Widgets(),
+		),
+		new Feature(
+			'disable_password_change_notification',
+			new Features\Disable_Password_Change_Notification(),
+		),
+		new Feature(
+			'disable_sticky_posts',
+			new Features\Disable_Sticky_Posts(),
+		),
+		new Feature(
+			'disable_trackbacks',
+			new Features\Disable_Trackbacks(),
+		),
+		new Feature(
+			'disallow_file_edit',
+			new Features\Disallow_File_Edit(),
+		),
+		new Feature(
+			'login_nonce',
+			new Features\Login_Nonce(),
+		),
+		new Feature(
+			'prevent_framing',
+			new Features\Prevent_Framing(),
+		),
+		new Feature(
+			'redirect_guess_shortcircuit',
+			new Features\Redirect_Guess_Shortcircuit(),
+		),
+		new Feature(
+			'user_enumeration_restrictions',
+			new Features\User_Enumeration_Restrictions(),
+		),
+		new Feature(
+			'remove_shortlink',
+			new Features\Remove_Shortlink(),
+		),
+		new Feature(
+			'disable_pantheon_constant_overrides',
+			new Features\Disable_Pantheon_Constant_Overrides(),
+		),
+		new Feature(
+			'force_two_factor_authentication',
+			new Features\Force_Two_Factor_Authentication(),
+		),
+		new Feature(
+			'disable_deep_pagination',
+			new Features\Disable_Deep_Pagination(),
+		),
+		new Feature(
+			'disable_block_editor_rest_api_preload_paths',
+			new Features\Disable_Block_Editor_Rest_Api_Preload_Paths(),
+		),
+	);
 
-	foreach ( $features as $handle => $feature ) {
-		$load = true;
-
-		/**
-		 * Filters whether to load an Alleyvate feature.
-		 *
-		 * @param bool   $load   Whether to load the feature. Default true.
-		 * @param string $handle Feature handle.
-		 */
-		$load = apply_filters( 'alleyvate_load_feature', $load, $handle );
-
-		/**
-		 * Filters whether to load the given Alleyvate feature.
-		 *
-		 * The dynamic portion of the hook name, `$handle`, refers to the
-		 * machine name for the feature.
-		 *
-		 * @param bool $load Whether to load the feature. Default true.
-		 */
-		$load = apply_filters( "alleyvate_load_{$handle}", $load );
-
-		if ( $load ) {
-			$feature->boot();
-		}
-	}
+	$plugin->boot();
 }

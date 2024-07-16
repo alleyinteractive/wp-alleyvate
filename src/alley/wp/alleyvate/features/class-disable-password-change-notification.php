@@ -1,6 +1,6 @@
 <?php
 /**
- * Class file for Redirect_Guess_Shortcircuit
+ * Class file for Disable_Password_Change_Notification
  *
  * (c) Alley <info@alley.com>
  *
@@ -15,14 +15,13 @@ namespace Alley\WP\Alleyvate\Features;
 use Alley\WP\Types\Feature;
 
 /**
- * Disable `redirect_guess_404_permalink()`, whose behavior often confuses clients
- * and is non-performant on larger sites.
+ * Fully disables password change notifications.
  */
-final class Redirect_Guess_Shortcircuit implements Feature {
+final class Disable_Password_Change_Notification implements Feature {
 	/**
 	 * Boot the feature.
 	 */
 	public function boot(): void {
-		add_filter( 'do_redirect_guess_404_permalink', '__return_false' );
+		remove_action( 'after_password_reset', 'wp_password_change_notification' );
 	}
 }

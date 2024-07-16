@@ -10,24 +10,27 @@
  * @package wp-alleyvate
  */
 
+declare( strict_types=1 );
+
 namespace Alley\WP\Alleyvate\Features;
 
-use Alley\WP\Alleyvate\Feature;
 use Mantle\Testkit\Test_Case;
+use Mantle\Testing\Concerns\{Admin_Screen, Refresh_Database};
 
 /**
  * Tests for fully disabling comment functionality.
  */
 final class Test_Disable_Comments extends Test_Case {
-	use \Mantle\Testing\Concerns\Admin_Screen,
-		\Mantle\Testing\Concerns\Refresh_Database;
+	use Concerns\Remove_Meta_Box;
+	use Admin_Screen;
+	use Refresh_Database;
 
 	/**
 	 * Feature instance.
 	 *
-	 * @var Feature
+	 * @var Disable_Comments
 	 */
-	private Feature $feature;
+	private Disable_Comments $feature;
 
 	/**
 	 * Set up.
@@ -152,6 +155,7 @@ final class Test_Disable_Comments extends Test_Case {
 		// Build the admin bar menu and ensure comments are in it by default.
 		$this->get( admin_url() );
 		global $wp_admin_bar;
+		set_current_screen( 'dashboard' );
 		do_action( 'admin_bar_menu', $wp_admin_bar ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 		$this->assertNotEmpty( $wp_admin_bar->get_node( 'comments' ) );
 
@@ -163,29 +167,14 @@ final class Test_Disable_Comments extends Test_Case {
 	}
 
 	/**
-	 * Test that the comments metaboxes are removed.
+	 * Test that the comments meta boxes are removed.
 	 */
-	public function test_remove_metaboxes(): void {
-		$post = self::factory()->post->create_and_get();
-
-		// Load files required to get $wp_meta_boxes global.
-		require_once ABSPATH . 'wp-admin/includes/misc.php';
-		require_once ABSPATH . 'wp-admin/includes/template.php';
-		require_once ABSPATH . 'wp-admin/includes/theme.php';
-		require_once ABSPATH . 'wp-admin/includes/meta-boxes.php';
-
-		// Setup metaboxes global and confirm comments are in it.
-		set_current_screen( 'post' );
-		register_and_do_post_meta_boxes( $post );
-		global $wp_meta_boxes;
-		$this->assertNotEmpty( $wp_meta_boxes['post']['normal']['core']['commentsdiv'] );
-
-		// Activate feature.
-		$this->feature->boot();
-
-		// Confirm metaboxes are removed.
-		register_and_do_post_meta_boxes( $post );
-		$this->assertFalse( $wp_meta_boxes['post']['normal']['core']['commentsdiv'] );
+	public function test_remove_meta_boxes(): void {
+		$this->assertMetaBoxRemoval(
+			feature: $this->feature,
+			id: 'commentsdiv',
+			priority: 'core',
+		);
 	}
 
 	/**

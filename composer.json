@@ -15,23 +15,34 @@
       "composer/installers": true,
       "dealerdirect/phpcodesniffer-composer-installer": true
     },
-    "lock": false
+    "lock": false,
+    "sort-packages": true
   },
   "require": {
-    "php": "^8.0",
+    "php": "^8.1",
     "alleyinteractive/composer-wordpress-autoloader": "^1.0",
-    "composer/installers": "^1.0"
+    "alleyinteractive/wp-type-extensions": "^2.0"
   },
   "require-dev": {
-    "alleyinteractive/alley-coding-standards": "^1.0",
+    "alleyinteractive/alley-coding-standards": "^2.0",
     "friendsofphp/php-cs-fixer": "^3.8",
-    "mantle-framework/testkit": "^0.11"
+    "mantle-framework/testkit": "^0.12",
+    "szepeviktor/phpstan-wordpress": "^1.3"
   },
   "scripts": {
     "fixer": "php-cs-fixer -v fix --allow-risky=yes",
+    "lint": [
+      "@phpcs",
+      "@phpstan"
+    ],
     "phpcbf": "phpcbf",
     "phpcs": "phpcs",
-    "phpunit": "phpunit"
+    "phpstan": "phpstan --memory-limit=768M",
+    "phpunit": "phpunit",
+    "test": [
+      "@lint",
+      "@phpunit"
+    ]
   },
   "extra": {
     "wordpress-autoloader": {

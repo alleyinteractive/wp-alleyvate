@@ -12,7 +12,7 @@
 
 namespace Alley\WP\Alleyvate\Features;
 
-use Alley\WP\Alleyvate\Feature;
+use Alley\WP\Types\Feature;
 
 /**
  * Fully disables comments.
@@ -42,6 +42,7 @@ final class Disable_Comments implements Feature {
 	 */
 	public static function action__add_meta_boxes( string $post_type ): void {
 		remove_meta_box( 'commentsdiv', $post_type, 'normal' );
+		remove_meta_box( 'commentstatusdiv', $post_type, 'normal' );
 	}
 
 	/**
@@ -74,9 +75,11 @@ final class Disable_Comments implements Feature {
 	}
 
 	/**
-	 * Removes post type support for comments and filters REST responses for each post type to remove comment support.
+	 * Add actions and filters to run on the init hook.
 	 */
 	public static function action__init(): void {
+
+		// Removes post type support for comments and filters REST responses for each post type to remove comment support.
 		foreach ( get_post_types() as $post_type ) {
 			if ( post_type_supports( $post_type, 'comments' ) ) {
 				remove_post_type_support( $post_type, 'comments' );
@@ -85,13 +88,17 @@ final class Disable_Comments implements Feature {
 			// The REST API filters don't have a generic form, so they need to be registered for each post type.
 			add_filter( "rest_prepare_{$post_type}", [ self::class, 'filter__rest_prepare' ], 9999 );
 		}
+
+		// Removes the Akismet comments section from the dashboard.
+		remove_action( 'rightnow_end', [ 'Akismet_Admin', 'rightnow_stats' ] );
 	}
 
 	/**
 	 * Short-circuits the comments query to return an empty array or 0 (if count was requested).
 	 *
-	 * @param array|int|null    $comment_data  Not used.
-	 * @param \WP_Comment_Query $comment_query The comment query object to filter results for.
+	 * @param array<mixed>|int|null $comment_data  Not used.
+	 * @param \WP_Comment_Query     $comment_query The comment query object to filter results for.
+	 * @return int|array<mixed>
 	 */
 	public static function filter__comments_pre_query( $comment_data, \WP_Comment_Query $comment_query ) {
 		return $comment_query->query_vars['count'] ? 0 : [];
@@ -100,9 +107,9 @@ final class Disable_Comments implements Feature {
 	/**
 	 * Removes REST endpoints related to comments.
 	 *
-	 * @param array $endpoints REST endpoints to be filtered.
+	 * @param array<string> $endpoints REST endpoints to be filtered.
 	 *
-	 * @return array Filtered endpoints.
+	 * @return array<string> Filtered endpoints.
 	 */
 	public static function filter__rest_endpoints( array $endpoints ): array {
 		unset( $endpoints['/wp/v2/comments'] );
@@ -120,7 +127,8 @@ final class Disable_Comments implements Feature {
 	 */
 	public static function filter__rest_prepare( \WP_REST_Response $response ): \WP_REST_Response {
 		$response->remove_link( 'replies' );
-		if ( isset( $response->data['comment_status'] ) ) {
+
+		if ( \is_array( $response->data ) && isset( $response->data['comment_status'] ) ) {
 			$response->data['comment_status'] = 'closed';
 		}
 
@@ -130,9 +138,9 @@ final class Disable_Comments implements Feature {
 	/**
 	 * Removes rewrite rules related to comments.
 	 *
-	 * @param array $rules Rewrite rules to be filtered.
+	 * @param array<string> $rules Rewrite rules to be filtered.
 	 *
-	 * @return array Filtered rewrite rules.
+	 * @return array<string> Filtered rewrite rules.
 	 */
 	public static function filter__rewrite_rules_array( array $rules ): array {
 		foreach ( $rules as $regex => $rewrite ) {

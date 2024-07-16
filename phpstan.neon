@@ -1,0 +1,13 @@
+includes:
+  - vendor/szepeviktor/phpstan-wordpress/extension.neon
+
+parameters:
+	# Level 9 is the highest level
+	level: max
+
+	paths:
+		- src/
+		- wp-alleyvate.php
+
+	ignoreErrors:
+		- '#WP_REST_Request but does not specify its#'
