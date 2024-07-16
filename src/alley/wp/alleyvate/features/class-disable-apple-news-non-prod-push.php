@@ -22,7 +22,7 @@ final class Disable_Apple_News_Non_Prod_Push implements Feature {
 	 * Boot the feature.
 	 */
 	public function boot(): void {
-		add_filter( 'apple_news_skip_push', [ $this, 'filter_apple_news_skip_push' ], 1, 100 );
+		add_filter( 'apple_news_skip_push', [ $this, 'filter_apple_news_skip_push' ], 9999 );
 	}
 
 	/**

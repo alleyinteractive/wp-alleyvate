@@ -10,6 +10,13 @@
  * @package wp-alleyvate
  */
 
+/*
+ * This is required to override `wp_get_environment_type()`. Otherwise
+ * the method caches the initial result and always returns it, even if
+ * we modify the environment variable.
+ */
+define( 'WP_RUN_CORE_TESTS', true );
+
 \Mantle\Testing\manager()
 	// Fires on 'muplugins_loaded'.
 	->loaded(

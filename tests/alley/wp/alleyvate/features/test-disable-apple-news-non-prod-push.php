@@ -20,36 +20,17 @@ use Mantle\Testkit\Test_Case;
  */
 final class Disable_Apple_News_Non_Prod_Push_Test extends Test_Case {
 	/**
-	 * Production instance of Disable_Apple_News_Non_Prod_Push
+	 * The Feature class.
 	 *
 	 * @var Disable_Apple_News_Non_Prod_Push
 	 */
-	protected $production_instance;
+	protected $feature;
 
 	/**
-	 * Non-production_ instance of Disable_Apple_News_Non_Prod_Push
-	 *
-	 * @var Disable_Apple_News_Non_Prod_Push
-	 */
-	protected $non_production_instance;
-
-	/**
-	 * Sets up our mocks.
+	 * Setup before test.
 	 */
 	protected function setUp(): void {
-		parent::setUp();
-
-		$reflection_class = new \ReflectionClass( 'Alley\WP\Alleyvate\Features\Disable_Apple_News_Non_Prod_Push' );
-
-		$production_property = $reflection_class->getProperty( 'is_production' );
-		$production_property->setAccessible( true );
-		$this->production_instance = new Disable_Apple_News_Non_Prod_Push();
-		$production_property->setValue( $this->production_instance, true );
-
-		$non_production_property = $reflection_class->getProperty( 'is_production' );
-		$non_production_property->setAccessible( true );
-		$this->non_production_instance = new Disable_Apple_News_Non_Prod_Push();
-		$non_production_property->setValue( $this->non_production_instance, false );
+		$this->feature = new Disable_Apple_News_Non_Prod_Push();
 	}
 
 	/**
@@ -58,7 +39,10 @@ final class Disable_Apple_News_Non_Prod_Push_Test extends Test_Case {
 	public function testFalseFilterAppleNewsSkipPushProductionEnvironment() {
 		$skip = false;
 
-		$result = $this->production_instance->filter_apple_news_skip_push( $skip );
+		putenv( 'WP_ENVIRONMENT_TYPE=production' );
+		$_ENV['WP_ENVIRONMENT_TYPE'] = 'production';
+
+		$result = $this->feature->filter_apple_news_skip_push( $skip );
 
 		$this->assertFalse( $result );
 	}
@@ -69,7 +53,10 @@ final class Disable_Apple_News_Non_Prod_Push_Test extends Test_Case {
 	public function testTrueFilterAppleNewsSkipPushProductionEnvironment() {
 		$skip = true;
 
-		$result = $this->production_instance->filter_apple_news_skip_push( $skip );
+		putenv( 'WP_ENVIRONMENT_TYPE=production' );
+		$_ENV['WP_ENVIRONMENT_TYPE'] = 'production';
+
+		$result = $this->feature->filter_apple_news_skip_push( $skip );
 
 		$this->assertTrue( $result );
 	}
@@ -80,7 +67,10 @@ final class Disable_Apple_News_Non_Prod_Push_Test extends Test_Case {
 	public function testFalseFilterAppleNewsSkipPushOtherEnvironments() {
 		$skip = false;
 
-		$result = $this->non_production_instance->filter_apple_news_skip_push( $skip );
+		putenv( 'WP_ENVIRONMENT_TYPE=local' );
+		$_ENV['WP_ENVIRONMENT_TYPE'] = 'local';
+
+		$result = $this->feature->filter_apple_news_skip_push( $skip );
 
 		$this->assertTrue( $result );
 	}
@@ -91,7 +81,10 @@ final class Disable_Apple_News_Non_Prod_Push_Test extends Test_Case {
 	public function testTrueFilterAppleNewsSkipPushOtherEnvironments() {
 		$skip = true;
 
-		$result = $this->non_production_instance->filter_apple_news_skip_push( $skip );
+		putenv( 'WP_ENVIRONMENT_TYPE=local' );
+		$_ENV['WP_ENVIRONMENT_TYPE'] = 'local';
+
+		$result = $this->feature->filter_apple_news_skip_push( $skip );
 
 		$this->assertTrue( $result );
 	}
