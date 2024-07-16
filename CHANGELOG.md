@@ -4,7 +4,7 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 
 ## Unreleased
 
-Nothing yet.
+* `disable_apple_news_non_prod_push`: Added a feature to disable pushing to Apple News when not on a production environment.
 
 ## 3.1.0
 
