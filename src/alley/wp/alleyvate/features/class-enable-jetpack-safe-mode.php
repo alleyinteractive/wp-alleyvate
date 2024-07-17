@@ -24,7 +24,7 @@ final class Enable_Jetpack_Safe_Mode implements Feature {
 	public function boot(): void {
 		if (
 			isset( $_ENV['PANTHEON_ENVIRONMENT'] ) &&
-			$_ENV['PANTHEON_ENVIRONMENT'] !== 'live'
+			'live' !== $_ENV['PANTHEON_ENVIRONMENT']
 		) {
 			add_filter( 'jetpack_is_development_site', '__return_true' );
 		}

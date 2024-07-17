@@ -41,10 +41,10 @@ final class Test_Enabled_Jetpack_Safe_Mode extends Test_Case {
 	 * Test that the feature enabled Jetpack safe mode.
 	 */
 	public function test_enable_jetpack_safe_mode(): void {
-		$this->assertFalse( apply_filters( 'jetpack_is_development_site', false ), 'jetpack_is_development_site should not be true prior to boot.' );
+		$this->assertFalse( apply_filters( 'jetpack_is_development_site', false ), 'jetpack_is_development_site should not be true prior to boot.' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 		$this->setEnvironment( 'test' );
 		$this->feature->boot();
-		$this->assertTrue( apply_filters( 'jetpack_is_development_site', false ), 'jetpack_is_development_site should be true after boot.' );
+		$this->assertTrue( apply_filters( 'jetpack_is_development_site', false ), 'jetpack_is_development_site should be true after boot.' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 	}
 
 	/**
