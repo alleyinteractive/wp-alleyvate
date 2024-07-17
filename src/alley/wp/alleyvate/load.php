@@ -66,6 +66,10 @@ function load(): void {
 			new Features\Disallow_File_Edit(),
 		),
 		new Feature(
+			'enable_jetpack_safe_mode',
+			new Features\Enable_Jetpack_Safe_Mode(),
+		),
+		new Feature(
 			'login_nonce',
 			new Features\Login_Nonce(),
 		),
