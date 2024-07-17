@@ -40,6 +40,10 @@ queries with the relevant filters to disable them:
 
 This feature removes selected nodes from the admin bar.
 
+### `disable_apple_news_non_prod_push`
+
+This feature disables pushing to Apple News when not on a production environment. This is determined by setting the `WP_ENVIRONMENT_TYPE` environment variable, or the `WP_ENVIRONMENT_TYPE` constant.
+
 ### `disable_attachment_routing`
 
 This feature disables WordPress attachment pages entirely from the front end of the site.
