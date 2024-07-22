@@ -2,9 +2,15 @@
 
 This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a CHANGELOG](https://keepachangelog.com/en/1.0.0/).
 
-## Unreleased
+## 3.2.0
+
+### Added
 
 * `disable_apple_news_non_prod_push`: Added a feature to disable pushing to Apple News when not on a production environment.
+
+### Changed
+
+* `force_two_factor_authentication`: Fixed an infinite loop issue on VIP sites.
 
 ## 3.1.0
 
