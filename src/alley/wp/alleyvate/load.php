@@ -105,6 +105,10 @@ function load(): void {
 			'disable_block_editor_rest_api_preload_paths',
 			new Features\Disable_Block_Editor_Rest_Api_Preload_Paths(),
 		),
+		new Feature(
+			'limit_xmlrpc_access',
+			new Features\Limit_Xmlrpc_Access(),
+		),
 	);
 
 	$plugin->boot();
