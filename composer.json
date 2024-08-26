@@ -39,6 +39,7 @@
     "phpcs": "phpcs",
     "phpstan": "phpstan --memory-limit=768M",
     "phpunit": "phpunit",
+    "scaffold": "npx npx @alleyinteractive/scaffolder@latest wp-alleyvate@feature",
     "test": [
       "@lint",
       "@phpunit"
