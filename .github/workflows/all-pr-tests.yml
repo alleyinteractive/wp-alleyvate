@@ -37,6 +37,7 @@ jobs:
         uses: alleyinteractive/action-test-php@develop
         with:
           php-version: '${{ matrix.php }}'
+          skip-audit: 'true'
           skip-wordpress-install: 'true'
           wordpress-version: '${{ matrix.wordpress }}'
           wordpress-multisite: '${{ matrix.multisite }}'
