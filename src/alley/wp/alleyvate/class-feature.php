@@ -81,7 +81,7 @@ final class Feature implements \Alley\WP\Types\Feature {
 
 		$info['wp-alleyvate']['fields'] ??= [];
 		$info['wp-alleyvate']['fields'][] = [
-			'label' => sprintf(
+			'label' => \sprintf(
 				/* translators: %s: Feature name. */
 				__( 'Feature: %s', 'alley' ),
 				$this->handle,
