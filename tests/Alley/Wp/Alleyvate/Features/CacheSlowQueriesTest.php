@@ -21,7 +21,7 @@ use Mantle\Testing\Concerns\Refresh_Database;
 /**
  * Tests for caching slow queries.
  */
-final class Test_Cache_Slow_Queries extends Test_Case {
+final class CacheSlowQueriesTest extends Test_Case {
 	use Admin_Screen;
 	use Refresh_Database;
 

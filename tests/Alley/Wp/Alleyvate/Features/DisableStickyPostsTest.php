@@ -20,7 +20,7 @@ use Mantle\Testkit\Test_Case;
 /**
  * Tests for fully disabling sticky posts.
  */
-final class Test_Disable_Sticky_Posts extends Test_Case {
+final class DisableStickyPostsTest extends Test_Case {
 	use Refresh_Database;
 
 	/**

@@ -19,7 +19,7 @@ use Mantle\Testkit\Test_Case;
 /**
  * Tests for disabling block editor REST API preload paths.
  */
-final class Test_Disable_Block_Editor_Rest_Api_Preload_Paths extends Test_Case {
+final class DisableBlockEditorRestApiPreloadPathsTest extends Test_Case {
 
 	/**
 	 * Feature instance.

@@ -20,7 +20,7 @@ use Mantle\Testkit\Test_Case;
 /**
  * Tests for removing the shortlink link tag from the head of pages.
  */
-final class Test_Remove_Shortlink extends Test_Case {
+final class RemoveShortlinkTest extends Test_Case {
 	use Refresh_Database;
 
 	/**

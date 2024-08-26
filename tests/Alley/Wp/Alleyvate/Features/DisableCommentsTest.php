@@ -20,8 +20,8 @@ use Mantle\Testing\Concerns\{Admin_Screen, Refresh_Database};
 /**
  * Tests for fully disabling comment functionality.
  */
-final class Test_Disable_Comments extends Test_Case {
-	use Concerns\Remove_Meta_Box;
+final class DisableCommentsTest extends Test_Case {
+	use Concerns\RemoveMetaBox;
 	use Admin_Screen;
 	use Refresh_Database;
 

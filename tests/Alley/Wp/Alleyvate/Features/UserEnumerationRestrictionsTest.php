@@ -16,11 +16,12 @@ namespace Alley\WP\Alleyvate\Features;
 
 use Mantle\Testing\Concerns\Refresh_Database;
 use Mantle\Testkit\Test_Case;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests for the user enumeration restrictions feature.
  */
-final class Test_User_Enumeration_Restrictions extends Test_Case {
+final class UserEnumerationRestrictionsTest extends Test_Case {
 	use Refresh_Database;
 
 	/**
@@ -42,11 +43,10 @@ final class Test_User_Enumeration_Restrictions extends Test_Case {
 	/**
 	 * User should receive the given response code when accessing user routes.
 	 *
-	 * @dataProvider data_rest_enumeration_by_user
-	 *
 	 * @param bool $logged_in       Whether a user is logged in.
 	 * @param int  $expected_status Expected response code.
 	 */
+	#[DataProvider('data_rest_enumeration_by_user')]
 	public function test_rest_enumeration_by_user( bool $logged_in, int $expected_status ): void {
 		/*
 		 * Individual users can be read anonymously over the REST API only

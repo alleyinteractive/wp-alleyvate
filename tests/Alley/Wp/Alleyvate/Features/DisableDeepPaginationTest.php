@@ -22,28 +22,22 @@ use WP_Query;
 /**
  * Tests for fully disabling comment functionality.
  */
-final class Test_Disable_Deep_Pagination extends Test_Case {
+final class DisableDeepPaginationTest extends Test_Case {
 	use Refresh_Database;
 	use Admin_Screen;
 
 	/**
-	 * Feature instance.
-	 *
-	 * @var Disable_Deep_Pagination
+	 * Feature instance.@var Disable_Deep_Pagination
 	 */
 	private Disable_Deep_Pagination $feature;
 
 	/**
-	 * Filter function for max number of pages.
-	 *
-	 * @var callable|null
+	 * Filter function for max number of pages.@var callable|null
 	 */
 	private $filter = null;
 
 	/**
-	 * The wp_die_handler callable.
-	 *
-	 * @var callable|null
+	 * The wp_die_handler callable.@var callable|null
 	 */
 	private $handler = null;
 
@@ -88,8 +82,6 @@ final class Test_Disable_Deep_Pagination extends Test_Case {
 
 	/**
 	 * Verify the maximum pages are listed at 100.
-	 *
-	 * @test
 	 */
 	public function test_maximum_posts_restricted() {
 		$this->feature->boot();
@@ -107,8 +99,6 @@ final class Test_Disable_Deep_Pagination extends Test_Case {
 
 	/**
 	 * Do not filter WP Admin queries.
-	 *
-	 * @test
 	 */
 	public function test_admin_queries_are_unaffected() {
 		// Enable the Admin screen.
@@ -131,8 +121,6 @@ final class Test_Disable_Deep_Pagination extends Test_Case {
 
 	/**
 	 * Allow filtering of the maximum number of posts.
-	 *
-	 * @test
 	 */
 	public function test_maximum_number_of_posts_can_be_filtered() {
 		// Enable the Admin screen.
@@ -162,8 +150,6 @@ final class Test_Disable_Deep_Pagination extends Test_Case {
 
 	/**
 	 * Validate that all expected pages can be accessed.
-	 *
-	 * @test
 	 */
 	public function test_all_expected_available_pages_can_be_accessed() {
 		// Enable the Admin screen.
@@ -190,8 +176,6 @@ final class Test_Disable_Deep_Pagination extends Test_Case {
 	 * We should allow developers to dangerously override this filter in code, when necessary, as a
 	 * one-time override of the filter. This will allow us to not have to litter our code with hundreds
 	 * of one-time-use filters.
-	 *
-	 * @test
 	 */
 	public function test_can_dangerously_override_page_limit() {
 		$this->feature->boot();
@@ -212,8 +196,6 @@ final class Test_Disable_Deep_Pagination extends Test_Case {
 
 	/**
 	 * Unauthenticated REST queries should be filtered.
-	 *
-	 * @test
 	 */
 	public function test_unauthenticated_rest_queries_are_filtered() {
 		$this->feature->boot();
@@ -229,8 +211,6 @@ final class Test_Disable_Deep_Pagination extends Test_Case {
 
 	/**
 	 * Authenticated REST queries should NOT be filtered.
-	 *
-	 * @test
 	 */
 	public function test_authenticated_rest_queries_are_not_filtered() {
 		$this->feature->boot();
@@ -244,9 +224,7 @@ final class Test_Disable_Deep_Pagination extends Test_Case {
 	}
 
 	/**
-	 * Helper function for swapping out the max pages filter.
-	 *
-	 * @param int $max The max pages to return.
+	 * Helper function for swapping out the max pages filter.@param int $max The max pages to return.
 	 */
 	private function filter_max_pages( int $max ): void {
 		if ( ! empty( $this->filter ) ) {
