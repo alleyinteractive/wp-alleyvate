@@ -2,6 +2,12 @@
 
 This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a CHANGELOG](https://keepachangelog.com/en/1.0.0/).
 
+## 3.3.0
+
+### Added
+
+* `disable_site_health_directories`: Added a feature to disable the site health check for information about the WordPress directories and their sizes.
+
 ## 3.2.0
 
 ### Added

@@ -58,6 +58,10 @@ function load(): void {
 			new Features\Disable_Password_Change_Notification(),
 		),
 		new Feature(
+			'disable_site_health_directories',
+			new Features\Disable_Site_Health_Directories(),
+		),
+		new Feature(
 			'disable_sticky_posts',
 			new Features\Disable_Sticky_Posts(),
 		),

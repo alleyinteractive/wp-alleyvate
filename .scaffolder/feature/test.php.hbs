@@ -15,7 +15,6 @@ declare( strict_types=1 );
 namespace Alley\WP\Alleyvate\Features;
 
 use Mantle\Testing\Concerns\Refresh_Database;
-use Mantle\Testing\Exceptions\WP_Die_Exception;
 use Mantle\Testkit\Test_Case;
 
 /**
@@ -44,6 +43,9 @@ final class {{ wpClassName inputs.featureName prefix="Test_" }} extends Test_Cas
 	 * Example Test.
 	 */
 	public function test_example(): void {
+		// Activate the feature.
+		$this->feature->boot();
+
 		$this->assertTrue( true );
 	}
 }
