@@ -31,8 +31,10 @@
   },
   "scripts": {
     "fixer": "php-cs-fixer -v fix --allow-risky=yes",
+    "fixer:test": "php-cs-fixer fix -v --dry-run --stop-on-violation --using-cache=no --allow-risky=yes",
     "lint": [
       "@phpcs",
+      "@fixer:test",
       "@phpstan"
     ],
     "phpcbf": "phpcbf",
