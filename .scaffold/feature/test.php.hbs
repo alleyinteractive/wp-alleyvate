@@ -1,0 +1,32 @@
+<?php
+/**
+ * Class file for {{ wpClassName inputs.featureName prefix="Test_" }}
+ *
+ * (c) Alley <info@alley.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * @package wp-alleyvate
+ *
+ * @phpcs:disable WordPress.WP.GlobalVariablesOverride.Prohibited, Generic.CodeAnalysis.EmptyStatement.DetectedCatch, WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+ */
+
+declare( strict_types=1 );
+
+namespace Alley\WP\Alleyvate\Features;
+
+use Mantle\Testing\Concerns\Refresh_Database;
+use Mantle\Testing\Exceptions\WP_Die_Exception;
+use Mantle\Testkit\Test_Case;
+
+/**
+ * Tests for {{ wpClassName inputs.featureName }} feature.
+ */
+final class {{ wpClassName inputs.featureName prefix="Test_" }} extends Test_Case {
+	use Refresh_Database;
+
+	public function test_example(): void {
+		$this->assertTrue( true );
+	}
+}
