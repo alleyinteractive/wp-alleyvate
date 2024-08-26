@@ -8,8 +8,6 @@
  * file that was distributed with this source code.
  *
  * @package wp-alleyvate
- *
- * @phpcs:disable WordPress.WP.GlobalVariablesOverride.Prohibited, Generic.CodeAnalysis.EmptyStatement.DetectedCatch, WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
  */
 
 declare( strict_types=1 );
@@ -26,6 +24,25 @@ use Mantle\Testkit\Test_Case;
 final class {{ wpClassName inputs.featureName prefix="Test_" }} extends Test_Case {
 	use Refresh_Database;
 
+	/**
+	 * Feature instance.
+	 *
+	 * @var {{ wpClassName inputs.featureName }}
+	 */
+	private {{ wpClassName inputs.featureName }} $feature;
+
+	/**
+	 * Set up.
+	 */
+	protected function setUp(): void {
+		parent::setUp();
+
+		$this->feature = new {{ wpClassName inputs.featureName }}();
+	}
+
+	/**
+	 * Example Test.
+	 */
 	public function test_example(): void {
 		$this->assertTrue( true );
 	}
