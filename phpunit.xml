@@ -8,6 +8,6 @@
     cacheDirectory=".phpunit.result.cache"
 >
   <testsuite name="unit">
-    <directory suffix=".php">tests/alley/wp/</directory>
+    <directory suffix="Test.php">tests/alley/wp/</directory>
   </testsuite>
 </phpunit>

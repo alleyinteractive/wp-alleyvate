@@ -46,7 +46,7 @@ final class UserEnumerationRestrictionsTest extends Test_Case {
 	 * @param bool $logged_in       Whether a user is logged in.
 	 * @param int  $expected_status Expected response code.
 	 */
-	#[DataProvider('data_rest_enumeration_by_user')]
+	#[DataProvider( 'dataprovider_rest_enumeration_by_user' )]
 	public function test_rest_enumeration_by_user( bool $logged_in, int $expected_status ): void {
 		/*
 		 * Individual users can be read anonymously over the REST API only
@@ -98,7 +98,7 @@ final class UserEnumerationRestrictionsTest extends Test_Case {
 	 *
 	 * @return array
 	 */
-	public function data_rest_enumeration_by_user(): array {
+	public static function dataprovider_rest_enumeration_by_user(): array {
 		return [
 			'logged-out user' => [ false, 401 ],
 			'logged-in user'  => [ true, 200 ],

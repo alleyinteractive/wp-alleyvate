@@ -27,17 +27,23 @@ final class DisableDeepPaginationTest extends Test_Case {
 	use Admin_Screen;
 
 	/**
-	 * Feature instance.@var Disable_Deep_Pagination
+	 * Feature instance.
+	 *
+	 * @var Disable_Deep_Pagination
 	 */
 	private Disable_Deep_Pagination $feature;
 
 	/**
-	 * Filter function for max number of pages.@var callable|null
+	 * Filter function for max number of pages.
+	 *
+	 * @var callable|null
 	 */
 	private $filter = null;
 
 	/**
-	 * The wp_die_handler callable.@var callable|null
+	 * The wp_die_handler callable.
+	 *
+	 * @var callable|null
 	 */
 	private $handler = null;
 
@@ -224,7 +230,9 @@ final class DisableDeepPaginationTest extends Test_Case {
 	}
 
 	/**
-	 * Helper function for swapping out the max pages filter.@param int $max The max pages to return.
+	 * Helper function for swapping out the max pages filter.
+	 *
+	 * @param int $max The max pages to return.
 	 */
 	private function filter_max_pages( int $max ): void {
 		if ( ! empty( $this->filter ) ) {
