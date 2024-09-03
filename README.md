@@ -99,9 +99,14 @@ which have been shown to force those environments to use an insecure protocol at
 
 This feature disables sending password change notification emails to site admins.
 
+### `disable_site_health_directories`
+
+This feature disables the site health check for information about the WordPress directories and their sizes.
+
 ### `disable_sticky_posts`
 
 This feature disables WordPress sticky posts entirely, including the ability to set and query sticky posts.
+
 
 ### `disable_trackbacks`
 

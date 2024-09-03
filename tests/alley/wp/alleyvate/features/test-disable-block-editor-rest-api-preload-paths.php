@@ -64,13 +64,13 @@ final class Test_Disable_Block_Editor_Rest_Api_Preload_Paths extends Test_Case {
 				rest_get_route_for_post_type_items( 'wp_block' )
 			),
 			add_query_arg( 'context', 'edit', $rest_path ),
-			sprintf( '/wp/v2/types/%s?context=edit', $post_type ),
+			\sprintf( '/wp/v2/types/%s?context=edit', $post_type ),
 			'/wp/v2/users/me',
 			[ rest_get_route_for_post_type_items( 'attachment' ), 'OPTIONS' ],
 			[ rest_get_route_for_post_type_items( 'page' ), 'OPTIONS' ],
 			[ rest_get_route_for_post_type_items( 'wp_block' ), 'OPTIONS' ],
 			[ rest_get_route_for_post_type_items( 'wp_template' ), 'OPTIONS' ],
-			sprintf( '%s/autosaves?context=edit', $rest_path ),
+			\sprintf( '%s/autosaves?context=edit', $rest_path ),
 			'/wp/v2/settings',
 			[ '/wp/v2/settings', 'OPTIONS' ],
 		];
@@ -111,13 +111,13 @@ final class Test_Disable_Block_Editor_Rest_Api_Preload_Paths extends Test_Case {
 		$this->assertContains( '/wp/v2/types?context=view', $preload_paths );
 		$this->assertContains( '/wp/v2/taxonomies?context=view', $preload_paths );
 		$this->assertContains( add_query_arg( 'context', 'edit', $rest_path ), $preload_paths );
-		$this->assertContains( sprintf( '/wp/v2/types/%s?context=edit', $post_type ), $preload_paths );
+		$this->assertContains( \sprintf( '/wp/v2/types/%s?context=edit', $post_type ), $preload_paths );
 		$this->assertContains( '/wp/v2/users/me', $preload_paths );
 		$this->assertContains( [ rest_get_route_for_post_type_items( 'attachment' ), 'OPTIONS' ], $preload_paths );
 		$this->assertContains( [ rest_get_route_for_post_type_items( 'page' ), 'OPTIONS' ], $preload_paths );
 		$this->assertContains( [ rest_get_route_for_post_type_items( 'wp_block' ), 'OPTIONS' ], $preload_paths );
 		$this->assertContains( [ rest_get_route_for_post_type_items( 'wp_template' ), 'OPTIONS' ], $preload_paths );
-		$this->assertContains( sprintf( '%s/autosaves?context=edit', $rest_path ), $preload_paths );
+		$this->assertContains( \sprintf( '%s/autosaves?context=edit', $rest_path ), $preload_paths );
 		$this->assertContains( '/wp/v2/settings', $preload_paths );
 		$this->assertContains( [ '/wp/v2/settings', 'OPTIONS' ], $preload_paths );
 	}
