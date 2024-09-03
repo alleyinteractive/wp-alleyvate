@@ -18,7 +18,7 @@ use Mantle\Testkit\Test_Case;
 /**
  * Tests for fully disabling pingback and trackback functionality.
  */
-final class Test_Disable_Trackbacks extends Test_Case {
+final class DisableTrackbacksTest extends Test_Case {
 	use Refresh_Database;
 
 	/**

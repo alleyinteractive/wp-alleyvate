@@ -19,8 +19,8 @@ use Mantle\Testkit\Test_Case;
 /**
  * Tests for the disabling of the custom fields meta box.
  */
-final class Test_Disable_Custom_Fields_Meta_Box extends Test_Case {
-	use Concerns\Remove_Meta_Box;
+final class DisableCustomFieldsMetaBoxTest extends Test_Case {
+	use Concerns\RemoveMetaBox;
 
 	/**
 	 * Feature instance.

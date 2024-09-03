@@ -20,7 +20,7 @@ use Mantle\Testkit\Test_Case;
 /**
  * Tests for Disable_Site_Health_Directories feature.
  */
-final class Test_Disable_Site_Health_Directories extends Test_Case {
+final class DisableSiteHealthDirectoriesTest extends Test_Case {
 	use Refresh_Database;
 
 	/**

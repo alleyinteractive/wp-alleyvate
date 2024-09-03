@@ -21,7 +21,7 @@ use Mantle\Testing\Concerns\Refresh_Database;
 /**
  * Tests for the cleaning of the admin bar.
  */
-final class Test_Clean_Admin_Bar extends Test_Case {
+final class CleanAdminBarTest extends Test_Case {
 	use Refresh_Database;
 
 	/**
