@@ -19,7 +19,7 @@ use Mantle\Testkit\Test_Case;
 /**
  * Tests for the enabling of Jetpack safe mode.
  */
-final class Test_Enabled_Jetpack_Safe_Mode extends Test_Case {
+final class EnabledJetpackSafeModeTest extends Test_Case {
 
 	/**
 	 * Feature instance.
