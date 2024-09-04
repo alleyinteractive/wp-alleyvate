@@ -26,7 +26,7 @@ final class Force_Two_Factor_Authentication implements Feature {
 	 */
 	public function boot(): void {
 		if ( self::is_vip_environment() ) {
-			add_filter( 'wpcom_vip_is_two_factor_forced', [ self::class, 'filter__wpcom_vip_is_two_factor_forced' ], \PHP_INT_MAX );
+			add_filter( 'wpcom_vip_two_factor_enforcement_cap', [ self::class, 'filter__wpcom_vip_two_factor_enforcement_cap' ], \PHP_INT_MAX );
 			return;
 		}
 
@@ -34,16 +34,6 @@ final class Force_Two_Factor_Authentication implements Feature {
 		add_filter( 'map_meta_cap', [ self::class, 'filter__map_meta_cap' ], 0, 4 );
 
 		add_action( 'admin_notices', [ self::class, 'action__admin_notices' ] );
-	}
-
-	/**
-	 * For VIP environments we can skip all of the functionality, and only focus on returning true if the current user
-	 * can edit posts.
-	 *
-	 * @return bool
-	 */
-	public static function filter__wpcom_vip_is_two_factor_forced(): bool {
-		return self::force_to_enable_2fa();
 	}
 
 	/**
@@ -87,6 +77,15 @@ final class Force_Two_Factor_Authentication implements Feature {
 		if ( ! self::two_factor_plugin_active() ) {
 			self::admin_notice__plugin_dependency();
 		}
+	}
+
+	/**
+	 * Returns the capability level that accounts will be required to use 2fa.
+	 *
+	 * @return string
+	 */
+	public static function filter__wpcom_vip_two_factor_enforcement_cap(): string {
+		return apply_filters( 'alleyvate_force_2fa_capability', 'edit_posts' );
 	}
 
 	/**
@@ -165,7 +164,7 @@ final class Force_Two_Factor_Authentication implements Feature {
 	 * @return bool
 	 */
 	private static function force_to_enable_2fa(): bool {
-		$capability_min = apply_filters( 'alleyvate_force_2fa_capability', 'edit_posts' );
+		$capability_min = self::filter__wpcom_vip_two_factor_enforcement_cap();
 
 		// Remove the filter to avoid infinite loops.
 		$removed = remove_filter( 'map_meta_cap', [ self::class, 'filter__map_meta_cap' ], 0 );

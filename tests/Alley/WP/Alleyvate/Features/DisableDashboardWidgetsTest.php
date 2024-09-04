@@ -20,7 +20,7 @@ use Mantle\Testkit\Test_Case;
 /**
  * Tests for disabling selected unpopular dashboard widgets.
  */
-final class Test_Disable_Dashboard_Widgets extends Test_Case {
+final class DisableDashboardWidgetsTest extends Test_Case {
 	use Admin_Screen;
 	use Refresh_Database;
 

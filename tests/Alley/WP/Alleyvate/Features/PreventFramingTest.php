@@ -20,7 +20,7 @@ use Mantle\Testkit\Test_Case;
 /**
  * Tests for the preventing the iframing of a site.
  */
-final class Test_Prevent_Framing extends Test_Case {
+final class PreventFramingTest extends Test_Case {
 	use Refresh_Database;
 
 	/**

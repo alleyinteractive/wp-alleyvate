@@ -20,8 +20,8 @@ use Mantle\Testing\Concerns\{Admin_Screen, Refresh_Database};
 /**
  * Tests for fully disabling comment functionality.
  */
-final class Test_Disable_Comments extends Test_Case {
-	use Concerns\Remove_Meta_Box;
+final class DisableCommentsTest extends Test_Case {
+	use Concerns\RemoveMetaBox;
 	use Admin_Screen;
 	use Refresh_Database;
 
@@ -187,7 +187,7 @@ final class Test_Disable_Comments extends Test_Case {
 		$this->assertTrue( post_type_supports( 'post', 'comments' ) );
 
 		// Ensure the comment status is reported as open and the replies link exists out of the box.
-		$result = rest_do_request( sprintf( '/wp/v2/posts/%d', $post_id ) );
+		$result = rest_do_request( \sprintf( '/wp/v2/posts/%d', $post_id ) );
 		$this->assertSame( 'open', $result->data['comment_status'] );
 		$this->assertArrayHasKey( 'replies', $result->get_links() );
 
@@ -198,7 +198,7 @@ final class Test_Disable_Comments extends Test_Case {
 		$this->assertFalse( post_type_supports( 'post', 'comments' ) );
 
 		// Ensure the comment status is reported as closed and the replies link has been removed.
-		$result = rest_do_request( sprintf( '/wp/v2/posts/%d', $post_id ) );
+		$result = rest_do_request( \sprintf( '/wp/v2/posts/%d', $post_id ) );
 		$this->assertSame( 'closed', $result->data['comment_status'] );
 		$this->assertArrayNotHasKey( 'replies', $result->get_links() );
 	}
@@ -222,7 +222,7 @@ final class Test_Disable_Comments extends Test_Case {
 
 		// Ensure comment routes are successful before the plugin is active.
 		$result_generic  = rest_do_request( new \WP_REST_Request( 'GET', '/wp/v2/comments' ) );
-		$result_specific = rest_do_request( new \WP_REST_Request( 'GET', sprintf( '/wp/v2/comments/%d', $comment_id ) ) );
+		$result_specific = rest_do_request( new \WP_REST_Request( 'GET', \sprintf( '/wp/v2/comments/%d', $comment_id ) ) );
 		$this->assertSame( 200, $result_generic->get_status() );
 		$this->assertSame( 200, $result_specific->get_status() );
 
@@ -236,7 +236,7 @@ final class Test_Disable_Comments extends Test_Case {
 
 		// Ensure comment routes 404.
 		$result_generic  = rest_do_request( new \WP_REST_Request( 'GET', '/wp/v2/comments' ) );
-		$result_specific = rest_do_request( new \WP_REST_Request( 'GET', sprintf( '/wp/v2/comments/%d', $comment_id ) ) );
+		$result_specific = rest_do_request( new \WP_REST_Request( 'GET', \sprintf( '/wp/v2/comments/%d', $comment_id ) ) );
 		$this->assertSame( 404, $result_generic->get_status() );
 		$this->assertSame( 404, $result_specific->get_status() );
 	}

@@ -19,7 +19,7 @@ use Mantle\Testkit\Test_Case;
 /**
  * Tests for the disallowing of file editing.
  */
-final class Test_Disallow_File_Edit extends Test_Case {
+final class DisallowFileEditTest extends Test_Case {
 
 	/**
 	 * Feature instance.

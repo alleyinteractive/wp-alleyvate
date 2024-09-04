@@ -23,7 +23,7 @@ use Mantle\Testkit\Test_Case;
 /**
  * Tests for the login nonce.
  */
-final class Test_Login_Nonce extends Test_Case {
+final class LoginNonceTest extends Test_Case {
 	use Refresh_Database;
 
 	/**

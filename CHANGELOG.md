@@ -2,9 +2,21 @@
 
 This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a CHANGELOG](https://keepachangelog.com/en/1.0.0/).
 
-## Unreleased
+## 3.3.0
+
+### Added
+
+* `disable_site_health_directories`: Added a feature to disable the site health check for information about the WordPress directories and their sizes.
+
+## 3.2.0
+
+### Added
 
 * `disable_apple_news_non_prod_push`: Added a feature to disable pushing to Apple News when not on a production environment.
+
+### Fixed
+
+* `force_two_factor_authentication`: Fixed an infinite loop issue on VIP sites.
 
 ## 3.1.0
 

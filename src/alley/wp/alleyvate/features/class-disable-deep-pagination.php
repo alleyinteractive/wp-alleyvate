@@ -52,7 +52,7 @@ final class Disable_Deep_Pagination implements Feature {
 		}
 
 		wp_die(
-			sprintf(
+			\sprintf(
 				/* translators: The maximum number of pages. */
 				esc_html__( 'Invalid Request: Pagination beyond page %d has been disabled for performance reasons.', 'alley' ),
 				esc_html( $max_pages ),

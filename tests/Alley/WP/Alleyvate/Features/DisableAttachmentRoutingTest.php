@@ -20,7 +20,7 @@ use Mantle\Testkit\Test_Case;
 /**
  * Tests for fully disabling attachment routing.
  */
-final class Test_Disable_Attachment_Routing extends Test_Case {
+final class DisableAttachmentRoutingTest extends Test_Case {
 	use Refresh_Database;
 
 	/**

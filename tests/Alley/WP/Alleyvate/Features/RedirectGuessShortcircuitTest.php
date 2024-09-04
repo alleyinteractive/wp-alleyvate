@@ -20,7 +20,7 @@ use Mantle\Testkit\Test_Case;
 /**
  * Tests for short-circuiting the redirect URL guessing for 404 requests.
  */
-final class Test_Redirect_Guess_Shortcircuit extends Test_Case {
+final class RedirectGuessShortcircuitTest extends Test_Case {
 	use Refresh_Database;
 
 	/**
