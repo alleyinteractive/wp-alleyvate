@@ -27,7 +27,7 @@ final class Disable_Attachment_Routing implements Feature {
 		add_filter( 'pre_option_wp_attachment_pages_enabled', '__return_zero', 100 );
 		add_filter( 'rewrite_rules_array', [ self::class, 'filter__rewrite_rules_array' ] );
 		add_filter( 'attachment_link', [ self::class, 'filter__attachment_link' ] );
-		add_action( 'pre_get_posts', [ self::class, 'action__pre_get_posts' ] );
+		add_filter( 'pre_handle_404', [ self::class, 'filter__pre_handle_404' ], 10, 2 );
 		add_action( 'admin_bar_menu', [ self::class, 'action__admin_bar_menu' ], 100 );
 	}
 
@@ -57,22 +57,25 @@ final class Disable_Attachment_Routing implements Feature {
 	}
 
 	/**
-	 * Ensure attachment pages return 404s.
+	 * Filters whether to short-circuit default header status handling.
 	 *
-	 * @param WP_Query $query WP_Query object.
+	 * @param bool     $preempt  Whether to short-circuit default header status handling.
+	 * @param WP_Query $wp_query Query object.
+	 * @return bool
 	 */
-	public static function action__pre_get_posts( $query ): void {
-		if ( is_admin() || ! $query->is_main_query() ) {
-			return;
+	public static function filter__pre_handle_404( $preempt, $wp_query ) {
+		if ( $wp_query->is_attachment() ) {
+			$preempt = true;
+
+			// This wipes out `is_attachment`, so the redirect to the attachment file in `canonical_redirect()` is bypassed.
+			$wp_query->set_404();
+
+			// `WP::handle_404()` normally calls these, but we're preempting that.
+			status_header( 404 );
+			nocache_headers();
 		}
 
-		if (
-			$query->queried_object instanceof \WP_Post
-			&& 'attachment' === get_post_type( $query->get_queried_object_id() )
-		) {
-			$query->set_404();
-			status_header( 404 );
-		}
+		return $preempt;
 	}
 
 	/**

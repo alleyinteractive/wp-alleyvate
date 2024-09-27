@@ -2,6 +2,12 @@
 
 This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a CHANGELOG](https://keepachangelog.com/en/1.0.0/).
 
+## 3.4.0
+
+### Changed
+
+* The `disable_attachment_routing` feature now also disables the automatic redirect from an attachment to its corresponding file URL.
+
 ## 3.3.0
 
 ### Added
