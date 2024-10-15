@@ -79,6 +79,15 @@ final class Login_Nonce implements Feature {
 	 */
 	public static function action__add_meta_refresh(): void {
 		printf( '<meta http-equiv="refresh" content="%d">', esc_attr( (string) self::NONCE_TIMEOUT ) );
+		?>
+		<script>
+			window.addEventListener('pageshow', (event) => {
+				if (event.persisted) {
+					location.reload();
+				}
+			});
+		</script>
+		<?php
 	}
 
 	/**
@@ -99,16 +108,22 @@ final class Login_Nonce implements Feature {
 	 * @see <https://github.com/WordPress/wordpress-develop/blob/94b70f1ae065f10937c22b2d4b180ceade1ddeee/src/wp-login.php#L482-L495>
 	 */
 	public static function action__add_nonce_life_filter(): void {
-		add_filter( 'nonce_life', [ __CLASS__, 'nonce_life_filter' ] );
+		add_filter( 'nonce_life', [ __CLASS__, 'nonce_life_filter' ], 10, 2 );
 		add_action( 'login_form', [ __CLASS__, 'action__add_nonce_to_form' ] );
 	}
 
 	/**
 	 * Filter the nonce timeout.
 	 *
+	 * @param int        $nonce_lifetime The lifetime of the nonce in seconds.
+	 * @param string|int $action The nonce action, or -1 if none was provided.
 	 * @return int
 	 */
-	public static function nonce_life_filter(): int {
+	public static function nonce_life_filter( $nonce_lifetime, $action ): int {
+		if ( self::NONCE_ACTION !== $action ) {
+			return $nonce_lifetime;
+		}
+
 		return self::NONCE_TIMEOUT;
 	}
 
@@ -131,7 +146,7 @@ final class Login_Nonce implements Feature {
 		 * Nonce life is used to generate the nonce value. If this differs from the form,
 		 * the nonce will not validate.
 		 */
-		add_filter( 'nonce_life', [ __CLASS__, 'nonce_life_filter' ] );
+		add_filter( 'nonce_life', [ __CLASS__, 'nonce_life_filter' ], 10, 2 );
 
 		$nonce = sanitize_key( $_POST[ self::NONCE_NAME ] ?? '' );
 
