@@ -135,10 +135,7 @@ final class Login_Nonce implements Feature {
 
 		$nonce = sanitize_key( $_POST[ self::NONCE_NAME ] ?? '' );
 
-		if (
-			! $nonce ||
-			! wp_verify_nonce( $nonce, self::NONCE_ACTION )
-		) {
+		if ( ! wp_verify_nonce( $nonce, self::NONCE_ACTION ) ) {
 			// This is a login with an invalid nonce. Throw an error.
 			http_response_code( 403 );
 			wp_die( 'Login attempt failed. Please try again.', 'Login Error' );
