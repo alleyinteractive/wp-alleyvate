@@ -2,6 +2,12 @@
 
 This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a CHANGELOG](https://keepachangelog.com/en/1.0.0/).
 
+## Unreleased
+
+### Fixed
+
+* `login_nonce`: Fixed issue where loading cached version of login page would store invalid nonce.
+
 ## 3.4.0
 
 ### Changed
