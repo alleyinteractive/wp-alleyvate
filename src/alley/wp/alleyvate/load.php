@@ -70,6 +70,10 @@ function load(): void {
 			new Features\Disable_Trackbacks(),
 		),
 		new Feature(
+			'disable_xmlrpc',
+			new Features\Disable_XMLRPC(),
+		),
+		new Feature(
 			'disallow_file_edit',
 			new Features\Disallow_File_Edit(),
 		),
