@@ -27,14 +27,14 @@ final class Disable_XMLRPC implements Feature {
 		// Disable XML-RPC for non-Jetpack requests.
 		add_filter(
 			'xmlrpc_enabled',
-			fn( $enabled ) => Disable_XMLRPC::is_jetpack_enabled() && Disable_XMLRPC::is_jetpack_xmlrpc_request() ? $enabled : false,
+			fn( $enabled ) => \Alley\WP\Alleyvate\Features\Disable_XMLRPC::is_jetpack_enabled() && \Alley\WP\Alleyvate\Features\Disable_XMLRPC::is_jetpack_xmlrpc_request() ? $enabled : false, // phpcs:ignore Squiz.Classes.SelfMemberReference.NotUsed
 			PHP_INT_MAX,
 		);
 
 		// Remove all XML-RPC methods for non-Jetpack requests.
 		add_filter(
 			'xmlrpc_methods',
-			fn( $methods ) => Disable_XMLRPC::is_jetpack_enabled() && Disable_XMLRPC::is_jetpack_xmlrpc_request() ? $methods : [],
+			fn( $methods ) => \Alley\WP\Alleyvate\Features\Disable_XMLRPC::is_jetpack_enabled() && \Alley\WP\Alleyvate\Features\Disable_XMLRPC::is_jetpack_xmlrpc_request() ? $methods : [], // phpcs:ignore Squiz.Classes.SelfMemberReference.NotUsed
 			PHP_INT_MAX,
 		);
 	}
@@ -55,7 +55,7 @@ final class Disable_XMLRPC implements Feature {
 	 */
 	public static function is_jetpack_xmlrpc_request(): bool {
 		// Bail if there's no remote address.
-		if ( empty( $_SERVER['REMOTE_ADDR'] ) ) {
+		if ( empty( $_SERVER['REMOTE_ADDR'] ) ) { // phpcs:ignore WordPressVIPMinimum.Variables.ServerVariables.UserControlledHeaders
 			return false;
 		}
 
@@ -68,12 +68,12 @@ final class Disable_XMLRPC implements Feature {
 		}
 
 		// Check if the request is from a Jetpack IP.
-		if ( IpUtils::checkIp( $_SERVER['REMOTE_ADDR'], $jetpack_ips ) ) {
+		if ( IpUtils::checkIp( $_SERVER['REMOTE_ADDR'], $jetpack_ips ) ) { // phpcs:ignore WordPressVIPMinimum.Variables.ServerVariables.UserControlledHeaders, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			return true;
 		}
 
 		// Check if the request is from a forwarded Jetpack IP.
-		return isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) && IpUtils::checkIp( $_SERVER['HTTP_X_FORWARDED_FOR'], $jetpack_ips );
+		return isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) && IpUtils::checkIp( $_SERVER['HTTP_X_FORWARDED_FOR'], $jetpack_ips ); // phpcs:ignore WordPressVIPMinimum.Variables.ServerVariables.UserControlledHeaders, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 	}
 
 	/**
@@ -99,7 +99,7 @@ final class Disable_XMLRPC implements Feature {
 						'jetpack_ips',
 						$jetpack_ips,
 						'alleyvate_disable_xmlrpc',
-						is_array( $jetpack_ips ) ? WEEK_IN_SECONDS : HOUR_IN_SECONDS
+						is_array( $jetpack_ips ) ? WEEK_IN_SECONDS : HOUR_IN_SECONDS // phpcs:ignore WordPressVIPMinimum.Performance.LowExpiryCacheTime.CacheTimeUndetermined
 					);
 
 					return ( is_array( $jetpack_ips ) && ! empty( $jetpack_ips ) ) ? $jetpack_ips : [];
