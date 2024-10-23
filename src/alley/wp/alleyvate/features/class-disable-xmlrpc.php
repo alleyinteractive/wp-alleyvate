@@ -104,6 +104,9 @@ final class Disable_XMLRPC implements Feature {
 
 					return ( is_array( $jetpack_ips ) && ! empty( $jetpack_ips ) ) ? $jetpack_ips : [];
 				}
+			} else {
+				// cache the "bad result" for a short time to avoid hammering the jetpack endpoint.
+				wp_cache_set( 'jetpack_ips', [], 'alleyvate_disable_xmlrpc', HOUR_IN_SECONDS );
 			}
 		}
 
