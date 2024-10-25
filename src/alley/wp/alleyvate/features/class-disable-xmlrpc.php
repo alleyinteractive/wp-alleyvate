@@ -83,7 +83,7 @@ final class Disable_XMLRPC implements Feature {
 	/**
 	 * Get the Jetpack IPs.
 	 *
-	 * @return array
+	 * @return array<string> List of IPs. Empty array if unable to retrieve.
 	 */
 	public static function get_jetpack_ips(): array {
 		// Look for cache.
