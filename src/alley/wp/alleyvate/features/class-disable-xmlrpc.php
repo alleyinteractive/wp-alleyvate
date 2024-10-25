@@ -10,6 +10,8 @@
  * @package wp-alleyvate
  */
 
+declare( strict_types=1 );
+
 namespace Alley\WP\Alleyvate\Features;
 
 use Symfony\Component\HttpFoundation\IpUtils;
@@ -28,14 +30,14 @@ final class Disable_XMLRPC implements Feature {
 		add_filter(
 			'xmlrpc_enabled',
 			fn( $enabled ) => self::is_jetpack_enabled() && self::is_jetpack_xmlrpc_request() ? $enabled : false,
-			PHP_INT_MAX,
+			\PHP_INT_MAX,
 		);
 
 		// Remove all XML-RPC methods for non-Jetpack requests.
 		add_filter(
 			'xmlrpc_methods',
 			fn( $methods ) => self::is_jetpack_enabled() && self::is_jetpack_xmlrpc_request() ? $methods : [],
-			PHP_INT_MAX,
+			\PHP_INT_MAX,
 		);
 	}
 
@@ -101,10 +103,10 @@ final class Disable_XMLRPC implements Feature {
 						'jetpack_ips',
 						$jetpack_ips,
 						'alleyvate_disable_xmlrpc',
-						is_array( $jetpack_ips ) ? WEEK_IN_SECONDS : HOUR_IN_SECONDS // phpcs:ignore WordPressVIPMinimum.Performance.LowExpiryCacheTime.CacheTimeUndetermined
+						\is_array( $jetpack_ips ) ? WEEK_IN_SECONDS : HOUR_IN_SECONDS // phpcs:ignore WordPressVIPMinimum.Performance.LowExpiryCacheTime.CacheTimeUndetermined
 					);
 
-					return ( is_array( $jetpack_ips ) && ! empty( $jetpack_ips ) ) ? $jetpack_ips : [];
+					return ( \is_array( $jetpack_ips ) && ! empty( $jetpack_ips ) ) ? $jetpack_ips : [];
 				}
 			} else {
 				// cache the "bad result" for a short time to avoid hammering the jetpack endpoint.
