@@ -45,7 +45,7 @@ final class Disable_XMLRPC implements Feature {
 	 * @return bool
 	 */
 	public static function is_jetpack_enabled(): bool {
-		return defined( 'JETPACK__VERSION' );
+		return \defined( 'JETPACK__VERSION' );
 	}
 
 	/**
