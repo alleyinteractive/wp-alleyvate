@@ -1,6 +1,6 @@
 <?php
 /**
- * Trait file for Remove_Meta_Box
+ * Trait file for RemoveMetaBox
  *
  * (c) Alley <info@alley.com>
  *
@@ -22,7 +22,7 @@ use Mantle\Testing\Concerns\Admin_Screen;
 /**
  * Test the removal of a meta box.
  */
-trait Remove_Meta_Box {
+trait RemoveMetaBox {
 	use Admin_Screen;
 
 	/**

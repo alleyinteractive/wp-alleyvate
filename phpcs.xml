@@ -41,6 +41,11 @@
         <exclude-pattern>tests/</exclude-pattern>
     </rule>
 
+    <!-- Allow PSR-4 in all test files -->
+    <rule ref="WordPress.Files.FileName.NotHyphenatedLowercase">
+        <exclude-pattern>tests/</exclude-pattern>
+    </rule>
+
     <!-- In effect, set the minimum supported version of WordPress to the latest version. -->
     <config name="minimum_supported_wp_version" value="99.0"/>
 </ruleset>

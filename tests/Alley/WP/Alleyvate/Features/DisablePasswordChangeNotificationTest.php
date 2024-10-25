@@ -20,7 +20,7 @@ use Mantle\Testkit\Test_Case;
 /**
  * Tests for disabling the password change notification.
  */
-final class Test_Disable_Password_Change_Notification extends Test_Case {
+final class DisablePasswordChangeNotificationTest extends Test_Case {
 	use Refresh_Database;
 
 	/**

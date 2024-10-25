@@ -2,6 +2,18 @@
 
 This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a CHANGELOG](https://keepachangelog.com/en/1.0.0/).
 
+## 3.4.0
+
+### Changed
+
+* The `disable_attachment_routing` feature now also disables the automatic redirect from an attachment to its corresponding file URL.
+
+## 3.3.0
+
+### Added
+
+* `disable_site_health_directories`: Added a feature to disable the site health check for information about the WordPress directories and their sizes.
+
 ## 3.2.0
 
 ### Added
