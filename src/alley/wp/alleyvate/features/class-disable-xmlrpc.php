@@ -27,14 +27,14 @@ final class Disable_XMLRPC implements Feature {
 		// Disable XML-RPC for non-Jetpack requests.
 		add_filter(
 			'xmlrpc_enabled',
-			fn( $enabled ) => \Alley\WP\Alleyvate\Features\Disable_XMLRPC::is_jetpack_enabled() && \Alley\WP\Alleyvate\Features\Disable_XMLRPC::is_jetpack_xmlrpc_request() ? $enabled : false, // phpcs:ignore Squiz.Classes.SelfMemberReference.NotUsed
+			fn( $enabled ) => self::is_jetpack_enabled() && self::is_jetpack_xmlrpc_request() ? $enabled : false,
 			PHP_INT_MAX,
 		);
 
 		// Remove all XML-RPC methods for non-Jetpack requests.
 		add_filter(
 			'xmlrpc_methods',
-			fn( $methods ) => \Alley\WP\Alleyvate\Features\Disable_XMLRPC::is_jetpack_enabled() && \Alley\WP\Alleyvate\Features\Disable_XMLRPC::is_jetpack_xmlrpc_request() ? $methods : [], // phpcs:ignore Squiz.Classes.SelfMemberReference.NotUsed
+			fn( $methods ) => self::is_jetpack_enabled() && self::is_jetpack_xmlrpc_request() ? $methods : [],
 			PHP_INT_MAX,
 		);
 	}
