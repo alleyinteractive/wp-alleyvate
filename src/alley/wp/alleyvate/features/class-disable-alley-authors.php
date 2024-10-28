@@ -21,6 +21,32 @@ use Alley\WP\Types\Feature;
  *  - Filtering Alley account usernames to display as "Staff" on the frontend.
  */
 final class Disable_Alley_Authors implements Feature {
+
+	/**
+	 * Add an early hook to decide if this feature should load or not, based on the environment.
+	 */
+	public function __construct() {
+		add_filter( 'alleyvate_load_disable_alley_authors_in_environment', [ self::class, 'restrict_to_environment' ], 999, 2 );
+	}
+
+	/**
+	 * Accepts whether or not the feature should load, as well as the current environment,
+	 * to allow for disabling this feature on certain environments.
+	 *
+	 * @param bool   $load        Whether or not to load the feature.
+	 * @param string $environment The loaded environment.
+	 * @return bool
+	 */
+	public static function restrict_to_environment( $load, $environment ): bool {
+		if ( ! $load ) {
+			return $load;
+		}
+
+		$allowed_environments = apply_filters( 'alleyvate_disable_alley_authors_environments', [ 'production' ] );
+
+		return in_array( $environment, $allowed_environments, true );
+	}
+
 	/**
 	 * Boot the feature.
 	 */

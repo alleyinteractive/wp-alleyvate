@@ -246,18 +246,30 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 	}
 
 	/**
-	 * Only apply this behavior to production by default, but allow the list of environments to
-	 * be filtered using values from wp_get_environment_type.
-	 */
-	public function test_only_filter_production_by_default() {
-		$this->markTestIncomplete();
-	}
-
-	/**
 	 * The environment list should be filterable, with production being the default.
 	 */
 	public function test_environment_list_is_filterable() {
-		$this->markTestIncomplete();
+		// Temporarily enable feature loading, but disable for all environments.
+		remove_filter( 'alleyvate_load_feature', '__return_false' );
+
+		// Allow this feature for our test environment.
+		$filter = fn() => [ 'development' ];
+		add_filter( 'alleyvate_disable_alley_authors_environments', $filter );
+
+		$feature = new Feature( 'disable_alley_authors', $this->feature );
+		$feature->filtered_boot();
+
+		$debug_information = $feature->add_debug_information( [] );
+
+		/*
+		 * We can use the debug information to confirm that our feature
+		 * was actually enabled during this process.
+		 */
+		$this->assertSame( 'Enabled', $debug_information['wp-alleyvate']['fields'][0]['value'] );
+
+		// Clean up.
+		remove_filter( 'alleyvate_disable_alley_authors_environments', $filter );
+		add_filter( 'alleyvate_load_feature', '__return_false' );
 	}
 
 	/**
