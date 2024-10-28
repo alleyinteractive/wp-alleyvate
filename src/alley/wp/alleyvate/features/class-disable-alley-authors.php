@@ -13,9 +13,6 @@
 namespace Alley\WP\Alleyvate\Features;
 
 use Alley\WP\Types\Feature;
-use WP_Query;
-use WP_User;
-use WP_User_Query;
 
 /**
  * Removes the impact of Alley accounts on the frontend of client websites by:
@@ -28,6 +25,32 @@ final class Disable_Alley_Authors implements Feature {
 	 * Boot the feature.
 	 */
 	public function boot(): void {
+		add_action( 'template_include', [ self::class, 'disable_staff_archives' ] );
+	}
+
+	/**
+	 * Disable author archives for Alley--and other "general staff"--accounts.
+	 *
+	 * @param string $template The template currently being included.
+	 * @return string The template to ultimately include.
+	 */
+	public static function disable_staff_archives( string $template ): string {
+		global $wp_query;
+		// If this isn't an author archive, skip it.
+		if ( ! is_author() ) {
+			return $template;
+		}
+
+		$author = $wp_query->get_queried_object();
+
+		if ( ! self::is_staff_author( $author->user_email ) ) {
+			return $template;
+		}
+
+		$wp_query->set_404();
+		status_header( 404 );
+		nocache_headers();
+		return get_404_template();
 	}
 
 	/**

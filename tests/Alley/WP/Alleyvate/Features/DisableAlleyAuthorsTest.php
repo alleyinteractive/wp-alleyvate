@@ -47,7 +47,30 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 	 * not have author archive pages (they should 404)
 	 */
 	public function test_ensure_alley_users_do_not_have_author_archive_pages() {
-		$this->markTestIncomplete();
+		$this->feature->boot();
+
+		$alley_author = $this->factory()->user->as_models()->create_and_get(
+			[
+				'user_email' => 'user@alley.com',
+				'role'       => 'administrator',
+			]
+		);
+
+		$non_alley_editor = $this->factory()->user->as_models()->create_and_get(
+			[
+				'user_email' => 'user@example.com',
+				'role'       => 'editor',
+			]
+		);
+
+		$this->factory()->post->create( [ 'post_author' => $alley_author->ID ] );
+		$this->factory()->post->create( [ 'post_author' => $non_alley_editor->ID ] );
+
+		$this->get( $alley_author->permalink() )
+			->assertStatus( 404 );
+
+		$this->get( $non_alley_editor->permalink() )
+			->assertOk();
 	}
 
 	/**
