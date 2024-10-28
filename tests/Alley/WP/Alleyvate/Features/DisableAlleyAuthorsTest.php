@@ -269,7 +269,16 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 
 		// Temporarily enable feature loading, but disable for all environments.
 		remove_filter( 'alleyvate_load_feature', '__return_false' );
-		add_filter( 'alleyvate_load_in_environment', '__return_false' );
+
+		$filter = function ( $load, $environment ): bool {
+			if ( 'production' === $environment ) {
+				return true;
+			}
+
+			return false;
+		};
+
+		add_filter( 'alleyvate_load_in_environment', $filter, 10, 2 );
 
 		/**
 		 * A test dummy feature that increments a counter whenever booted.
@@ -304,8 +313,18 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 
 		$this->assertSame( 0, $dummy->getCounter() );
 
+		// Remove test filter.
+		remove_filter( 'alleyvate_load_in_environment', $filter );
+
+		// Force feature to load.
+		add_filter( 'alleyvate_load_in_environment', '__return_true' );
+
+		$feature->filtered_boot();
+
+		$this->assertSame( 1, $dummy->getCounter() );
+
 		// Remove customizations of filters.
-		remove_filter( 'alleyvate_load_in_environment', '__return_false' );
+		remove_filter( 'alleyvate_load_in_environment', '__return_true' );
 		add_filter( 'alleyvate_load_feature', '__return_false' );
 	}
 }
