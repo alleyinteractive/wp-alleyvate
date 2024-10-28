@@ -14,6 +14,8 @@ declare( strict_types=1 );
 
 namespace Alley\WP\Alleyvate\Features;
 
+use Alley\WP\Alleyvate\Feature;
+
 use Mantle\Database\Model\User;
 use Mantle\Testkit\Test_Case;
 use Mantle\Testing\Concerns\Refresh_Database;
@@ -264,6 +266,46 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 	 * of a feature being enabled on all environments) so this can be filtered a high level.
 	 */
 	public function test_high_level_enable_disable_filter_exists_to_allow_enabling_feature_by_environment() {
-		$this->markTestIncomplete();
+
+		// Temporarily enable feature loading, but disable for all environments.
+		remove_filter( 'alleyvate_load_feature', '__return_false' );
+		add_filter( 'alleyvate_load_in_environment', '__return_false' );
+
+		/**
+		 * A test dummy feature that increments a counter whenever booted.
+		 */
+		$dummy = new class() implements \Alley\WP\Types\Feature {
+			/**
+			 * Counter to count how many times the boot method is run.
+			 *
+			 * @var int
+			 */
+			public static $counter = 0;
+
+			/**
+			 * Boot of test dummy feature.
+			 */
+			public function boot(): void {
+				self::$counter++;
+			}
+
+			/**
+			 * Get the counter.
+			 *
+			 * @return int
+			 */
+			public function getCounter(): int {
+				return self::$counter;
+			}
+		};
+
+		$feature = new Feature( 'example_feature', $dummy );
+		$feature->filtered_boot();
+
+		$this->assertSame( 0, $dummy->getCounter() );
+
+		// Remove customizations of filters.
+		remove_filter( 'alleyvate_load_in_environment', '__return_false' );
+		add_filter( 'alleyvate_load_feature', '__return_false' );
 	}
 }
