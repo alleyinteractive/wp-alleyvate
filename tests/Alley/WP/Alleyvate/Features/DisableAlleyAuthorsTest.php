@@ -278,7 +278,7 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 			return false;
 		};
 
-		add_filter( 'alleyvate_load_in_environment', $filter, 10, 2 );
+		add_filter( 'alleyvate_load_example_feature_in_environment', $filter, 10, 2 );
 
 		/**
 		 * A test dummy feature that increments a counter whenever booted.
@@ -314,17 +314,17 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 		$this->assertSame( 0, $dummy->getCounter() );
 
 		// Remove test filter.
-		remove_filter( 'alleyvate_load_in_environment', $filter );
+		remove_filter( 'alleyvate_load_example_feature_in_environment', $filter );
 
 		// Force feature to load.
-		add_filter( 'alleyvate_load_in_environment', '__return_true' );
+		add_filter( 'alleyvate_load_example_feature_in_environment', '__return_true' );
 
 		$feature->filtered_boot();
 
 		$this->assertSame( 1, $dummy->getCounter() );
 
 		// Remove customizations of filters.
-		remove_filter( 'alleyvate_load_in_environment', '__return_true' );
+		remove_filter( 'alleyvate_load_example_feature_in_environment', '__return_true' );
 		add_filter( 'alleyvate_load_feature', '__return_false' );
 	}
 }
