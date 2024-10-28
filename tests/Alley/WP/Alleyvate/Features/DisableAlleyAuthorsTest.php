@@ -120,10 +120,39 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 
 	/**
 	 * Filter author names for traditional authors data so filtered users don't appear as
-	 * their actual names, but rather a generic "Staff" name
+	 * their actual names, but rather a generic "Staff" name.
+	 *
+	 * @test
 	 */
 	public function test_alley_author_names_appear_as_generic_staff_name() {
-		$this->markTestIncomplete();
+		$this->feature->boot();
+
+		$post = $this->factory()->post
+								->as_models()
+								->create_and_get( [ 'post_author' => $this->alley_account->ID ] );
+
+		$this->get( $post->permalink() )
+			->assertOk()
+			->assertDontSee( '>' . $this->alley_account->name . '<' )
+			->assertSee( '>Staff<' );
+	}
+
+	/**
+	 * Filter author URLs for traditional authors data so filtered users don't get author
+	 * links.
+	 *
+	 * @test
+	 */
+	public function test_alley_author_urls_do_not_render() {
+		$this->feature->boot();
+
+		$post = $this->factory()->post
+								->as_models()
+								->create_and_get( [ 'post_author' => $this->alley_account->ID ] );
+
+		$this->get( $post->permalink() )
+			->assertOk()
+			->assertDontSee( '/author/' . $this->alley_account->slug );
 	}
 
 	/**

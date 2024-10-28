@@ -25,7 +25,47 @@ final class Disable_Alley_Authors implements Feature {
 	 * Boot the feature.
 	 */
 	public function boot(): void {
-		add_action( 'template_include', [ self::class, 'disable_staff_archives' ] );
+		add_action( 'template_include', [ self::class, 'disable_staff_archives' ], 999 );
+		add_filter( 'get_the_author_display_name', [ self::class, 'filter__get_the_author_display_name' ], 999, 2 );
+		add_filter( 'author_link', [ self::class, 'filter__author_link' ], 999, 2 );
+	}
+
+	/**
+	 * Filters the author archive URL.
+	 *
+	 * @param string $link      The author link.
+	 * @param int    $author_id The author ID.
+	 * @return string
+	 */
+	public static function filter__author_link( $link, $author_id ): string {
+		if ( ! is_singular() ) {
+			return $link;
+		}
+
+		$author = get_user_by( 'ID', $author_id );
+		if ( ! self::is_staff_author( $author->user_email ) ) {
+			return $link;
+		}
+
+		return get_home_url();
+	}
+
+	/**
+	 * Action fired once the post data has been set up. Passes the post and query by
+	 * reference, so we can filter the objects directly.
+	 *
+	 * @param string $display_name The current post we are filtering.
+	 * @param int    $author_id    The author ID.
+	 * @return string
+	 */
+	public static function filter__get_the_author_display_name( $display_name, $author_id ): string {
+		$author = get_user_by( 'ID', $author_id );
+
+		if ( ! self::is_staff_author( $author->user_email ) ) {
+			return $display_name;
+		}
+
+		return __( 'Staff', 'alley' );
 	}
 
 	/**
@@ -46,7 +86,6 @@ final class Disable_Alley_Authors implements Feature {
 		if ( ! self::is_staff_author( $author->user_email ) ) {
 			return $template;
 		}
-
 		$wp_query->set_404();
 		status_header( 404 );
 		nocache_headers();
@@ -71,6 +110,7 @@ final class Disable_Alley_Authors implements Feature {
 			[
 				'alley.com',
 				'alley.co',
+				'local.test',
 			]
 		);
 
