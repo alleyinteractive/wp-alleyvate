@@ -16,7 +16,7 @@ namespace Alley\WP\Alleyvate\Features;
 
 use Mantle\Testkit\Test_Case;
 use Mantle\Testing\Concerns\Refresh_Database;
-use WP_User;
+use PHPUnit\Framework\Attributes\TestWithJson;
 
 use function Mantle\Support\Helpers\collect;
 
@@ -43,79 +43,104 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 	}
 
 	/**
-	 * Ensure Alley users (as identified by an email address at one of Alley's domains) do not have author archive pages (they should 404)
+	 * Ensure Alley users (as identified by an email address at one of Alley's domains) do
+	 * not have author archive pages (they should 404)
 	 */
 	public function test_ensure_alley_users_do_not_have_author_archive_pages() {
 		$this->markTestIncomplete();
 	}
 
 	/**
-	 * Ensure Byline Manager and Co-Authors Plus profiles linked to Alley users do not have author archives
+	 * Ensure Byline Manager and Co-Authors Plus profiles linked to Alley users do not have
+	 * author archives
 	 */
 	public function test_ensure_byline_manager_profiles_linked_to_alley_users_do_not_have_author_archive() {
 		$this->markTestIncomplete();
 	}
 
 	/**
-	 * Filter author names for traditional authors, Byline Manager, and Co-Authors Plus so that Alley users don't appear as their actual names, but rather a generic "Staff" name
+	 * Filter author names for traditional authors, Byline Manager, and Co-Authors Plus so
+	 * that Alley users don't appear as their actual names, but rather a generic "Staff" name
 	 */
 	public function test_alley_author_names_appear_as_generic_staff_name() {
 		$this->markTestIncomplete();
 	}
 
 	/**
+	 * Data Provider for testing emails.
+	 *
+	 * @return array;
+	 */
+	public static function emailProvider(): array {
+		return [
+			[ 'user1@alley.com', true ],
+			[ 'user1@alley.co', true ],
+			[ 'user1@example.com', false ],
+			[ 'user1@example.co', false ],
+			[ 'alley.com@example.co', false ],
+			[ 'alley.co@example.co', false ],
+		];
+	}
+
+	/**
 	 * Generate a list of user accounts by email domain, defaulting to include Alley domains.
 	 *
+	 * @param string $email           The email address to test.
+	 * @param bool   $expected_result Whether or not the comparison should work.
 	 * @test
+	 * @dataProvider emailProvider
 	 */
-	public function test_user_array_generated_by_email_domain() {
-		// Generate test accounts.
-		$alley_emails = [
-			'user1@alley.com',
-			'user2@alley.com',
-			'user3@alley.co',
-			'user4@alley.co',
-		];
-
-		$non_alley_emails = [
-			'user1@example.com',
-			'user2@example.com',
-			'user3@example.co',
-			'user4@example.co',
-		];
-
-		foreach ( array_merge( $alley_emails, $non_alley_emails ) as $email ) {
-			$this->factory()->user->create( [ 'user_email' => $email ] );
-		}
-
-		$alley_authors = collect( Disable_Alley_Authors::get_staff_authors() );
-
-		// Verify the correct number of accounts was found.
-		$this->assertCount(
-			4,
-			$alley_authors,
-			'Incorrect number of accounts found.'
-		);
-
-		// Verify that the correct emails were found.
-		$this->assertCount(
-			4,
-			$alley_authors
-				->map( fn( $user ) => ( is_object( $user ) && isset( $user->user_email ) ) ? $user->user_email : $user )
-				->filter( fn( $email ) => in_array( $email, $alley_emails, true ) ),
-			'Not all filterable accounts located, or incorrect data returned.'
+	public function test_user_array_generated_by_email_domain( string $email, bool $expected_result ) {
+		$this->assertSame(
+			$expected_result,
+			Disable_Alley_Authors::is_staff_author( $email ),
+			sprintf(
+				'Email %s was expected to be %s but returned %s.',
+				$email,
+				( $expected_result ) ? 'true' : 'false',
+				( ! $expected_result ) ? 'true' : 'false',
+			),
 		);
 	}
 
 	/**
-	 * Allow the list of domains for this feature to be filtered
+	 * Allow the list of domains for this feature to be filtered. To test this, we take our
+	 * list of test emails and invert the expected results.
+	 *
+	 * @param string $email           The email address to test.
+	 * @param bool   $expected_result Whether or not the comparison should work.
+	 * @test
+	 * @dataProvider emailProvider
 	 */
-	public function test_email_domains_is_filterable() {
-		$this->markTestIncomplete();
+	public function test_email_domains_is_filterable( string $email, bool $expected_result ) {
+		// Define the set of domains to be non-alley domains.
+		$filter = fn() => [ 'example.com', 'example.co' ];
+		add_filter( 'alleyvate_staff_author_domains', $filter );
+
+		/*
+		 * The filter above should provide us with the exact opposite results as defined
+		 * in the dataProvider so we invert that expectation here.
+		 */
+		$expected_result = ! $expected_result;
+
+		// Now that we've inverted expectations, compare against reality.
+		$this->assertSame(
+			$expected_result,
+			Disable_Alley_Authors::is_staff_author( $email ),
+			sprintf(
+				'Email %s was expected to be %s but returned %s.',
+				$email,
+				( $expected_result ) ? 'true' : 'false',
+				( ! $expected_result ) ? 'true' : 'false',
+			),
+		);
+
+		remove_filter( 'alleyvate_staff_author_domains', $filter );
 	}
 
 	/**
-	 * Only apply this behavior to production by default, but allow the list of environments to be filtered using values from wp_get_environment_type.
+	 * Only apply this behavior to production by default, but allow the list of environments to
+	 * be filtered using values from wp_get_environment_type.
 	 */
 	public function test_only_filter_production_by_default() {
 		$this->markTestIncomplete();
@@ -129,7 +154,9 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 	}
 
 	/**
-	 * Add a filter to conditionally enable/disable features by environment, which passes the feature and the environment name, using defaults from the feature (with the typical case of a feature being enabled on all environments) so this can be filtered a high level.
+	 * Add a filter to conditionally enable/disable features by environment, which passes the
+	 * feature and the environment name, using defaults from the feature (with the typical case
+	 * of a feature being enabled on all environments) so this can be filtered a high level.
 	 */
 	public function test_high_level_enable_disable_filter_exists_to_allow_enabling_feature_by_environment() {
 		$this->markTestIncomplete();
