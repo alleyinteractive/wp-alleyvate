@@ -46,6 +46,20 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 	private User $non_alley_account;
 
 	/**
+	 * Determine if Byline Manager is installed and available.
+	 *
+	 * @var bool
+	 */
+	private bool $byline_manager_installed;
+
+	/**
+	 * Determine if Co-Authors Plus is installed and available.
+	 *
+	 * @var bool
+	 */
+	private bool $co_authors_plus_installed;
+
+	/**
 	 * Set up the test.
 	 */
 	protected function setUp(): void {
@@ -66,6 +80,9 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 				'role'       => 'editor',
 			]
 		);
+
+		$this->byline_manager_installed  = class_exists( 'Byline_Manager\Core_Author_Block' );
+		$this->co_authors_plus_installed = class_exists( 'CoAuthors_Plus' );
 	}
 
 	/**
