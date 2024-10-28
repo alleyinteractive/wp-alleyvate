@@ -14,11 +14,9 @@ declare( strict_types=1 );
 
 namespace Alley\WP\Alleyvate\Features;
 
+use Mantle\Database\Model\User;
 use Mantle\Testkit\Test_Case;
 use Mantle\Testing\Concerns\Refresh_Database;
-use PHPUnit\Framework\Attributes\TestWithJson;
-
-use function Mantle\Support\Helpers\collect;
 
 /**
  * Tests for confirming Alley usernames authors do not appear on the frontend as authors.
@@ -34,12 +32,40 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 	private Disable_Alley_Authors $feature;
 
 	/**
+	 * Alley User test account.
+	 *
+	 * @var Mantle\Database\Model\User
+	 */
+	private User $alley_account;
+
+	/**
+	 * Non-Alley User test account.
+	 *
+	 * @var Mantle\Database\Model\User
+	 */
+	private User $non_alley_account;
+
+	/**
 	 * Set up the test.
 	 */
 	protected function setUp(): void {
 		parent::setUp();
 
 		$this->feature = new Disable_Alley_Authors();
+
+		$this->alley_account = $this->factory()->user->as_models()->create_and_get(
+			[
+				'user_email' => 'user@alley.com',
+				'role'       => 'administrator',
+			]
+		);
+
+		$this->non_alley_account = $this->factory()->user->as_models()->create_and_get(
+			[
+				'user_email' => 'user@example.com',
+				'role'       => 'editor',
+			]
+		);
 	}
 
 	/**
@@ -49,27 +75,13 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 	public function test_ensure_alley_users_do_not_have_author_archive_pages() {
 		$this->feature->boot();
 
-		$alley_author = $this->factory()->user->as_models()->create_and_get(
-			[
-				'user_email' => 'user@alley.com',
-				'role'       => 'administrator',
-			]
-		);
+		$this->factory()->post->create( [ 'post_author' => $this->alley_account->ID ] );
+		$this->factory()->post->create( [ 'post_author' => $this->non_alley_account->ID ] );
 
-		$non_alley_editor = $this->factory()->user->as_models()->create_and_get(
-			[
-				'user_email' => 'user@example.com',
-				'role'       => 'editor',
-			]
-		);
-
-		$this->factory()->post->create( [ 'post_author' => $alley_author->ID ] );
-		$this->factory()->post->create( [ 'post_author' => $non_alley_editor->ID ] );
-
-		$this->get( $alley_author->permalink() )
+		$this->get( $this->alley_account->permalink() )
 			->assertStatus( 404 );
 
-		$this->get( $non_alley_editor->permalink() )
+		$this->get( $this->non_alley_account->permalink() )
 			->assertOk();
 	}
 
