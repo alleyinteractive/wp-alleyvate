@@ -71,6 +71,8 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 	/**
 	 * Ensure Alley users (as identified by an email address at one of Alley's domains) do
 	 * not have author archive pages (they should 404)
+	 *
+	 * @test
 	 */
 	public function test_ensure_alley_users_do_not_have_author_archive_pages() {
 		$this->feature->boot();
@@ -86,18 +88,40 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 	}
 
 	/**
-	 * Ensure Byline Manager and Co-Authors Plus profiles linked to Alley users do not have
-	 * author archives
+	 * Ensure Co-Authors Plus profiles linked to Alley users do not have author archives
+	 */
+	public function test_ensure_co_authors_plus_profiles_linked_to_alley_users_do_not_have_author_archive() {
+		$this->markTestIncomplete();
+	}
+
+	/**
+	 * Ensure Byline Manager profiles linked to Alley users do not have author archives
 	 */
 	public function test_ensure_byline_manager_profiles_linked_to_alley_users_do_not_have_author_archive() {
 		$this->markTestIncomplete();
 	}
 
 	/**
-	 * Filter author names for traditional authors, Byline Manager, and Co-Authors Plus so
-	 * that Alley users don't appear as their actual names, but rather a generic "Staff" name
+	 * Filter author names for traditional authors data so filtered users don't appear as
+	 * their actual names, but rather a generic "Staff" name
 	 */
 	public function test_alley_author_names_appear_as_generic_staff_name() {
+		$this->markTestIncomplete();
+	}
+
+	/**
+	 * Filter author names for Co-Authors Plus so filtered users appear as "Staff" instead of
+	 * their display name.
+	 */
+	public function test_alley_author_names_appear_as_generic_staff_name_in_co_authors_plus() {
+		$this->markTestIncomplete();
+	}
+
+	/**
+	 * Filter author names for Byline Manager so filtered users appear as "Staff" instead of
+	 * their display name.
+	 */
+	public function test_alley_author_names_appear_as_generic_staff_name_in_byline_manager() {
 		$this->markTestIncomplete();
 	}
 
