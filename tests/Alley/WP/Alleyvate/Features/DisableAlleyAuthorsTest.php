@@ -85,6 +85,30 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 
 		$this->byline_manager_installed  = class_exists( 'Byline_Manager\Core_Author_Block' );
 		$this->co_authors_plus_installed = class_exists( 'CoAuthors_Plus' );
+
+		require_once( trailingslashit( \ABSPATH ) . 'wp-admin/includes/plugin.php' );
+
+		if (
+			in_array( 'byline-manager', $this->groups(), true ) &&
+			! $this->byline_manager_installed
+		) {
+			// Enforce Byline Manager plugin activation here.
+			if ( file_exists( \WP_PLUGIN_DIR . '/byline-manager/byline-manager.php' ) ) {
+				\activate_plugin( 'byline-manager/byline-manager.php' );
+				$this->byline_manager_installed = true;
+			}
+		}
+
+		if (
+			in_array( 'coauthors-plus', $this->groups(), true ) &&
+			! $this->co_authors_plus_installed
+		) {
+			// Enforce Byline Manager plugin activation here.
+			if ( file_exists( \WP_PLUGIN_DIR . '/co-authors-plus/co-authors-plus.php' ) ) {
+				\activate_plugin( 'co-authors-plus/co-authors-plus.php' );
+				$this->co_authors_plus_installed = true;
+			}
+		}
 	}
 
 	/**
@@ -108,15 +132,27 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 
 	/**
 	 * Ensure Co-Authors Plus profiles linked to Alley users do not have author archives
+	 *
+	 * @group coauthors-plus
 	 */
 	public function test_ensure_co_authors_plus_profiles_linked_to_alley_users_do_not_have_author_archive() {
+		if ( ! $this->co_authors_plus_installed ) {
+			$this->markTestSkipped( 'Co-Authors Plus is not available.' );
+		}
+
 		$this->markTestIncomplete();
 	}
 
 	/**
 	 * Ensure Byline Manager profiles linked to Alley users do not have author archives
+	 *
+	 * @group byline-manager
 	 */
 	public function test_ensure_byline_manager_profiles_linked_to_alley_users_do_not_have_author_archive() {
+		if ( ! $this->byline_manager_installed ) {
+			$this->markTestSkipped( 'Byline Manager is not available.' );
+		}
+
 		$this->markTestIncomplete();
 	}
 
@@ -160,16 +196,28 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 	/**
 	 * Filter author names for Co-Authors Plus so filtered users appear as "Staff" instead of
 	 * their display name.
+	 *
+	 * @group coauthors-plus
 	 */
 	public function test_alley_author_names_appear_as_generic_staff_name_in_co_authors_plus() {
+		if ( ! $this->co_authors_plus_installed ) {
+			$this->markTestSkipped( 'Co-Authors Plus is not available.' );
+		}
+
 		$this->markTestIncomplete();
 	}
 
 	/**
 	 * Filter author names for Byline Manager so filtered users appear as "Staff" instead of
 	 * their display name.
+	 *
+	 * @group byline-manager
 	 */
 	public function test_alley_author_names_appear_as_generic_staff_name_in_byline_manager() {
+		if ( ! $this->byline_manager_installed ) {
+			$this->markTestSkipped( 'Byline Manager is not available.' );
+		}
+
 		$this->markTestIncomplete();
 	}
 
