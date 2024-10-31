@@ -13,4 +13,12 @@
   <php>
     <env name="WP_ENVIRONMENT_TYPE" value="development" force="true"/>
   </php>
+
+  <groups>
+    <exclude>
+      <!-- Exclude by default. These require additional plugins to run. -->
+      <group>byline-manager</group>
+      <group>coauthors-plus</group>
+    </exclude>
+  </groups>
 </phpunit>
