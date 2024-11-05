@@ -14,6 +14,7 @@ declare( strict_types=1 );
 
 namespace Alley\WP\Alleyvate\Features;
 
+use Mantle\Testing\Utils;
 use Mantle\Testkit\Test_Case;
 
 /**
@@ -37,14 +38,16 @@ final class DisableXMLRPCTest extends Test_Case {
 				   '<methodName>demo.sayHello</methodName>' .
 				   '</methodCall>';
 
-		// Make the XML-RPC request with HTTP_X_FORWARDED_FOR header.
-		$response = wp_remote_post( site_url( '/xmlrpc.php' ), [
-			'headers' => [
-				'Content-Type'         => 'application/xml',
-				'HTTP_X_FORWARDED_FOR' => '192.0.80.5',
-			],
-			'body'    => $request,
-		] );
+		// Use Mantle's command helper to load xmlrpc.php directly via a subprocess, simulating a direct request to the server.
+		$response = Utils::command(
+			[
+				'X_HTTP_FORWARDED_FOR="192.0.80.5"',
+				WP_PHP_BINARY,
+				escapeshellarg( ABSPATH . 'xmlrpc.php' ),
+				// TODO: How do we pass the body in a way that the script can pick up?
+				escapeshellarg( $request )
+			]
+		);
 
 		// Assert that the response is valid.
 		$this->assertNotWPError( $response );
