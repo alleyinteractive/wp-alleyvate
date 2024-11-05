@@ -54,7 +54,7 @@ final class DisableXMLRPCTest extends Test_Case {
 		$this->assertEmpty( apply_filters( 'xmlrpc_methods', [ 'testMethod' ] ) );
 
 		// Fake a request from a Jetpack IP and ensure XMLRPC is allowed for Jetpack origins.
-		define( 'JETPACK__VERSION', 'x.y.z' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound
+		\define( 'JETPACK__VERSION', 'x.y.z' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound
 		$_SERVER['REMOTE_ADDR'] = '192.0.80.5'; // phpcs:ignore WordPressVIPMinimum.Variables.ServerVariables.UserControlledHeaders,WordPressVIPMinimum.Variables.RestrictedVariables.cache_constraints___SERVER__REMOTE_ADDR__
 		$this->fake_request( 'https://jetpack.com/ips-v4.json' )
 			->with_response_code( 200 )
