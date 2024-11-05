@@ -7,6 +7,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
+ * phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+ *
  * @package wp-alleyvate
  */
 
@@ -42,35 +44,22 @@ final class DisableXMLRPCTest extends Test_Case {
 	 * Test that widgets have been removed.
 	 */
 	public function test_disable_xmlrpc(): void {
-		// Get a list of IPs from Jetpack.
+		// XMLRPC should be available normally.
+		$this->assertTrue( apply_filters( 'xmlrpc_enabled', true ) );
+		$this->assertNotEmpty( apply_filters( 'xmlrpc_methods', [ 'testMethod' ] ) );
+
+		// Boot the feature and ensure XMLRPC is turned off.
+		$this->feature->boot();
+		$this->assertFalse( apply_filters( 'xmlrpc_enabled', true ) );
+		$this->assertEmpty( apply_filters( 'xmlrpc_methods', [ 'testMethod' ] ) );
+
+		// Fake a request from a Jetpack IP and ensure XMLRPC is allowed for Jetpack origins.
+		define( 'JETPACK__VERSION', 'x.y.z' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound
+		$_SERVER['REMOTE_ADDR'] = '192.0.80.5'; // phpcs:ignore WordPressVIPMinimum.Variables.ServerVariables.UserControlledHeaders,WordPressVIPMinimum.Variables.RestrictedVariables.cache_constraints___SERVER__REMOTE_ADDR__
 		$this->fake_request( 'https://jetpack.com/ips-v4.json' )
-			 ->with_response_code( 200 )
-			 ->with_body( '["192.0.80.5","192.0.80.6","192.0.80.7"]' );
-
-		// Make XMLRPC Request.
-		// Use the XML-RPC "sayHello" method.
-		$request = '<?xml version="1.0"?>' .
-				   '<methodCall>' .
-				   '<methodName>demo.sayHello</methodName>' .
-				   '</methodCall>';
-
-		// Use Mantle's command helper to load xmlrpc.php directly via a subprocess, simulating a direct request to the server.
-		$response = Utils::command(
-			[
-				'X_HTTP_FORWARDED_FOR="192.0.80.5"',
-				WP_PHP_BINARY,
-				escapeshellarg( ABSPATH . 'xmlrpc.php' ),
-				// TODO: How do we pass the body in a way that the script can pick up?
-				escapeshellarg( $request )
-			]
-		);
-
-		// Assert that the response is valid.
-		$this->assertNotWPError( $response );
-		$this->assertEquals( 200, wp_remote_retrieve_response_code( $response ) );
-
-		// Check that the response body includes the expected output from "sayHello".
-		$responseBody = wp_remote_retrieve_body( $response );
-		$this->assertStringContainsString( 'Hello', $responseBody );
+			->with_response_code( 200 )
+			->with_body( '["192.0.80.5","192.0.80.6","192.0.80.7"]' );
+		$this->assertTrue( apply_filters( 'xmlrpc_enabled', true ) );
+		$this->assertNotEmpty( apply_filters( 'xmlrpc_methods', [ 'testMethod' ] ) );
 	}
 }
