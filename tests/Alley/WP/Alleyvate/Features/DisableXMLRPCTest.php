@@ -22,6 +22,22 @@ use Mantle\Testkit\Test_Case;
 final class DisableXMLRPCTest extends Test_Case {
 
 	/**
+	 * Feature instance.
+	 *
+	 * @var Disable_XMLRPC
+	 */
+	private Disable_XMLRPC $feature;
+
+	/**
+	 * Set up.
+	 */
+	protected function setUp(): void {
+		parent::setUp();
+
+		$this->feature = new Disable_XMLRPC();
+	}
+
+	/**
 	 * Test that widgets have been removed.
 	 */
 	public function test_disable_xmlrpc(): void {
