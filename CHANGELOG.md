@@ -4,7 +4,7 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 
 ## Unreleased
 
-## 4.0.0
+## 3.5.0
 
 ### Added
 
