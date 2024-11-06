@@ -20,7 +20,7 @@ use Mantle\Testing\Utils;
 use Mantle\Testkit\Test_Case;
 
 /**
- * Tests for disabling selected unpopular dashboard widgets.
+ * Tests for disabling XMLRPC requests.
  */
 final class DisableXMLRPCTest extends Test_Case {
 
