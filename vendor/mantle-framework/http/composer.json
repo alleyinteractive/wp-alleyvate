@@ -1,0 +1,42 @@
+{
+    "name": "mantle-framework/http",
+    "description": "The Mantle Framework Http Package",
+    "type": "library",
+    "require": {
+        "php": "^8.1",
+        "mantle-framework/contracts": "^1.0",
+        "mantle-framework/filesystem": "^1.0",
+        "mantle-framework/support": "^1.0",
+        "symfony/http-foundation": "^6.0.20",
+        "symfony/http-kernel": "^6.0.20",
+        "symfony/mime": "^6.2",
+        "symfony/routing": "^6.2",
+        "symfony/var-dumper": "^6.2"
+    },
+    "extra": {
+        "wordpress-autoloader": {
+            "autoload": {
+                "Mantle\\Http": "./"
+            }
+        }
+    },
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Alley",
+            "email": "mantle@alley.com"
+        }
+    ],
+    "autoload": {
+        "files": [
+            "autoload.php"
+        ]
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "suggest": {
+        "illuminate/view": "For assertions in tests that use Blade templating"
+    }
+}

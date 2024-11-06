@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Alley Interactive" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/squizlabs/PHP_CodeSniffer/master/phpcs.xsd">
+  <description>The Alley Interactive PHP coding standard.</description>
+
+  <exclude-pattern>*/node_modules/*</exclude-pattern>
+  <exclude-pattern>*/vendor/*</exclude-pattern>
+  <exclude-pattern>*\.js$</exclude-pattern>
+  <exclude-pattern>*\.css$</exclude-pattern>
+
+  <!-- Use the WordPress ruleset, with some customizations. -->
+  <rule ref="WordPress">
+    <!-- Allow short array syntax. -->
+    <exclude name="Universal.Arrays.DisallowShortArraySyntax" />
+    <!-- Allow short ternary expressions -->
+    <exclude name="Universal.Operators.DisallowShortTernary.Found" />
+    <!-- Allow any name to be used as a function paramater name. -->
+    <exclude name="Universal.NamingConventions.NoReservedKeywordParameterNames" />
+    <!-- Allow post-increment/decrement vs disallowing it. -->
+    <exclude name="Universal.Operators.DisallowStandalonePostIncrementDecrement" />
+    <!-- Allow checking any capability. -->
+    <exclude name="WordPress.WP.Capabilities.Undetermined" />
+    <exclude name="WordPress.WP.Capabilities.Unknown" />
+    <!-- Disable the PEAR-style function call signature. -->
+    <exclude name="PEAR.Functions.FunctionCallSignature" />
+  </rule>
+
+  <!-- Use the VIP Go ruleset. -->
+  <rule ref="WordPress-VIP-Go" />
+
+  <!-- Use the PHPCompatibilityWP rules -->
+  <rule ref="PHPCompatibilityWP" />
+
+  <!-- Check for cross-version support for PHP 8.1 and higher. -->
+  <config name="testVersion" value="8.1-"/>
+
+  <!--
+  Alley specific customizations.
+  -->
+
+  <!-- We prefer short array syntax. -->
+  <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
+  <rule ref="WordPress">
+    <exclude name="Universal.Arrays.DisallowShortArraySyntax.Found"/>
+  </rule>
+
+  <!-- Allow for common global prefixes used in Alley code. -->
+  <rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+    <properties>
+      <property name="prefixes" type="array" value="wp_starter_theme,ai_,_ai" />
+    </properties>
+
+    <!-- In practice, partials should be loaded outside of the global namespace with get_template_part(). -->
+    <exclude-pattern>template-parts/</exclude-pattern>
+    <exclude-pattern>vendor/</exclude-pattern>
+  </rule>
+
+  <!-- Keep common boilerplate code from triggering an error. -->
+  <rule ref="Squiz.Commenting.FileComment.SpacingAfterComment">
+    <!--
+    Downgrade while so many PHP files are empty to start with.
+    The empty file makes it difficult to comply with this rule
+    and the trailing newline rule at the same time.
+    -->
+    <type>warning</type>
+
+    <!--
+    Once your PHP files have been filled in, you might be able
+    to start checking for compliance again with an
+    exclude-pattern like these:
+
+    <exclude-pattern>themes(/vip)?/[^/]+/[^/]+\.php$</exclude-pattern>
+    <exclude-pattern>themes(/vip)?/[^/]+/template-parts/*</exclude-pattern>
+    -->
+  </rule>
+
+  <!-- Encourage having only one class/interface/trait per file. -->
+  <rule ref="Generic.Files.OneObjectStructurePerFile">
+    <!--
+    Increase severity. If it becomes a problem for this sniff to trigger an
+    error, then we might want to provide feedback to the WPCS maintainers.
+    See https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/1111.
+    -->
+    <type>error</type>
+  </rule>
+
+  <!-- Ignore an issue with singleton classes instance methods being flagged. -->
+  <rule ref="Universal.CodeAnalysis.ConstructorDestructorReturn.ReturnValueFound">
+    <exclude-pattern>(class|trait)-(instance|singleton).php</exclude-pattern>
+  </rule>
+
+  <!-- Allow PSR-4 file format for test files -->
+  <rule ref="WordPress.Files.FileName.NotHyphenatedLowercase">
+    <exclude-pattern>tests/*Test.php</exclude-pattern>
+  </rule>
+
+  <!-- Allow PSR-4 file format for test files -->
+  <rule ref="WordPress.Files.FileName.InvalidClassFileName">
+    <exclude-pattern>tests/*Test.php</exclude-pattern>
+  </rule>
+
+  <!--
+  Replace PEAR.Functions.FunctionCallSignature with a sniff that supports
+  arguments on the same line as the function call while still requiring
+  spaces after the opening parenthesis and before the closing parenthesis.
+  -->
+  <rule ref="PSR2.Methods.FunctionCallSignature">
+		<properties>
+			<property name="requiredSpacesAfterOpen" value="1" />
+			<property name="requiredSpacesBeforeClose" value="1" />
+			<property name="allowMultipleArguments" value="true" />
+		</properties>
+	</rule>
+
+  <!-- Allow snakeCase for DOMDocument/DOMElement properties -->
+  <rule ref="WordPress.NamingConventions.ValidVariableName">
+    <properties>
+      <property name="allowed_custom_properties" type="array">
+        <element value="className"/>
+        <element value="childNodes"/>
+        <element value="firstChild"/>
+        <element value="formatOutput"/>
+        <element value="lastChild"/>
+        <element value="nodeName"/>
+        <element value="nodeType"/>
+        <element value="nodeValue"/>
+        <element value="parentNode"/>
+        <element value="preserveWhiteSpace"/>
+        <element value="tagName"/>
+        <element value="textContent"/>
+      </property>
+    </properties>
+  </rule>
+</ruleset>

@@ -1,0 +1,33 @@
+{
+    "name": "mantle-framework/http-client",
+    "description": "The Mantle Framework Http Client Package",
+    "type": "library",
+    "require": {
+        "php": "^8.1",
+        "alleyinteractive/wp-concurrent-remote-requests": "^1.0.2",
+        "mantle-framework/support": "^1.0"
+    },
+    "extra": {
+        "wordpress-autoloader": {
+            "autoload": {
+                "Mantle\\Http_Client": "./"
+            }
+        }
+    },
+    "autoload": {
+        "files": [
+            "autoload.php"
+        ]
+    },
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Alley",
+            "email": "mantle@alley.com"
+        }
+    ],
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev"
+}
