@@ -16,3 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: alleyinteractive/action-release@develop
+        with:
+          skip-build: 'true'
+          skip-npm-install: 'true'
