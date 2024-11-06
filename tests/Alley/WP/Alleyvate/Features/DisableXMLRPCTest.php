@@ -1,6 +1,6 @@
 <?php
 /**
- * Class file for Test_Disable_Dashboard_Widgets
+ * Class file for DisableXMLRPCTest
  *
  * (c) Alley <info@alley.com>
  *
