@@ -4,6 +4,13 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 
 ## Unreleased
 
+## 3.5.0
+
+### Added
+
+* Added build release scripts and GitHub Actions for automated releases (used for this release).
+* Added a feature to disable XML-RPC (and removes all methods) for all requests that come from IPs that are not known Jetpack IPs.
+
 ### Fixed
 
 * `login_nonce`: Fixed issue where loading cached version of login page would store invalid nonce.

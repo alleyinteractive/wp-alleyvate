@@ -112,6 +112,10 @@ This feature disables WordPress sticky posts entirely, including the ability to 
 
 This feature disables WordPress from sending or receiving trackbacks or pingbacks.
 
+### `disable_xmlrpc`
+
+This feature disables XML-RPC (and removes all methods) for all requests made to XML-RPC that come from IPs that are not known Jetpack IPs.
+
 ### `force_two_factor_authentication`
 
 This feature forces users with `edit_posts` permissions to use two factor authentication (2fa) for their accounts.
