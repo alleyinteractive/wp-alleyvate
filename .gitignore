@@ -26,3 +26,5 @@ Thumbs.db
 *.code-workspace
 .idea
 .vscode
+.DS_Store
+.idea
