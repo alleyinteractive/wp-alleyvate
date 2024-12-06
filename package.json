@@ -7,11 +7,6 @@
     "npm": "10"
   },
   "scripts": {
-    "preinstall": "check-node-version --package",
-    "prerelease": "check-node-version --package",
     "release": "npx @alleyinteractive/create-release@latest"
-  },
-  "devDependencies": {
-    "check-node-version": "^4.2.1"
   }
 }

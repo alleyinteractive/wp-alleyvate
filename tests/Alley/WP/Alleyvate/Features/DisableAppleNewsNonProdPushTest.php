@@ -30,6 +30,8 @@ final class DisableAppleNewsNonProdPushTest extends Test_Case {
 	 * Setup before test.
 	 */
 	protected function setUp(): void {
+		parent::setUp();
+
 		$this->feature = new Disable_Apple_News_Non_Prod_Push();
 	}
 

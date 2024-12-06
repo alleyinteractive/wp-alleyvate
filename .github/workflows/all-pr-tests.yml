@@ -39,7 +39,27 @@ jobs:
         with:
           php-version: '${{ matrix.php }}'
           skip-audit: 'true'
-          wordpress-version: '${{ matrix.wordpress }}'
-          wordpress-multisite: '${{ matrix.multisite }}'
           skip-core-test-suite: 'true'
           skip-wordpress-install: 'true'
+          wordpress-multisite: '${{ matrix.multisite }}'
+          wordpress-version: '${{ matrix.wordpress }}'
+  # This required job ensures that all PR checks have passed before merging.
+  all-pr-checks-passed:
+    name: All PR checks passed
+    needs:
+      - pr-tests
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Check job statuses
+        run: |
+          if [[ "${{ contains(needs.*.result, 'failure') }}" == "true" ]]; then
+            echo "One or more jobs failed"
+            exit 1
+          elif [[ "${{ contains(needs.*.result, 'cancelled') }}" == "true" ]]; then
+            echo "One or more jobs were cancelled"
+            exit 1
+          else
+            echo "All jobs passed or were skipped"
+            exit 0
+          fi
