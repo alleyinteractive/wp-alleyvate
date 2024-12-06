@@ -1,0 +1,53 @@
+{
+  "name": "alleyinteractive/wp-type-extensions",
+  "description": "PHP interfaces and implementations for WordPress.",
+  "type": "library",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Alley",
+      "email": "info@alley.com"
+    }
+  ],
+  "config": {
+    "allow-plugins": {
+      "alleyinteractive/composer-wordpress-autoloader": true,
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    },
+    "lock": false
+  },
+  "require": {
+    "php": "^8.1",
+    "alleyinteractive/laminas-validator-extensions": "^2.0",
+    "alleyinteractive/wp-match-blocks": "^3.0",
+    "spatie/once": "^3.1"
+  },
+  "require-dev": {
+    "alleyinteractive/alley-coding-standards": "^1.0.0",
+    "friendsofphp/php-cs-fixer": "^3.8",
+    "mantle-framework/testkit": "^0.9",
+    "szepeviktor/phpstan-wordpress": "^1.1"
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Alley\\": "tests/alley/"
+    }
+  },
+  "extra": {
+    "wordpress-autoloader": {
+      "autoload": {
+        "Alley\\": "src/alley/"
+      },
+      "autoload-dev": {
+        "Alley\\": "tests/alley/"
+      }
+    }
+  },
+  "scripts": {
+    "fixer": "php-cs-fixer -v fix --allow-risky=yes",
+    "phpcbf": "phpcbf",
+    "phpcs": "phpcs",
+    "phpstan": "phpstan --memory-limit=512M",
+    "phpunit": "phpunit"
+  }
+}
