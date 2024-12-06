@@ -62,6 +62,18 @@ final class Feature implements \Alley\WP\Types\Feature {
 		 */
 		$load = apply_filters( "alleyvate_load_{$this->handle}", $load );
 
+		/**
+		 * Filters whether to load the given Alleyvate feature.
+		 *
+		 * The dynamic portion of the hook name, `$this->$this->handle`, refers to the
+		 * machine name for the feature. Filtering in this instance is based on the
+		 * secondary parameter, environment,which should be used to determine whether
+		 * to load or not.
+		 *
+		 * @param bool $load Whether to load the feature. Default true.
+		 */
+		$load = apply_filters( "alleyvate_load_{$this->handle}_in_environment", $load, wp_get_environment_type() );
+
 		if ( $load ) {
 			$this->booted = true;
 			$this->origin->boot();
