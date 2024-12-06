@@ -21,7 +21,7 @@
   "require": {
     "php": "^8.1",
     "alleyinteractive/composer-wordpress-autoloader": "^1.0",
-    "alleyinteractive/wp-type-extensions": "^2.0",
+    "alleyinteractive/wp-type-extensions": "^2.0|^3.0",
     "symfony/http-foundation": "^v6.4.12"
   },
   "require-dev": {
