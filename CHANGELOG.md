@@ -4,6 +4,10 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 
 ## Unreleased
 
+## 3.5.1
+
+* Added support for `alleyinteractive/wp-type-extensions` v3.
+
 ## 3.5.0
 
 ### Added
