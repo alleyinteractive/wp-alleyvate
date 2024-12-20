@@ -15,7 +15,7 @@ namespace Alley\WP\Alleyvate\Features;
 use Alley\WP\Types\Feature;
 
 /**
- * Adds noindex to robots meta tag content for password-protected posts.
+ * Adds noindex to the robots meta tag content for password-protected posts.
  */
 final class Noindex_Password_Protected_Posts implements Feature {
 
@@ -33,11 +33,10 @@ final class Noindex_Password_Protected_Posts implements Feature {
 	 *
 	 * @return array
 	 */
-	function filter_robots_content( array $robots ): array {
+	public function filter_robots_content( array $robots ): array {
 		if ( post_password_required() ) {
 			$robots['noindex'] = true;
 		}
 		return $robots;
 	}
-
 }

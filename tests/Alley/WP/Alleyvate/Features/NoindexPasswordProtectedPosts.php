@@ -18,7 +18,7 @@ use Mantle\Testing\Concerns\Refresh_Database;
 use Mantle\Testkit\Test_Case;
 
 /**
- * Tests for adding noindex to robots meta tag content for password-protected posts.
+ * Tests for adding noindex to the robots meta tag content for password-protected posts.
  */
 final class NoindexPasswordProtectedPostsTest extends Test_Case {
 	use Refresh_Database;
@@ -49,10 +49,10 @@ final class NoindexPasswordProtectedPostsTest extends Test_Case {
 			]
 		);
 
-		$this->get( $post )->assertElementMissing('head/meta[@name="robots" and contains(@content, "noindex")]');
+		$this->get( $post )->assertElementMissing( 'head/meta[@name="robots" and contains(@content, "noindex")]' );
 
 		$this->feature->boot();
 
-		$this->get( $post )->assertElementExists('head/meta[@name="robots" and contains(@content, "noindex")]');
+		$this->get( $post )->assertElementExists( 'head/meta[@name="robots" and contains(@content, "noindex")]' );
 	}
 }
