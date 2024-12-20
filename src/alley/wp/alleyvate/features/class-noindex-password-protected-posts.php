@@ -29,9 +29,9 @@ final class Noindex_Password_Protected_Posts implements Feature {
 	/**
 	 * Filters the robots meta tag content to add a noindex directive.
 	 *
-	 * @param array $robots Associative array of directives.
+	 * @param array<string, boolean> $robots Associative array of directives.
 	 *
-	 * @return array
+	 * @return array<string, boolean>
 	 */
 	public function filter_robots_content( array $robots ): array {
 		if ( post_password_required() ) {
