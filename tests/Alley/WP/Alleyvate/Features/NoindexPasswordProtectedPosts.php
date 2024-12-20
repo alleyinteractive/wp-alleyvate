@@ -31,15 +31,6 @@ final class NoindexPasswordProtectedPostsTest extends Test_Case {
 	private Noindex_Password_Protected_Posts $feature;
 
 	/**
-	 * Set up.
-	 */
-	protected function setUp(): void {
-		parent::setUp();
-
-		$this->feature = new Noindex_Password_Protected_Posts();
-	}
-
-	/**
 	 * Test that the feature adds a noindex directive to password protected posts.
 	 */
 	public function test_boot(): void {
@@ -54,5 +45,14 @@ final class NoindexPasswordProtectedPostsTest extends Test_Case {
 		$this->feature->boot();
 
 		$this->get( $post )->assertElementExists( 'head/meta[@name="robots" and contains(@content, "noindex")]' );
+	}
+
+	/**
+	 * Set up.
+	 */
+	protected function setUp(): void {
+		parent::setUp();
+
+		$this->feature = new Noindex_Password_Protected_Posts();
 	}
 }

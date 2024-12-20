@@ -37,6 +37,7 @@ final class Noindex_Password_Protected_Posts implements Feature {
 		if ( post_password_required() ) {
 			$robots['noindex'] = true;
 		}
+
 		return $robots;
 	}
 }
