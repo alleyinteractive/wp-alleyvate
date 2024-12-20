@@ -44,7 +44,7 @@ final class NoindexPasswordProtectedPostsTest extends Test_Case {
 
 		$this->feature->boot();
 
-		$this->get( $post )->assertElementExists( 'head/meta[@name="robots" and contains(@content, "xnoindex")]' );
+		$this->get( $post )->assertElementExists( 'head/meta[@name="robots" and contains(@content, "noindex")]' );
 	}
 
 	/**
