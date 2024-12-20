@@ -113,6 +113,10 @@ function load(): void {
 			'disable_block_editor_rest_api_preload_paths',
 			new Features\Disable_Block_Editor_Rest_Api_Preload_Paths(),
 		),
+		new Feature(
+			'noindex_password_protected_posts',
+			new Features\Noindex_Password_Protected_Posts(),
+		),
 	);
 
 	$plugin->boot();
