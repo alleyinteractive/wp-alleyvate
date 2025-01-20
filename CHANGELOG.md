@@ -4,6 +4,10 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 
 ## Unreleased
 
+### Added
+
+* `noindex_password_protected_posts`: Added a feature to add noindex to the robots meta tag content for password-protected posts.
+
 ## 3.5.1
 
 * Added support for `alleyinteractive/wp-type-extensions` v3.
