@@ -124,7 +124,7 @@ This feature forces users with `edit_posts` permissions to use two factor authen
 
 This feature adds a nonce to the login form to prevent CSRF attacks.
 
-### `Noindex_Password_Protected_Posts`
+### `noindex_password_protected_posts`
 
 This feature adds noindex to the robots meta tag content for password-protected posts.
 
