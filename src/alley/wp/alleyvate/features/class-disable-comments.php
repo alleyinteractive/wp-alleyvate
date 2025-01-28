@@ -24,6 +24,7 @@ final class Disable_Comments implements Feature {
 	public function boot(): void {
 		add_action( 'add_meta_boxes', [ self::class, 'action__add_meta_boxes' ], 9999 );
 		add_action( 'admin_bar_menu', [ self::class, 'action__admin_bar_menu' ], 9999 );
+		add_action( 'admin_footer', [ self::class, 'action__admin_footer' ], 9999 );
 		add_action( 'admin_init', [ self::class, 'action__admin_init' ], 0 );
 		add_action( 'admin_menu', [ self::class, 'action__admin_menu' ], 9999 );
 		add_action( 'init', [ self::class, 'action__init' ], 9999 );
@@ -52,6 +53,22 @@ final class Disable_Comments implements Feature {
 	 */
 	public static function action__admin_bar_menu( \WP_Admin_Bar $wp_admin_bar ): void {
 		$wp_admin_bar->remove_node( 'comments' );
+	}
+
+	/**
+	 * tktk
+	 */
+	public static function action__admin_footer(): void {
+		echo <<<SCRIPT
+			<script>
+			console.log('LAUREN disable comments');
+			wp.domReady( () => {
+				console.log('LAUREN disable comments');
+				// Unregister the Verse block.
+				wp.blocks.unregisterBlockType( 'core/comments' );
+			} );
+			</script>
+		SCRIPT;
 	}
 
 	/**
