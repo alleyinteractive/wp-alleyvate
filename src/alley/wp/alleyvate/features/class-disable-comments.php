@@ -56,16 +56,17 @@ final class Disable_Comments implements Feature {
 	}
 
 	/**
-	 * tktk
+	 * Removes blocks related to core/comments from the admin block selector.
 	 */
 	public static function action__admin_footer(): void {
 		echo <<<SCRIPT
 			<script>
-			console.log('LAUREN disable comments');
 			wp.domReady( () => {
-				console.log('LAUREN disable comments');
-				// Unregister the Verse block.
+				// Unregister blocks related to core comments.
 				wp.blocks.unregisterBlockType( 'core/comments' );
+				wp.blocks.unregisterBlockType( 'core/post-comments-form' );
+				wp.blocks.unregisterBlockType( 'core/comments-query-loop' );
+				wp.blocks.unregisterBlockType( 'core/latest-comments' );
 			} );
 			</script>
 		SCRIPT;
