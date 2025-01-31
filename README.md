@@ -60,7 +60,7 @@ admin stability. For technical details on how WP core implements preloading, ref
 
 ### `disable_comments`
 
-This feature disables WordPress comments entirely, including the ability to post, view, edit, list, count, modify settings for, or access URLs that are related to comments completely.
+This feature disables WordPress comments entirely, including the ability to post, view, edit, list, count, modify settings for, or access URLs that are related to comments completely. The blocks are also removed from the Gutenburg block editor.
 
 ### `disable_custom_fields_meta_box`
 

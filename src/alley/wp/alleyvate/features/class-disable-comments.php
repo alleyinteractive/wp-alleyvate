@@ -57,6 +57,11 @@ final class Disable_Comments implements Feature {
 
 	/**
 	 * Removes blocks related to core/comments from the admin block selector.
+	 * 
+	 * JavaScript is used to selectively remove blocks from the editor.
+	 * The PHP filter for allowed blocks passes ‘true’ to allow all blocks by default,
+	 * so you can’t get the full list of blocks and selectively remove them.
+	 * Followed this tutorial: https://developer.wordpress.org/news/2024/01/how-to-disable-specific-blocks-in-wordpress/#disable-blocks-with-php
 	 */
 	public static function action__admin_footer(): void {
 		echo <<<SCRIPT
