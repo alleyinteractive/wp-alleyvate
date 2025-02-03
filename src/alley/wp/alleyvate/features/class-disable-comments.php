@@ -66,7 +66,7 @@ final class Disable_Comments implements Feature {
 	public static function action__admin_footer(): void {
 		echo <<<SCRIPT
 			<script>
-			wp.domReady( () => {
+			if (typeof wp?.domReady === 'function') {
 				// Unregister blocks related to core comments.
 				if (typeof wp?.blocks?.unregisterBlockType === 'function') {
 					wp.blocks.unregisterBlockType( 'core/comments' );
@@ -74,7 +74,7 @@ final class Disable_Comments implements Feature {
 					wp.blocks.unregisterBlockType( 'core/comments-query-loop' );
 					wp.blocks.unregisterBlockType( 'core/latest-comments' );
 				}
-			} );
+			}
 			</script>
 		SCRIPT;
 	}
