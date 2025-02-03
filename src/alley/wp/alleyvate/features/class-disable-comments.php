@@ -64,7 +64,7 @@ final class Disable_Comments implements Feature {
 	 * https://developer.wordpress.org/news/2024/01/how-to-disable-specific-blocks-in-wordpress/#disable-blocks-with-php
 	 */
 	public static function action__admin_footer(): void {
-		echo <<<SCRIPT
+		echo(<<<SCRIPT
 			<script>
 			if (typeof wp?.domReady === 'function') {
 				// Unregister blocks related to core comments.
@@ -76,7 +76,7 @@ final class Disable_Comments implements Feature {
 				}
 			}
 			</script>
-		SCRIPT;
+		SCRIPT);
 	}
 
 	/**
