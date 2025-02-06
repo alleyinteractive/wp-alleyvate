@@ -43,17 +43,19 @@ final class Twitter_Embeds implements Feature {
 	 * @return array{string, boolean}[]
 	 */
 	public function add_twitter_oembed_provider( array $providers ): array {
+		/* phpcs:disable WordPress.Arrays.MultipleStatementAlignment */
 		return array_merge(
 			$providers,
 			[
 				'#https?://(www\.)?x\.com/\w{1,15}/status(es)?/.*#i' => [ 'https://publish.twitter.com/oembed', true ],
-				'#https?://(www\.)?x\.com/\w{1,15}$#i' => [ 'https://publish.twitter.com/oembed', true ],
-				'#https?://(www\.)?x\.com/\w{1,15}/likes$#i' => [ 'https://publish.twitter.com/oembed', true ],
-				'#https?://(www\.)?x\.com/\w{1,15}/lists/.*#i' => [ 'https://publish.twitter.com/oembed', true ],
-				'#https?://(www\.)?x\.com/\w{1,15}/timelines/.*#i' => [ 'https://publish.twitter.com/oembed', true ],
-				'#https?://(www\.)?x\.com/i/moments/.*#i' => [ 'https://publish.twitter.com/oembed', true ],
+				'#https?://(www\.)?x\.com/\w{1,15}$#i'               => [ 'https://publish.twitter.com/oembed', true ],
+				'#https?://(www\.)?x\.com/\w{1,15}/likes$#i'         => [ 'https://publish.twitter.com/oembed', true ],
+				'#https?://(www\.)?x\.com/\w{1,15}/lists/.*#i'       => [ 'https://publish.twitter.com/oembed', true ],
+				'#https?://(www\.)?x\.com/\w{1,15}/timelines/.*#i'   => [ 'https://publish.twitter.com/oembed', true ],
+				'#https?://(www\.)?x\.com/i/moments/.*#i'            => [ 'https://publish.twitter.com/oembed', true ],
 			],
 		);
+		/* phpcs:enable WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned */
 	}
 
 	/**
@@ -67,7 +69,7 @@ final class Twitter_Embeds implements Feature {
 	public function filter_twitter_oembed_404s( array $response, array $parsed_args, string $url ): array {
 		if (
 			strpos( $url, 'publish.twitter.com' ) !== false
-		    && 404 === $response['response']['code'] /* @phpstan-ignore offsetAccess.nonOffsetAccessible */
+			&& 404 === $response['response']['code'] /* @phpstan-ignore offsetAccess.nonOffsetAccessible */
 		) {
 			$this->attempts[ $url ] = ( $this->attempts[ $url ] ?? 0 ) + 1;
 
