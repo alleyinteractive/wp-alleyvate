@@ -21,7 +21,9 @@ use WpOrg\Requests\Transport\Fsockopen;
  */
 final class Twitter_Embeds implements Feature {
 	/**
-	 * @var int[] $attempts Array of attempts to catch 404 responses from Twitter.
+	 * Array of attempts to catch 404 responses from Twitter.
+	 *
+	 * @var int[] $attempts
 	 */
 	private array $attempts = [];
 
@@ -31,7 +33,7 @@ final class Twitter_Embeds implements Feature {
 	public function boot(): void {
 		add_filter( 'oembed_providers', [ $this, 'add_twitter_oembed_provider' ] );
 		add_filter( 'http_response', [ $this, 'filter_twitter_oembed_404s' ], 10, 3 );
-		add_filter( 'wp_alleyvate_twitter_embeds_404_backstop', [ $this, 'attempt_404_backstop' ], 10, 4 );
+		add_filter( 'alleyvate_twitter_embeds_404_backstop', [ $this, 'attempt_404_backstop' ], 10, 4 );
 	}
 
 	/**
@@ -41,16 +43,16 @@ final class Twitter_Embeds implements Feature {
 	 * @return array
 	 */
 	public function add_twitter_oembed_provider( array $providers ): array {
-		if ( is_array( $providers ) ) {
+		if ( \is_array( $providers ) ) {
 			return array_merge(
 				$providers,
 				[
 					'#https?://(www\.)?x\.com/\w{1,15}/status(es)?/.*#i' => [ 'https://publish.twitter.com/oembed', true ],
-					'#https?://(www\.)?x\.com/\w{1,15}$#i'               => [ 'https://publish.twitter.com/oembed', true ],
-					'#https?://(www\.)?x\.com/\w{1,15}/likes$#i'         => [ 'https://publish.twitter.com/oembed', true ],
-					'#https?://(www\.)?x\.com/\w{1,15}/lists/.*#i'       => [ 'https://publish.twitter.com/oembed', true ],
-					'#https?://(www\.)?x\.com/\w{1,15}/timelines/.*#i'   => [ 'https://publish.twitter.com/oembed', true ],
-					'#https?://(www\.)?x\.com/i/moments/.*#i'            => [ 'https://publish.twitter.com/oembed', true ],
+					'#https?://(www\.)?x\.com/\w{1,15}$#i' => [ 'https://publish.twitter.com/oembed', true ],
+					'#https?://(www\.)?x\.com/\w{1,15}/likes$#i' => [ 'https://publish.twitter.com/oembed', true ],
+					'#https?://(www\.)?x\.com/\w{1,15}/lists/.*#i' => [ 'https://publish.twitter.com/oembed', true ],
+					'#https?://(www\.)?x\.com/\w{1,15}/timelines/.*#i' => [ 'https://publish.twitter.com/oembed', true ],
+					'#https?://(www\.)?x\.com/i/moments/.*#i' => [ 'https://publish.twitter.com/oembed', true ],
 				],
 			);
 		}
@@ -66,7 +68,7 @@ final class Twitter_Embeds implements Feature {
 	 * @return array
 	 */
 	public function filter_twitter_oembed_404s( array $response, array $parsed_args, string $url ): array {
-		if ( strpos( $url, 'publish.twitter.com' ) !== false && $response['response']['code'] === 404 ) {
+		if ( strpos( $url, 'publish.twitter.com' ) !== false && 404 === $response['response']['code'] ) {
 			$this->attempts[ $url ] = ( $this->attempts[ $url ] ?? 0 ) + 1;
 
 			/**
@@ -78,7 +80,7 @@ final class Twitter_Embeds implements Feature {
 			 * @param string $parsed_args HTTP request arguments.
 			 */
 			return apply_filters(
-				'wp_alleyvate_twitter_embeds_404_backstop',
+				'alleyvate_twitter_embeds_404_backstop',
 				$response,
 				$url,
 				$this->attempts[ $url ],
@@ -98,13 +100,13 @@ final class Twitter_Embeds implements Feature {
 	 * @return array
 	 */
 	public function attempt_404_backstop( array $response, string $url, int $attempts ): array|WP_Error {
-		if ( $attempts === 1 ) {
-			$env_endpoint = function_exists( 'vip_get_env_var' )
+		if ( 1 === $attempts ) {
+			$env_endpoint = \function_exists( 'vip_get_env_var' )
 				? vip_get_env_var( 'TWITTER_OEMBED_BACKSTOP_ENDPOINT' )
 				: getenv( 'TWITTER_OEMBED_BACKSTOP_ENDPOINT' );
 			if ( $env_endpoint ) {
 				// If there's a backstop endpoint defined, use it.
-				$url = str_replace( 'https://publish.twitter.com/oembed', $env_endpoint, $url );
+				$url      = str_replace( 'https://publish.twitter.com/oembed', $env_endpoint, $url );
 				$response = wp_safe_remote_get( $url );
 			} else {
 				// Attempt the request again using the fsockopen transport, which might get a different outcome.

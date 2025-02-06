@@ -20,7 +20,7 @@ use Mantle\Testkit\Test_Case;
 
 use function getenv;
 use function Mantle\Testing\mock_http_sequence;
-use function putenv;
+use function putenv; // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions
 
 /**
  * Tests for Twitter_Embeds feature.
@@ -37,6 +37,8 @@ final class TwitterEmbedsTest extends Test_Case {
 
 	/**
 	 * Set up.
+	 *
+	 * @throws \Exception If the TWITTER_OEMBED_BACKSTOP_ENDPOINT environment variable is set.
 	 */
 	protected function setUp(): void {
 		parent::setUp();
@@ -47,29 +49,18 @@ final class TwitterEmbedsTest extends Test_Case {
 		}
 	}
 
+	/**
+	 * Tear down.
+	 */
 	protected function tearDown(): void {
-		putenv( 'TWITTER_OEMBED_BACKSTOP_ENDPOINT' );
+		putenv( 'TWITTER_OEMBED_BACKSTOP_ENDPOINT' ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions
 
 		parent::tearDown();
 	}
 
-	protected function fake_oembed_request( int $response_code = 404 ) {
-//		$body = '';
-//		if ( 200 === $response_code ) {
-//			$body = '{"url":"https:\/\/twitter.com\/WordPress\/status\/1819377181035745510","author_name":"WordPress","author_url":"https:\/\/twitter.com\/WordPress","html":"\u003Cblockquote class=\"twitter-tweet\" data-width=\"550\" data-dnt=\"true\"\u003E\u003Cp lang=\"en\" dir=\"ltr\"\u003EMeet the brand-new, reimagined Learn WordPress experience and grow your WordPress skills at your own pace. Get more details: \u003Ca href=\"https:\/\/t.co\/6bj2bRr8BW\"\u003Ehttps:\/\/t.co\/6bj2bRr8BW\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/hashtag\/WordPress?src=hash&amp;ref_src=twsrc%5Etfw\"\u003E#WordPress\u003C\/a\u003E \u003Ca href=\"https:\/\/t.co\/24TkZaB6pW\"\u003Epic.twitter.com\/24TkZaB6pW\u003C\/a\u003E\u003C\/p\u003E&mdash; WordPress (@WordPress) \u003Ca href=\"https:\/\/twitter.com\/WordPress\/status\/1819377181035745510?ref_src=twsrc%5Etfw\"\u003EAugust 2, 2024\u003C\/a\u003E\u003C\/blockquote\u003E\n\u003Cscript async src=\"https:\/\/platform.twitter.com\/widgets.js\" charset=\"utf-8\"\u003E\u003C\/script\u003E\n\n","width":550,"height":null,"type":"rich","cache_age":"3153600000","provider_name":"Twitter","provider_url":"https:\/\/twitter.com","version":"1.0"}';
-//		} elseif ( 404 === $response_code ) {
-//			$body = '<!DOCTYPE html>\n<html lang="en" class="dog">\n<head>\n<title>X / ?</title>\n</head>\n<body>\n<h1 id="header">Nothing to see here</h1>\n</body>\n</html>';
-//		}
-//		$this->fake_request( 'https://publish.twitter.com/oembed' )
-//			->with_response_code( $response_code )
-//			->with_body( $body );
-		$this->fake_request( [
-			'https://publish.twitter.com/oembed' => mock_http_sequence()
-				->push_status( 404 )
-				->push_status( 200 )
-		] );
-	}
-
+	/**
+	 * Test that the default backstop executes when a 404 response is received from Twitter.
+	 */
 	public function test_default_backstop() {
 		$this->feature->boot();
 		$url = 'https://publish.twitter.com/oembed?format=json&url=https%3A%2F%2Ftwitter.com%2FWordPress%2Fstatus%2F1819377181035745510';
@@ -77,7 +68,7 @@ final class TwitterEmbedsTest extends Test_Case {
 		// Fire the filter with a 404 response and verify that the default backstop executes.
 		$this->fake_request( $url );
 		apply_filters(
-			'http_response',
+			'http_response', // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals
 			Mock_Http_Response::create()->with_response_code( 404 )->to_array(),
 			[],
 			$url
@@ -85,37 +76,43 @@ final class TwitterEmbedsTest extends Test_Case {
 		$this->assertRequestSent( $url );
 	}
 
+	/**
+	 * Test that the backstop endpoint can be set via an environment variable.
+	 */
 	public function test_backstop_through_env() {
 		$this->feature->boot();
-		putenv( 'TWITTER_OEMBED_BACKSTOP_ENDPOINT=https://example.com' );
+		putenv( 'TWITTER_OEMBED_BACKSTOP_ENDPOINT=https://example.com' ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions
 
-		$url = 'https://example.com?format=json&url=https%3A%2F%2Ftwitter.com%2FWordPress%2Fstatus%2F1819377181035745510';
+		$url    = 'https://example.com?format=json&url=https%3A%2F%2Ftwitter.com%2FWordPress%2Fstatus%2F1819377181035745510';
 		$og_url = 'https://publish.twitter.com/oembed?format=json&url=https%3A%2F%2Ftwitter.com%2FWordPress%2Fstatus%2F1819377181035745510';
 
 		// Fire the filter with a 404 response and verify that the default backstop executes.
 		$this->fake_request( [
-			$url => new Mock_Http_Response(),
+			$url    => new Mock_Http_Response(),
 			$og_url => new Mock_Http_Response(),
 		] );
 		apply_filters(
-			'http_response',
+			'http_response', // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals
 			Mock_Http_Response::create()->with_response_code( 404 )->to_array(),
 			[],
 			$og_url
 		);
-		putenv( 'TWITTER_OEMBED_BACKSTOP_ENDPOINT' );
+		putenv( 'TWITTER_OEMBED_BACKSTOP_ENDPOINT' ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions
 
 		$this->assertRequestSent( $url );
 		$this->assertRequestNotSent( $og_url );
 	}
 
+	/**
+	 * Test that x.com URLs are handled by the Twitter oEmbed provider.
+	 */
 	public function test_oembed_providers() {
 		$body = '{"url":"https:\/\/twitter.com\/WordPress\/status\/1819377181035745510","author_name":"WordPress","author_url":"https:\/\/twitter.com\/WordPress","html":"\u003Cblockquote class=\"twitter-tweet\" data-width=\"550\" data-dnt=\"true\"\u003E\u003Cp lang=\"en\" dir=\"ltr\"\u003EMeet the brand-new, reimagined Learn WordPress experience and grow your WordPress skills at your own pace. Get more details: \u003Ca href=\"https:\/\/t.co\/6bj2bRr8BW\"\u003Ehttps:\/\/t.co\/6bj2bRr8BW\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/hashtag\/WordPress?src=hash&amp;ref_src=twsrc%5Etfw\"\u003E#WordPress\u003C\/a\u003E \u003Ca href=\"https:\/\/t.co\/24TkZaB6pW\"\u003Epic.twitter.com\/24TkZaB6pW\u003C\/a\u003E\u003C\/p\u003E&mdash; WordPress (@WordPress) \u003Ca href=\"https:\/\/twitter.com\/WordPress\/status\/1819377181035745510?ref_src=twsrc%5Etfw\"\u003EAugust 2, 2024\u003C\/a\u003E\u003C\/blockquote\u003E\n\u003Cscript async src=\"https:\/\/platform.twitter.com\/widgets.js\" charset=\"utf-8\"\u003E\u003C\/script\u003E\n\n","width":550,"height":null,"type":"rich","cache_age":"3153600000","provider_name":"Twitter","provider_url":"https:\/\/twitter.com","version":"1.0"}';
 		$this->fake_request( 'https://publish.twitter.com/oembed*' )
 			->with_body( $body );
 		$this->fake_request( 'https://x.com/WordPress/status/1868689630931059186' );
 
-		$this->assertFalse( wp_oembed_get('https://x.com/WordPress/status/1868689630931059186') );
+		$this->assertFalse( wp_oembed_get( 'https://x.com/WordPress/status/1868689630931059186' ) );
 
 		$this->feature->boot();
 
@@ -124,9 +121,9 @@ final class TwitterEmbedsTest extends Test_Case {
 		$wp_oembed = _wp_oembed_get_object();
 		$wp_oembed->__construct();
 
-		$response = wp_oembed_get('https://x.com/WordPress/status/1819377181035745510');
+		$response = wp_oembed_get( 'https://x.com/WordPress/status/1819377181035745510' );
 
-		$this->assertNotFalse($response);
-		$this->assertMatchesSnapshot($response);
+		$this->assertNotFalse( $response );
+		$this->assertMatchesSnapshot( $response );
 	}
 }
