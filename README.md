@@ -161,7 +161,7 @@ Our clients tend to not want information about the registered users on their sit
 
 ### `twitter_embeds`
 
-This feature adds support for `x.com` oEmbeds. Out of the box, only `twitter.com` URLs are supported in WordPress.
+This feature adds full support for `x.com` URLs for oEmbeds. Out of the box, only `twitter.com` URLs are fully supported in WordPress (the block editor, it should be noted, https://github.com/WordPress/gutenberg/blob/a2b6d39d01d023b6c7c48ad6df5002b78a06794d/packages/block-library/src/embed/edit.js#L161-L166).
 
 This feature also adds fallback handling for Twitter's oEmbed API endpoint, which can unpredictably return 404 responses. There are two fallback options:
 

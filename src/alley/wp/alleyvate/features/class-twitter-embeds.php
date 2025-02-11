@@ -10,6 +10,8 @@
  * @package wp-alleyvate
  */
 
+declare( strict_types=1 );
+
 namespace Alley\WP\Alleyvate\Features;
 
 use Alley\WP\Types\Feature;
@@ -61,14 +63,15 @@ final class Twitter_Embeds implements Feature {
 	/**
 	 * Attempt to catch 404 responses from Twitter.
 	 *
-	 * @param array<mixed> $response    HTTP response.
-	 * @param array<mixed> $parsed_args HTTP request arguments.
-	 * @param string       $url         URL of the HTTP request.
-	 * @return array<mixed>
+	 * @param array<mixed>|WP_Error $response    HTTP response.
+	 * @param array<mixed>          $parsed_args HTTP request arguments.
+	 * @param string                $url         URL of the HTTP request.
+	 * @return array<mixed>|WP_Error
 	 */
-	public function filter_twitter_oembed_404s( array $response, array $parsed_args, string $url ): array {
+	public function filter_twitter_oembed_404s( array|WP_Error $response, array $parsed_args, string $url ): array|WP_Error {
 		if (
 			strpos( $url, 'publish.twitter.com' ) !== false
+			&& ! is_wp_error( $response )
 			&& 404 === $response['response']['code'] /* @phpstan-ignore offsetAccess.nonOffsetAccessible */
 		) {
 			$this->attempts[ $url ] = ( $this->attempts[ $url ] ?? 0 ) + 1;
@@ -128,9 +131,8 @@ final class Twitter_Embeds implements Feature {
 	 * @param array<mixed>  $data    HTTP request data. Ignored.
 	 * @param string        $type    HTTP request type. Ignored.
 	 * @param array<mixed>  $options HTTP request options. Passed by reference.
-	 * @return void
 	 */
-	public function attempt_fsockopen_for_twitter_oembeds( &$url, &$headers, &$data, &$type, &$options ) {
+	public function attempt_fsockopen_for_twitter_oembeds( &$url, &$headers, &$data, &$type, &$options ): void {
 		if ( class_exists( Fsockopen::class ) && str_starts_with( $url, 'https://publish.twitter.com/oembed' ) ) {
 			$options['transport'] = Fsockopen::class;
 		}
