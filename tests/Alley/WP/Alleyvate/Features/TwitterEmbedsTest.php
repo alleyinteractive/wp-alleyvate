@@ -61,7 +61,7 @@ final class TwitterEmbedsTest extends Test_Case {
 	/**
 	 * Test that the default backstop executes when a 404 response is received from Twitter.
 	 */
-	public function test_default_backstop() {
+	public function test_default_backstop(): void {
 		$this->feature->boot();
 		$url = 'https://publish.twitter.com/oembed?format=json&url=https%3A%2F%2Ftwitter.com%2FWordPress%2Fstatus%2F1819377181035745510';
 
@@ -79,7 +79,7 @@ final class TwitterEmbedsTest extends Test_Case {
 	/**
 	 * Test that the backstop endpoint can be set via an environment variable.
 	 */
-	public function test_backstop_through_env() {
+	public function test_backstop_through_env(): void {
 		$this->feature->boot();
 		putenv( 'TWITTER_OEMBED_BACKSTOP_ENDPOINT=https://example.com' ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions
 
@@ -106,7 +106,7 @@ final class TwitterEmbedsTest extends Test_Case {
 	/**
 	 * Test that x.com URLs are handled by the Twitter oEmbed provider.
 	 */
-	public function test_oembed_providers() {
+	public function test_oembed_providers(): void {
 		$body = '{"url":"https:\/\/twitter.com\/WordPress\/status\/1819377181035745510","author_name":"WordPress","author_url":"https:\/\/twitter.com\/WordPress","html":"\u003Cblockquote class=\"twitter-tweet\" data-width=\"550\" data-dnt=\"true\"\u003E\u003Cp lang=\"en\" dir=\"ltr\"\u003EMeet the brand-new, reimagined Learn WordPress experience and grow your WordPress skills at your own pace. Get more details: \u003Ca href=\"https:\/\/t.co\/6bj2bRr8BW\"\u003Ehttps:\/\/t.co\/6bj2bRr8BW\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/hashtag\/WordPress?src=hash&amp;ref_src=twsrc%5Etfw\"\u003E#WordPress\u003C\/a\u003E \u003Ca href=\"https:\/\/t.co\/24TkZaB6pW\"\u003Epic.twitter.com\/24TkZaB6pW\u003C\/a\u003E\u003C\/p\u003E&mdash; WordPress (@WordPress) \u003Ca href=\"https:\/\/twitter.com\/WordPress\/status\/1819377181035745510?ref_src=twsrc%5Etfw\"\u003EAugust 2, 2024\u003C\/a\u003E\u003C\/blockquote\u003E\n\u003Cscript async src=\"https:\/\/platform.twitter.com\/widgets.js\" charset=\"utf-8\"\u003E\u003C\/script\u003E\n\n","width":550,"height":null,"type":"rich","cache_age":"3153600000","provider_name":"Twitter","provider_url":"https:\/\/twitter.com","version":"1.0"}';
 		$this->fake_request( 'https://publish.twitter.com/oembed*' )
 			->with_body( $body );
