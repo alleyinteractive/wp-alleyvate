@@ -14,7 +14,7 @@
  * Plugin Name: Alleyvate
  * Plugin URI: https://github.com/alleyinteractive/wp-alleyvate
  * Description: Defaults for WordPress sites by Alley
- * Version: 3.5.2
+ * Version: 3.6.0
  * Author: Alley
  * Author URI: https://www.alley.com
  * Requires at least: 6.2
