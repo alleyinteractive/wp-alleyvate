@@ -53,9 +53,6 @@ final class DisableDeepPaginationTest extends Test_Case {
 	protected function setUp(): void {
 		parent::setUp();
 
-		// Generate 101 posts to use in testing.
-		self::factory()->post->create_ordered_set( 150 );
-
 		// Disable the Admin screen for now.
 		$this->admin_screen_tear_down();
 		unset( $GLOBALS['current_screen'] );
@@ -68,6 +65,16 @@ final class DisableDeepPaginationTest extends Test_Case {
 		add_filter( 'wp_die_json_handler', $this->handler, \PHP_INT_MAX );
 
 		$this->feature = new Disable_Deep_Pagination();
+	}
+
+	/**
+	 * Create posts for testing.
+	 */
+	public static function setUpBeforeClass(): void {
+		parent::setUpBeforeClass();
+
+		// Generate a lot of posts to use in testing.
+		self::factory()->post->create_ordered_set( 150 );
 	}
 
 	/**
