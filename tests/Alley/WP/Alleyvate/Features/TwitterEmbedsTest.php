@@ -18,10 +18,6 @@ use Mantle\Testing\Concerns\Refresh_Database;
 use Mantle\Testing\Mock_Http_Response;
 use Mantle\Testkit\Test_Case;
 
-use function getenv;
-use function Mantle\Testing\mock_http_sequence;
-use function putenv; // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions
-
 /**
  * Tests for Twitter_Embeds feature.
  */
