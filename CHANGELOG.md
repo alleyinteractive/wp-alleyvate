@@ -4,6 +4,12 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 
 ## Unreleased
 
+## 3.6.0
+
+### Added
+
+* Added a feature to improve Twitter/X oEmbed handling.
+
 ## 3.5.2
 
 * Optimize some unit tests that created a lot of posts.
