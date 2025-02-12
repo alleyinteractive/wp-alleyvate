@@ -73,7 +73,7 @@ final class DisableDeepPaginationTest extends Test_Case {
 	public static function setUpBeforeClass(): void {
 		parent::setUpBeforeClass();
 
-		// Generate 101 posts to use in testing.
+		// Generate a lot of posts to use in testing.
 		self::factory()->post->create_ordered_set( 150 );
 	}
 
