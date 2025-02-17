@@ -67,15 +67,15 @@ final class Disable_Comments implements Feature {
 		echo "
 			<script>
 			if (typeof wp?.domReady === 'function') {
-				wp.domReady( () => {
+				wp.domReady(() => {
 					if (typeof wp?.blocks?.unregisterBlockType === 'function') {
 						// Unregister blocks related to core comments.
-						wp.blocks.unregisterBlockType( 'core/comments' );
-						wp.blocks.unregisterBlockType( 'core/post-comments-form' );
-						wp.blocks.unregisterBlockType( 'core/comments-query-loop' );
-						wp.blocks.unregisterBlockType( 'core/latest-comments' );
+						wp.blocks.unregisterBlockType('core/comments');
+						wp.blocks.unregisterBlockType('core/post-comments-form');
+						wp.blocks.unregisterBlockType('core/comments-query-loop');
+						wp.blocks.unregisterBlockType('core/latest-comments');
 					}
-				} );
+				});
 			}
 			</script>";
 	}
