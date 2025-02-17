@@ -159,6 +159,15 @@ WordPress core ["doesn't consider usernames or user IDs to be private or secure 
 
 Our clients tend to not want information about the registered users on their sites to be discoverable; such lists can even disclose Alley's relationship with a client.
 
+### `twitter_embeds`
+
+This feature adds full support for `x.com` URLs for oEmbeds. Out of the box, only `twitter.com` URLs are fully supported in WordPress (the block editor, it should be noted, https://github.com/WordPress/gutenberg/blob/a2b6d39d01d023b6c7c48ad6df5002b78a06794d/packages/block-library/src/embed/edit.js#L161-L166).
+
+This feature also adds fallback handling for Twitter's oEmbed API endpoint, which can unpredictably return 404 responses. There are two fallback options:
+
+1. If the ENV variable `TWITTER_OEMBED_BACKSTOP_ENDPOINT` is set, this endpoint will be used in the event that a 404 is found. WPVIP offers a fallback proxy server which will reliably return a valid response.
+2. If that ENV variable is not set, the request is attempted again using fsockopen instead of curl. For some reason that smart people cannot explain, this is likely to produce a 200 when curl produces a 404.
+
 ## About
 
 ### License
