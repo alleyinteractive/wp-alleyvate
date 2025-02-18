@@ -1,0 +1,51 @@
+{
+  "name": "alleyinteractive/wp-match-blocks",
+  "description": "Match WordPress blocks in the given content.",
+  "type": "library",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Alley",
+      "email": "info@alley.com"
+    }
+  ],
+  "autoload": {
+    "files": [
+      "src/alley/wp/match-blocks.php",
+      "src/alley/wp/internals/internals.php"
+    ]
+  },
+  "config": {
+    "allow-plugins": {
+      "alleyinteractive/composer-wordpress-autoloader": true,
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    },
+    "lock": false
+  },
+  "require": {
+    "php": "^8.0",
+    "alleyinteractive/composer-wordpress-autoloader": "^1.0.0",
+    "alleyinteractive/laminas-validator-extensions": "^2.0.0"
+  },
+  "require-dev": {
+    "alleyinteractive/alley-coding-standards": "^1.0.0",
+    "friendsofphp/php-cs-fixer": "^3.8",
+    "mantle-framework/testkit": "^0.9"
+  },
+  "scripts": {
+    "fixer": "php-cs-fixer -v fix --allow-risky=yes",
+    "phpcbf": "phpcbf",
+    "phpcs": "phpcs",
+    "phpunit": "phpunit"
+  },
+  "extra": {
+    "wordpress-autoloader": {
+      "autoload": {
+        "Alley\\": "src/alley/"
+      },
+      "autoload-dev": {
+        "Alley\\": "tests/alley/"
+      }
+    }
+  }
+}
