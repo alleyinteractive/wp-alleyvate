@@ -117,6 +117,10 @@ function load(): void {
 			'noindex_password_protected_posts',
 			new Features\Noindex_Password_Protected_Posts(),
 		),
+		new Feature(
+			'twitter_embeds',
+			new Features\Twitter_Embeds(),
+		),
 	);
 
 	$plugin->boot();
