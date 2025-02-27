@@ -8,6 +8,10 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 
 * `noindex_password_protected_posts`: Added a feature to add noindex to the robots meta tag content for password-protected posts.
 
+### Changed
+
+* On login nonce failure, redirect back to the login page with an error message.
+
 ## 3.6.0
 
 ### Added

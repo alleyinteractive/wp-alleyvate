@@ -49,6 +49,7 @@ final class Login_Nonce implements Feature {
 	 */
 	public function boot(): void {
 		add_action( 'login_form_login', [ self::class, 'action__add_nonce_life_filter' ] );
+		add_action( 'login_form_expired', [ self::class, 'action__prep_expired_form' ] );
 		add_action( 'login_head', [ self::class, 'action__add_meta_refresh' ] );
 		add_action( 'after_setup_theme', [ self::class, 'action__pre_validate_login_nonce' ], 9999 );
 		add_filter( 'nocache_headers', [ self::class, 'add_no_store_to_login' ] );
@@ -151,14 +152,30 @@ final class Login_Nonce implements Feature {
 		$nonce = sanitize_key( $_POST[ self::NONCE_NAME ] ?? '' );
 
 		if ( ! wp_verify_nonce( $nonce, self::NONCE_ACTION ) ) {
-			// This is a login with an invalid nonce. Throw an error.
-			http_response_code( 403 );
-			wp_die( 'Login attempt failed. Please try again.', 'Login Error' );
+			// If the nonce is invalid, redirect to the login form with an error.
+			// @phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			wp_safe_redirect( add_query_arg( 'action', 'expired', wp_login_url( $_REQUEST['redirect_to'] ?? '' ) ) );
+			exit;
 		}
 
 		/*
 		 * Clean up after ourselves.
 		 */
 		remove_filter( 'nonce_life', [ __CLASS__, 'nonce_life_filter' ] );
+	}
+
+	/**
+	 * Prepare the login form following a failed nonce check.
+	 */
+	public static function action__prep_expired_form(): void {
+		add_filter( 'wp_login_errors', [ __CLASS__, 'filter__expired_login_error' ] );
+		self::action__add_nonce_life_filter();
+	}
+
+	/**
+	 * Add the expired message to the login screen.
+	 */
+	public static function filter__expired_login_error(): \WP_Error {
+		return new \WP_Error( 'nonce_error', __( 'The login form was expired, please try again.', 'alley' ) );
 	}
 }
