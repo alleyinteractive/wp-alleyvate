@@ -174,6 +174,8 @@ final class Login_Nonce implements Feature {
 
 	/**
 	 * Add the expired message to the login screen.
+	 *
+	 * @return \WP_Error Error message for a bad nonce.
 	 */
 	public static function filter__expired_login_error(): \WP_Error {
 		return new \WP_Error( 'nonce_error', __( 'The login form was expired, please try again.', 'alley' ) );
