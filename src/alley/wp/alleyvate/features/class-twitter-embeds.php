@@ -71,8 +71,7 @@ final class Twitter_Embeds implements Feature {
 	public function filter_twitter_oembed_404s( array|WP_Error $response, array $parsed_args, string $url ): array|WP_Error {
 		if (
 			strpos( $url, 'publish.twitter.com' ) !== false
-			&& ! is_wp_error( $response )
-			&& 404 === $response['response']['code'] /* @phpstan-ignore offsetAccess.nonOffsetAccessible */
+			&& 404 === wp_remote_retrieve_response_code( $response )
 		) {
 			$this->attempts[ $url ] = ( $this->attempts[ $url ] ?? 0 ) + 1;
 
@@ -84,7 +83,7 @@ final class Twitter_Embeds implements Feature {
 			 * @param int    $attempts    Number of times this filter has fired for this URL during this request.
 			 * @param array  $parsed_args HTTP request arguments.
 			 */
-			return apply_filters(
+			return apply_filters( /* @phpstan-ignore parameter.phpDocType */
 				'alleyvate_twitter_embeds_404_backstop',
 				$response,
 				$url,
@@ -110,31 +109,14 @@ final class Twitter_Embeds implements Feature {
 				? vip_get_env_var( 'TWITTER_OEMBED_BACKSTOP_ENDPOINT' )
 				: getenv( 'TWITTER_OEMBED_BACKSTOP_ENDPOINT' );
 			if ( $env_endpoint ) {
-				// If there's a backstop endpoint defined, use it.
+				// If there's a backstop endpoint defined, attempt to get the oembed from there.
 				$url      = str_replace( 'https://publish.twitter.com/oembed', $env_endpoint, $url );
-				$response = wp_safe_remote_get( $url );
-			} else {
-				// Attempt the request again using the fsockopen transport, which might get a different outcome.
-				add_action( 'requests-requests.before_request', [ $this, 'attempt_fsockopen_for_twitter_oembeds' ], 10, 5 );
-				$response = wp_safe_remote_get( $url );
-				remove_action( 'requests-requests.before_request', [ $this, 'attempt_fsockopen_for_twitter_oembeds' ] );
+				$backstop = wp_safe_remote_get( $url );
+				if ( 200 === wp_remote_retrieve_response_code( $backstop ) ) {
+					return $backstop;
+				}
 			}
 		}
 		return $response;
-	}
-
-	/**
-	 * Attempt to use fsockopen transport for Twitter oEmbeds.
-	 *
-	 * @param string        $url     URL of the HTTP request.
-	 * @param array<string> $headers HTTP request headers. Ignored.
-	 * @param array<mixed>  $data    HTTP request data. Ignored.
-	 * @param string        $type    HTTP request type. Ignored.
-	 * @param array<mixed>  $options HTTP request options. Passed by reference.
-	 */
-	public function attempt_fsockopen_for_twitter_oembeds( &$url, &$headers, &$data, &$type, &$options ): void {
-		if ( class_exists( Fsockopen::class ) && str_starts_with( $url, 'https://publish.twitter.com/oembed' ) ) {
-			$options['transport'] = Fsockopen::class;
-		}
 	}
 }
