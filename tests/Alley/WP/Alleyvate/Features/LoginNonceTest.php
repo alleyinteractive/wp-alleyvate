@@ -83,7 +83,7 @@ final class LoginNonceTest extends Test_Case {
 		$pagenow = 'wp-login.php';
 
 		// Prevent the redirect and exit from firing.
-		add_filter( 'wp_redirect', fn( $location ) => wp_die( esc_url( $location ) ) );
+		add_filter( 'wp_redirect', fn ( $location ) => wp_die( esc_url( $location ) ) );
 
 		try {
 			Login_Nonce::action__pre_validate_login_nonce();
