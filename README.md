@@ -165,12 +165,13 @@ Our clients tend to not want information about the registered users on their sit
 
 ### `twitter_embeds`
 
-This feature adds full support for `x.com` URLs for oEmbeds. Out of the box, only `twitter.com` URLs are fully supported in WordPress (the block editor, it should be noted, https://github.com/WordPress/gutenberg/blob/a2b6d39d01d023b6c7c48ad6df5002b78a06794d/packages/block-library/src/embed/edit.js#L161-L166).
+This feature adds full support for `x.com` URLs for oEmbeds. Out of the box, only `twitter.com` URLs are fully supported in WordPress (the block editor, it should be noted, [replaces x.com with twitter.com](https://github.com/WordPress/gutenberg/blob/a2b6d39d01d023b6c7c48ad6df5002b78a06794d/packages/block-library/src/embed/edit.js#L161-L166)).
 
-This feature also adds fallback handling for Twitter's oEmbed API endpoint, which can unpredictably return 404 responses. There are two fallback options:
+This feature also adds fallback handling for Twitter's oEmbed API endpoint, which can unpredictably and inexplicably return 404 responses (see [the X Developers Forum for numerous threads on the topic](https://devcommunity.x.com/tag/oembed)). If a 404 is encountered, the response is passed through the `alleyvate_twitter_embeds_404_backstop` filter, along with data about the request and the number of attempts to that endpoint during this pageload.
 
-1. If the ENV variable `TWITTER_OEMBED_BACKSTOP_ENDPOINT` is set, this endpoint will be used in the event that a 404 is found. WPVIP offers a fallback proxy server which will reliably return a valid response.
-2. If that ENV variable is not set, the request is attempted again using fsockopen instead of curl. For some reason that smart people cannot explain, this is likely to produce a 200 when curl produces a 404.
+By default, Alleyvate hooks into this filter to provide one additional attempt at getting a successful response from a proxy server, if the ENV variable `TWITTER_OEMBED_BACKSTOP_ENDPOINT` is set. WPVIP offers a fallback proxy server which seems to reliably return a valid response.
+
+If one doesn't have a proxy service, one suggestion would be to hook into this filter to enqueue a cron task that makes many (e.g. up to 100) rapid-fire requests to twitter until a successful response comes back. In experimenting with the Twitter oEmbed endpoint, we've found that it both works and fails in spurts, and if we make 100 requests in a loop, we eventually get a 200 response.
 
 ## About
 

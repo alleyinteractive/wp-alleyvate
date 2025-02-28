@@ -10,6 +10,7 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 
 ### Changed
 
+* Removed fsockopen backstop option for Twitter/X oEmbeds.
 * On login nonce failure, redirect back to the login page with an error message.
 
 ## 3.6.0

@@ -61,15 +61,17 @@ final class TwitterEmbedsTest extends Test_Case {
 		$this->feature->boot();
 		$url = 'https://publish.twitter.com/oembed?format=json&url=https%3A%2F%2Ftwitter.com%2FWordPress%2Fstatus%2F1819377181035745510';
 
-		// Fire the filter with a 404 response and verify that the default backstop executes.
+		// This should be unnecessary since the backstop shouldn't attempt a request, but fake it just in case.
 		$this->fake_request( $url );
+
+		// Fire the filter with a 404 response and verify that the default backstop doesn't execute.
 		apply_filters(
 			'http_response', // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals
 			Mock_Http_Response::create()->with_response_code( 404 )->to_array(),
 			[],
 			$url
 		);
-		$this->assertRequestSent( $url );
+		$this->assertRequestNotSent( $url );
 	}
 
 	/**
@@ -82,11 +84,12 @@ final class TwitterEmbedsTest extends Test_Case {
 		$url    = 'https://example.com?format=json&url=https%3A%2F%2Ftwitter.com%2FWordPress%2Fstatus%2F1819377181035745510';
 		$og_url = 'https://publish.twitter.com/oembed?format=json&url=https%3A%2F%2Ftwitter.com%2FWordPress%2Fstatus%2F1819377181035745510';
 
-		// Fire the filter with a 404 response and verify that the default backstop executes.
 		$this->fake_request( [
 			$url    => new Mock_Http_Response(),
 			$og_url => new Mock_Http_Response(),
 		] );
+
+		// Fire the filter with a 404 response and verify that the backstop executes.
 		apply_filters(
 			'http_response', // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals
 			Mock_Http_Response::create()->with_response_code( 404 )->to_array(),
