@@ -82,13 +82,14 @@ final class LoginNonceTest extends Test_Case {
 
 		$pagenow = 'wp-login.php';
 
+		// Prevent the redirect and exit from firing.
+		add_filter( 'wp_redirect', fn ( $location ) => wp_die( esc_url( $location ) ) );
+
 		try {
 			Login_Nonce::action__pre_validate_login_nonce();
 		} catch ( WP_Die_Exception $e ) {
-			$this->assertSame( 'Login attempt failed. Please try again.', $e->getMessage() );
+			$this->assertSame( wp_login_url() . '?action=expired', $e->getMessage() );
 		}
-
-		$this->assertSame( 403, http_response_code() );
 	}
 
 	/**
