@@ -16,6 +16,8 @@ namespace Alley\WP\Alleyvate\Features;
 
 use Alley\WP\Alleyvate\Feature;
 
+use Byline_Manager\Models\Profile;
+
 use Mantle\Database\Model\User;
 use Mantle\Testkit\Test_Case;
 use Mantle\Testing\Concerns\Refresh_Database;
@@ -86,7 +88,7 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 		$this->byline_manager_installed  = class_exists( 'Byline_Manager\Core_Author_Block' );
 		$this->co_authors_plus_installed = class_exists( 'CoAuthors_Plus' );
 
-		require_once( trailingslashit( \ABSPATH ) . 'wp-admin/includes/plugin.php' );
+		require_once trailingslashit( \ABSPATH ) . 'wp-admin/includes/plugin.php';
 
 		if (
 			in_array( 'byline-manager', $this->groups(), true ) &&
@@ -152,8 +154,16 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 		if ( ! $this->byline_manager_installed ) {
 			$this->markTestSkipped( 'Byline Manager is not available.' );
 		}
+		$this->feature->boot();
 
-		$this->markTestIncomplete();
+		$profile = Profile::create_from_user( $this->alley_account->core_object() );
+
+		$post = $this->factory()->post->create( [ 'post_author' => $this->alley_account->ID ] );
+
+		\Byline_Manager\Utils::assign_bylines_to_post( $post, [ $profile->byline_id ] );
+
+		$this->get( $profile->link )
+			->assertStatus( 404 );
 	}
 
 	/**
@@ -217,8 +227,18 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 		if ( ! $this->byline_manager_installed ) {
 			$this->markTestSkipped( 'Byline Manager is not available.' );
 		}
+		$this->feature->boot();
 
-		$this->markTestIncomplete();
+		$profile = Profile::create_from_user( $this->alley_account->core_object() );
+
+		$post = $this->factory()->post->create( [ 'post_author' => $this->alley_account->ID ] );
+
+		\Byline_Manager\Utils::assign_bylines_to_post( $post, [ $profile->byline_id ] );
+
+		$this->get( get_permalink( $post ) )
+			->assertOk()
+			->assertDontSee( '>' . $profile->display_name . '<' )
+			->assertSee( '>Staff<' );
 	}
 
 	/**

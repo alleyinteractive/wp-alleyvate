@@ -53,7 +53,71 @@ final class Disable_Alley_Authors implements Feature {
 	public function boot(): void {
 		add_action( 'template_include', [ self::class, 'disable_staff_archives' ], 999 );
 		add_filter( 'get_the_author_display_name', [ self::class, 'filter__get_the_author_display_name' ], 999, 2 );
+		add_filter( 'render_block_core/post-author', [ self::class, 'filter__render_block_post_author' ], 999 );
 		add_filter( 'author_link', [ self::class, 'filter__author_link' ], 999, 2 );
+	}
+
+	/**
+	 * Filter the render block for core/post-author when Byline Manager is used.
+	 *
+	 * @param string $block The parsed block.
+	 * @return string
+	 */
+	public static function filter__render_block_post_author( $block ): string {
+
+		if ( ! class_exists( '\Byline_Manager\Models\Profile' ) ) {
+			return (string) $block;
+		}
+
+		$post        = get_post();
+		$byline_meta = get_post_meta( $post->ID, 'byline', true );
+
+		if ( empty( $byline_meta ) || ! is_array( $byline_meta ) ) {
+			return $block;
+		}
+
+		$original_bylines = explode( PHP_EOL, $block );
+		$bylines          = [];
+		foreach ( $byline_meta['profiles'] as $profile ) {
+			if ( 'text' === $profile['type'] ) {
+				$bylines[] = $profile['atts']['text'];
+				continue;
+			}
+
+			$byline      = \Byline_Manager\Models\Profile::get_by_post( $profile['atts']['post_id'] );
+			$user_id     = $byline->get_linked_user_id();
+			$linked_user = get_user_by( 'ID', $user_id );
+
+			if ( false === $linked_user || ! self::is_staff_author( $linked_user->user_email ) ) {
+				$bylines[] = $byline->display_name;
+				continue;
+			}
+
+			if ( ! in_array( 'Staff', $bylines, true ) ) {
+				$bylines[] = 'Staff';
+			}
+		}
+
+		$new_block              = [];
+		$staff_template         = null;
+		$staff_name_placeholder = null;
+		foreach ( $original_bylines as $original_byline ) {
+			foreach ( $bylines as $byline ) {
+				if ( ! empty( $byline ) && strpos( $original_byline, $byline ) !== false && ! in_array( $original_byline, $new_block, true ) ) {
+					$new_block[] = $original_byline;
+					if ( empty( $staff_name_placeholder ) || empty( $staff_template ) ) {
+						$staff_name_placeholder = $byline;
+						$staff_template         = $original_byline;
+					}
+				}
+			}
+		}
+
+		if ( count( $new_block ) < count( $original_bylines ) ) {
+			$new_block[] = str_replace( $staff_name_placeholder, 'Staff', $staff_template );
+		}
+
+		return implode( PHP_EOL, $new_block );
 	}
 
 	/**
