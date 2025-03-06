@@ -16,7 +16,6 @@ namespace Alley\WP\Alleyvate\Features;
 
 use Alley\WP\Types\Feature;
 use WP_Error;
-use WpOrg\Requests\Transport\Fsockopen;
 
 /**
  * Twitter_Embeds feature.
@@ -33,31 +32,19 @@ final class Twitter_Embeds implements Feature {
 	 * Boot the feature.
 	 */
 	public function boot(): void {
-		add_filter( 'oembed_providers', [ $this, 'add_twitter_oembed_provider' ] );
+		/*
+		 * Use `wp_oembed_add_provider()` to avoid timing issues with the `oembed_providers` filter.
+		 * See https://github.com/alleyinteractive/wp-alleyvate/issues/133.
+		 */
+		wp_oembed_add_provider( '#https?://(www\.)?x\.com/\w{1,15}/status(es)?/.*#i', 'https://publish.twitter.com/oembed', true );
+		wp_oembed_add_provider( '#https?://(www\.)?x\.com/\w{1,15}$#i', 'https://publish.twitter.com/oembed', true );
+		wp_oembed_add_provider( '#https?://(www\.)?x\.com/\w{1,15}/likes$#i', 'https://publish.twitter.com/oembed', true );
+		wp_oembed_add_provider( '#https?://(www\.)?x\.com/\w{1,15}/lists/.*#i', 'https://publish.twitter.com/oembed', true );
+		wp_oembed_add_provider( '#https?://(www\.)?x\.com/\w{1,15}/timelines/.*#i', 'https://publish.twitter.com/oembed', true );
+		wp_oembed_add_provider( '#https?://(www\.)?x\.com/i/moments/.*#i', 'https://publish.twitter.com/oembed', true );
+
 		add_filter( 'http_response', [ $this, 'filter_twitter_oembed_404s' ], 10, 3 );
 		add_filter( 'alleyvate_twitter_embeds_404_backstop', [ $this, 'attempt_404_backstop' ], 10, 3 );
-	}
-
-	/**
-	 * Add Twitter oEmbed provider.
-	 *
-	 * @param array{string, boolean}[] $providers Array of oEmbed providers.
-	 * @return array{string, boolean}[]
-	 */
-	public function add_twitter_oembed_provider( array $providers ): array {
-		/* phpcs:disable WordPress.Arrays.MultipleStatementAlignment */
-		return array_merge(
-			$providers,
-			[
-				'#https?://(www\.)?x\.com/\w{1,15}/status(es)?/.*#i' => [ 'https://publish.twitter.com/oembed', true ],
-				'#https?://(www\.)?x\.com/\w{1,15}$#i'               => [ 'https://publish.twitter.com/oembed', true ],
-				'#https?://(www\.)?x\.com/\w{1,15}/likes$#i'         => [ 'https://publish.twitter.com/oembed', true ],
-				'#https?://(www\.)?x\.com/\w{1,15}/lists/.*#i'       => [ 'https://publish.twitter.com/oembed', true ],
-				'#https?://(www\.)?x\.com/\w{1,15}/timelines/.*#i'   => [ 'https://publish.twitter.com/oembed', true ],
-				'#https?://(www\.)?x\.com/i/moments/.*#i'            => [ 'https://publish.twitter.com/oembed', true ],
-			],
-		);
-		/* phpcs:enable WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned */
 	}
 
 	/**
