@@ -4,6 +4,16 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 
 ## Unreleased
 
+Nothing yet.
+
+## 3.7.1
+
+### Fixed
+
+* `twitter_embeds`: Fixed an issue where support for x.com embeds would load too late in some cases.
+
+## 3.7.0
+
 ### Added
 
 * `noindex_password_protected_posts`: Added a feature to add noindex to the robots meta tag content for password-protected posts.
