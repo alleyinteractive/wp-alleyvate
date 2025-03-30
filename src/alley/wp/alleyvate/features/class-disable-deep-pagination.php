@@ -27,6 +27,7 @@ final class Disable_Deep_Pagination implements Feature {
 	 */
 	public function boot(): void {
 		add_filter( 'posts_where', [ self::class, 'filter__posts_where' ], 10, 2 );
+		add_filter( 'render_block_context', [ self::class, 'custom_query_pagination_context' ], 10, 2 );
 	}
 
 	/**
@@ -36,7 +37,7 @@ final class Disable_Deep_Pagination implements Feature {
 	 * @param WP_Query $wp_query The WP_Query object, passed by reference.
 	 * @return string
 	 */
-	public static function filter__posts_where( $where, $wp_query ) {
+	public static function filter__posts_where( string $where, WP_Query $wp_query ): string {
 		$max_pages = ! empty( $wp_query->query['__dangerously_set_max_pages'] ) ? $wp_query->query['__dangerously_set_max_pages'] : 100;
 
 		if (
