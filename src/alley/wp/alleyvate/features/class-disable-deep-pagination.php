@@ -27,7 +27,7 @@ final class Disable_Deep_Pagination implements Feature {
 	 */
 	public function boot(): void {
 		add_filter( 'posts_where', [ self::class, 'filter__posts_where' ], 10, 2 );
-		add_filter( 'render_block_context', [ self::class, 'custom_query_pagination_context' ], 10, 2 );
+		add_filter( 'render_block_context', [ self::class, 'render_block_context_query_pagination_numbers' ], 10, 2 );
 	}
 
 	/**
@@ -72,7 +72,7 @@ final class Disable_Deep_Pagination implements Feature {
 	 * @param array $block   The block data.
 	 * @return array
 	 */
-	public static function custom_query_pagination_context( array $context, array $block ): array {
+	public static function render_block_context_query_pagination_numbers( array $context, array $block ): array {
 		global $wp_query;
 
 		// Check if the block is the query-pagination-numbers block.
