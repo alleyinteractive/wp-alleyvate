@@ -27,7 +27,7 @@ final class Disable_Deep_Pagination implements Feature {
 	 */
 	public function boot(): void {
 		add_filter( 'posts_where', [ self::class, 'filter__posts_where' ], 10, 2 );
-		add_filter( 'render_block_context', [ self::class, 'render_block_context_query_pagination_numbers' ], 10, 2 );
+		add_filter( 'render_block_context', [ self::class, 'render_block_context_query_pagination' ], 10, 2 );
 	}
 
 	/**
@@ -66,17 +66,17 @@ final class Disable_Deep_Pagination implements Feature {
 	}
 
 	/**
-	 * Filter the context for the query-pagination-numbers block.
+	 * Filter the context for the query-pagination blocks.
 	 *
 	 * @param array $context The block context.
 	 * @param array $block   The block data.
 	 * @return array
 	 */
-	public static function render_block_context_query_pagination_numbers( array $context, array $block ): array {
+	public static function render_block_context_query_pagination( array $context, array $block ): array {
 		global $wp_query;
 
-		// Check if the block is the query-pagination-numbers block.
-		if ( $block['blockName'] === 'core/query-pagination-numbers' ) {
+		// Check if the block is one of the query-pagination blocks.
+		if ( str_starts_with( $block['blockName'], 'core/query-pagination' ) ) {
 			// Set the max pages to the value from the query or a default value.
 			$max_pages = ! empty( $wp_query->query['__dangerously_set_max_pages'] ) ? $wp_query->query['__dangerously_set_max_pages'] : 100;
 			// Set the max pages in the context.
