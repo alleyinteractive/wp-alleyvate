@@ -68,9 +68,9 @@ final class Disable_Deep_Pagination implements Feature {
 	/**
 	 * Filter the context for the query-pagination blocks.
 	 *
-	 * @param array $context The block context.
-	 * @param array $block   The block data.
-	 * @return array
+	 * @param array<string, mixed> $block The block data.
+     * @param array<string, mixed> $context The context data.
+     * @return array<string, mixed> The pagination data.
 	 */
 	public static function render_block_context_query_pagination( array $context, array $block ): array {
 		global $wp_query;
