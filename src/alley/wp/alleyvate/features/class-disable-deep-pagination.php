@@ -58,9 +58,30 @@ final class Disable_Deep_Pagination implements Feature {
 				esc_html( $max_pages ),
 			),
 			esc_html__( 'Deep Pagination Disabled', 'alley' ),
-			400
+			410
 		);
 
 		return $where . 'AND 1 = 0';
+	}
+
+	/**
+	 * Filter the context for the query-pagination-numbers block.
+	 *
+	 * @param array $context The block context.
+	 * @param array $block   The block data.
+	 * @return array
+	 */
+	public static function custom_query_pagination_context( array $context, array $block ): array {
+		global $wp_query;
+
+		// Check if the block is the query-pagination-numbers block.
+		if ( $block['blockName'] === 'core/query-pagination-numbers' ) {
+			// Set the max pages to the value from the query or a default value.
+			$max_pages = ! empty( $wp_query->query['__dangerously_set_max_pages'] ) ? $wp_query->query['__dangerously_set_max_pages'] : 100;
+			// Set the max pages in the context.
+			$context['query']['pages'] = apply_filters( 'alleyvate_deep_pagination_max_pages', $max_pages );
+		}
+
+		return $context;
 	}
 }
