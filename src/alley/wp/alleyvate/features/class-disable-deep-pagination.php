@@ -76,10 +76,13 @@ final class Disable_Deep_Pagination implements Feature {
 		global $wp_query;
 
 		// Check if the block is one of the query-pagination blocks.
-		if ( str_starts_with( $block['blockName'], 'core/query-pagination' ) ) {
+		if ( isset( $block['blockName'] ) && is_string( $block['blockName'] ) && str_starts_with( $block['blockName'], 'core/query-pagination' ) ) {
 			// Set the max pages to the value from the query or a default value.
 			$max_pages = ! empty( $wp_query->query['__dangerously_set_max_pages'] ) ? $wp_query->query['__dangerously_set_max_pages'] : 100;
 			// Set the max pages in the context.
+			if ( ! isset( $context['query'] ) || ! is_array( $context['query'] ) ) {
+				$context['query'] = [];
+			}
 			$context['query']['pages'] = apply_filters( 'alleyvate_deep_pagination_max_pages', $max_pages );
 		}
 
