@@ -214,7 +214,7 @@ final class DisableDeepPaginationTest extends Test_Case {
 		$this->feature->boot();
 
 		$this->get( '/wp/v2/posts?per_page=1&page=101' )
-			->assertStatus( 410 );
+			->assertStatus( 404 );
 
 		$body = $this->get_json( rest_url( '/wp/v2/posts?per_page=1&page=100' ) )
 			->get_content();
