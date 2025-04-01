@@ -27,7 +27,7 @@ final class Disable_Deep_Pagination implements Feature {
 	 */
 	public function boot(): void {
 		add_filter( 'posts_where', [ self::class, 'filter__posts_where' ], 10, 2 );
-		add_filter( 'render_block_context', [ self::class, 'render_block_context_query_pagination' ], 10, 2 );
+		add_filter( 'posts_results', [ self::class, 'filter__posts_results' ], 9999, 2 ); // High priority to ensure we can override the max_num_pages.
 	}
 
 	/**
@@ -38,8 +38,8 @@ final class Disable_Deep_Pagination implements Feature {
 	 * @return string
 	 */
 	public static function filter__posts_where( string $where, WP_Query $wp_query ): string {
+		// If this is an admin request, or a JSON request with a logged in user, return the posts as normal.
 		$max_pages = ! empty( $wp_query->query['__dangerously_set_max_pages'] ) ? $wp_query->query['__dangerously_set_max_pages'] : 100;
-
 		if (
 			is_admin() ||
 			(
@@ -52,40 +52,37 @@ final class Disable_Deep_Pagination implements Feature {
 			return $where;
 		}
 
-		wp_die(
-			\sprintf(
-				/* translators: The maximum number of pages. */
-				esc_html__( 'Invalid Request: Pagination beyond page %d has been disabled for performance reasons.', 'alley' ),
-				esc_html( $max_pages ),
-			),
-			esc_html__( 'Deep Pagination Disabled', 'alley' ),
-			410
-		);
+		// Set the HTTP response status code to 410.
+		status_header(410);
+		// Load the 404 template.
+		include( get_404_template() );
+		// Terminate the script execution.
+		exit;
 
 		return $where . 'AND 1 = 0';
 	}
 
 	/**
-	 * Filter the context for the query-pagination blocks.
+	 * Filter post results to force page maximum.
 	 *
-	 * @param array<string, mixed> $context The block data.
-	 * @param array<string, mixed> $block   The context data.
-	 * @return array<string, mixed> The pagination data.
+	 * @param array    $posts    The posts.
+	 * @param WP_Query $wp_query The WP_Query object, passed by reference.
+	 * @return array
 	 */
-	public static function render_block_context_query_pagination( array $context, array $block ): array {
-		global $wp_query;
-
-		// Check if the block is one of the query-pagination blocks.
-		if ( isset( $block['blockName'] ) && is_string( $block['blockName'] ) && str_starts_with( $block['blockName'], 'core/query-pagination' ) ) {
-			// Set the max pages to the value from the query or a default value.
-			$max_pages = ! empty( $wp_query->query['__dangerously_set_max_pages'] ) ? $wp_query->query['__dangerously_set_max_pages'] : 100;
-			// Set the max pages in the context.
-			if ( ! isset( $context['query'] ) || ! is_array( $context['query'] ) ) {
-				$context['query'] = [];
-			}
-			$context['query']['pages'] = apply_filters( 'alleyvate_deep_pagination_max_pages', $max_pages );
+	public static function filter__posts_results( array $posts, WP_Query $wp_query ): array {
+		// If this is an admin request, or a JSON request with a logged in user, return the posts as normal.
+		$max_pages = apply_filters( 'alleyvate_deep_pagination_max_pages', ! empty( $wp_query->query['__dangerously_set_max_pages'] ) ? $wp_query->query['__dangerously_set_max_pages'] : 100 );
+		if (
+			! is_admin() &&
+			(
+				! wp_is_json_request() ||
+				! is_user_logged_in()
+			) &&
+			$wp_query->max_num_pages > $max_pages
+		) {
+			$wp_query->max_num_pages = $max_pages;
 		}
 
-		return $context;
+		return $posts;
 	}
 }
