@@ -53,13 +53,11 @@ final class Disable_Deep_Pagination implements Feature {
 		}
 
 		// Set the HTTP response status code to 410.
-		status_header(410);
+		status_header( 410 );
 		// Load the 404 template.
-		include( get_404_template() );
+		include get_404_template();
 		// Terminate the script execution.
 		exit;
-
-		return $where . 'AND 1 = 0';
 	}
 
 	/**
