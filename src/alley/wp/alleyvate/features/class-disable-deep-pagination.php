@@ -52,6 +52,20 @@ final class Disable_Deep_Pagination implements Feature {
 			return $where;
 		}
 
+		if ( wp_is_json_request() ) {
+			// If this is a JSON request, and the user is not logged in, we need to return a 400 error.
+			wp_die(
+				\sprintf(
+					/* translators: The maximum number of pages. */
+					esc_html__( 'Invalid Request: Pagination beyond page %d has been disabled for performance reasons.', 'alley' ),
+					esc_html( $max_pages ),
+				),
+				esc_html__( 'Deep Pagination Disabled', 'alley' ),
+				400
+			);
+
+		}
+
 		// Set the HTTP response status code to 410.
 		status_header( 410 );
 		// Load the 404 template.
