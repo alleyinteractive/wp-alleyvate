@@ -213,8 +213,8 @@ final class DisableDeepPaginationTest extends Test_Case {
 	public function test_unauthenticated_rest_queries_are_filtered() {
 		$this->feature->boot();
 
-		$this->get_json( rest_url( '/wp/v2/posts?per_page=1&page=101' ) )
-			->assertExactJson( [] );
+		$this->get( '/wp/v2/posts?per_page=1&page=101' )
+			->assertStatus( 404 );
 
 		$body = $this->get_json( rest_url( '/wp/v2/posts?per_page=1&page=100' ) )
 			->get_content();
