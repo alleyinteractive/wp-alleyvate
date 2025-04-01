@@ -62,9 +62,9 @@ final class Disable_Deep_Pagination implements Feature {
 	/**
 	 * Filter post results to force page maximum.
 	 *
-	 * @param array    $posts    The posts.
+	 * @param WP_Post[]    $posts    The posts.
 	 * @param WP_Query $wp_query The WP_Query object, passed by reference.
-	 * @return array
+	 * @return WP_Post[]
 	 */
 	public static function filter__posts_results( array $posts, WP_Query $wp_query ): array {
 		// If this is an admin request, or a JSON request with a logged in user, return the posts as normal.
