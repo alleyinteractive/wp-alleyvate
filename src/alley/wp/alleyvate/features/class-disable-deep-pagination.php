@@ -60,7 +60,7 @@ final class Disable_Deep_Pagination implements Feature {
 	}
 
 	/**
-	 * Filter post results to force page maximum.
+	 * Filter post results to force max num of pages.
 	 *
 	 * @param WP_Post[] $posts    The posts.
 	 * @param WP_Query  $wp_query The WP_Query object, passed by reference.
