@@ -6,6 +6,15 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 
 Nothing yet.
 
+## 3.7.2
+
+### Added
+
+### Changed
+
+* `disable_deep_pagination`: For urls over max pages display 404 template and set header stauts to 410.
+* `disable_deep_pagination`: Pagination display accordingly to max pages.
+
 ## 3.7.1
 
 ### Fixed
