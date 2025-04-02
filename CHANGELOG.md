@@ -12,8 +12,8 @@ Nothing yet.
 
 ### Changed
 
-* `disable_deep_pagination`: The feature now also disables the automatic redirect from an attachment to its corresponding file URL.
-* `disable_deep_pagination`: Added a feature for pagination to display accordingly to max number of pages.
+* `disable_deep_pagination`: For urls over max pages display 404 template and set header stauts to 410.
+* `disable_deep_pagination`: Pagination display accordingly to max pages.
 
 ## 3.7.1
 
