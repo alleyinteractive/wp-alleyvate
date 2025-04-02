@@ -6,6 +6,15 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 
 Nothing yet.
 
+## 3.7.2
+
+### Added
+
+### Changed
+
+* `disable_deep_pagination`: The feature now also disables the automatic redirect from an attachment to its corresponding file URL.
+* `disable_deep_pagination`: Added a feature for pagination to display accordingly to max number of pages.
+
 ## 3.7.1
 
 ### Fixed
