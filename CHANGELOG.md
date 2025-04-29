@@ -10,6 +10,7 @@ Nothing yet.
 
 ### Changed
 
+* Minimum PHP version is now 8.2.
 * Upgraded to `symfony/http-foundation` v7.
 
 ## 3.7.2

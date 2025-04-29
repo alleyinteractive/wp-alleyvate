@@ -19,7 +19,7 @@
     "sort-packages": true
   },
   "require": {
-    "php": "^8.1",
+    "php": "^8.2",
     "alleyinteractive/composer-wordpress-autoloader": "^1.0",
     "alleyinteractive/wp-type-extensions": "^2.0|^3.0",
     "symfony/http-foundation": "^v7.2"
