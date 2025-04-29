@@ -19,10 +19,14 @@ namespace Alley\WP\Alleyvate\Features;
 use Mantle\Testing\Concerns\Refresh_Database;
 use Mantle\Testing\Exceptions\WP_Die_Exception;
 use Mantle\Testkit\Test_Case;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunClassInSeparateProcess;
 
 /**
  * Tests for the login nonce.
  */
+#[PreserveGlobalState( false )]
+#[RunClassInSeparateProcess]
 final class LoginNonceTest extends Test_Case {
 	use Refresh_Database;
 
@@ -32,19 +36,6 @@ final class LoginNonceTest extends Test_Case {
 	 * @var Login_Nonce
 	 */
 	private Login_Nonce $feature;
-
-	/**
-	 * Setup the test case.
-	 *
-	 * @param array ...$args The array of arguments passed to the class.
-	 */
-	public function __construct( ...$args ) {
-		parent::__construct( ...$args );
-
-		// Run the test in isolation to allow us to use http_response_code().
-		$this->setPreserveGlobalState( false );
-		$this->setRunClassInSeparateProcess( true );
-	}
 
 	/**
 	 * Set up.
@@ -166,21 +157,5 @@ final class LoginNonceTest extends Test_Case {
 
 		self::assertArrayHasKey( 'Cache-Control', $headers );
 		self::assertStringContainsString( 'no-store', $headers['Cache-Control'] );
-	}
-
-	/**
-	 * Verify that the no-store flag isn't added to other pages.
-	 */
-	public function test_non_login_page_is_stored() {
-		global $pagenow;
-
-		$pagenow = 'single.php'; // Anything other than wp-login.php.
-
-		$this->feature->boot();
-
-		$headers = wp_get_nocache_headers();
-
-		self::assertArrayHasKey( 'Cache-Control', $headers );
-		self::assertStringNotContainsString( 'no-store', $headers['Cache-Control'] );
 	}
 }

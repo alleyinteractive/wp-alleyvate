@@ -66,11 +66,13 @@ final class Login_Nonce implements Feature {
 			$headers = [];
 		}
 
-		if ( 'wp-login.php' !== ( $GLOBALS['pagenow'] ?? '' ) ) {
+		if ( ! isset( $GLOBALS['pagenow'] ) || 'wp-login.php' !== $GLOBALS['pagenow'] ) {
 			return $headers;
 		}
 
-		$headers['Cache-Control'] = 'no-cache, must-revalidate, max-age=0, no-store';
+		if ( ! isset( $headers['Cache-Control'] ) || ! str_contains( $headers['Cache-Control'], 'no-store' ) ) {
+			$headers['Cache-Control'] = 'no-cache, must-revalidate, max-age=0, no-store';
+		}
 
 		return $headers;
 	}
