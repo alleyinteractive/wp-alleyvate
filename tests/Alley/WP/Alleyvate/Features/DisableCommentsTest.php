@@ -42,6 +42,19 @@ final class DisableCommentsTest extends Test_Case {
 		add_filter( 'wp_is_comment_flood', '__return_false', \PHP_INT_MAX );
 
 		$this->feature = new Disable_Comments();
+
+		// Ensure "comment_author_IP" is set to a valid value for the tests.
+		// Without it, the tests will throw a notice.
+		add_filter(
+			'preprocess_comment',
+			function ( $data ) {
+				if ( ! isset( $data['comment_author_IP'] ) ) {
+					$data['comment_author_IP'] = '127.0.0.1';
+				}
+
+				return $data;
+			}
+		);
 	}
 
 	/**
@@ -98,12 +111,13 @@ final class DisableCommentsTest extends Test_Case {
 		// Post a comment on the post and ensure that it posts correctly.
 		$result_pre = wp_handle_comment_submission(
 			[
-				'author'          => 'Test Author',
-				'comment'         => 'Lorem ipsum dolor sit amet.',
-				'comment_parent'  => 0,
-				'comment_post_ID' => $post_id,
-				'email'           => 'user@example.org',
-				'url'             => 'https://example.org',
+				'author'            => 'Test Author',
+				'comment_author_IP' => '127.0.0.1',
+				'comment_parent'    => 0,
+				'comment_post_ID'   => $post_id,
+				'comment'           => 'Lorem ipsum dolor sit amet.',
+				'email'             => 'user@example.org',
+				'url'               => 'https://example.org',
 			]
 		);
 		$this->assertNotWPError( $result_pre );
@@ -114,12 +128,13 @@ final class DisableCommentsTest extends Test_Case {
 		// Try again, and this time it should fail to insert.
 		$result_post = wp_handle_comment_submission(
 			[
-				'author'          => 'Testy McTesterson',
-				'comment'         => 'A new comment on a post with comments closed.',
-				'comment_parent'  => 0,
-				'comment_post_ID' => $post_id,
-				'email'           => 'testy@example.org',
-				'url'             => 'https://example.org/testy',
+				'author'            => 'Testy McTesterson',
+				'comment_author_IP' => '127.0.0.1',
+				'comment_parent'    => 0,
+				'comment_post_ID'   => $post_id,
+				'comment'           => 'A new comment on a post with comments closed.',
+				'email'             => 'testy@example.org',
+				'url'               => 'https://example.org/testy',
 			]
 		);
 		$this->assertWPError( $result_post );
