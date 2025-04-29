@@ -6,6 +6,12 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 
 Nothing yet.
 
+## 3.4.0
+
+### Changed
+
+* Upgraded to `symfony/http-foundation` v7.
+
 ## 3.7.2
 
 ### Added
