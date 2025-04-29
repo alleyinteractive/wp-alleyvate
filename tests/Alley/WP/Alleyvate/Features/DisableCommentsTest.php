@@ -43,9 +43,18 @@ final class DisableCommentsTest extends Test_Case {
 
 		$this->feature = new Disable_Comments();
 
-		$this->before_request( function (): void {
-			$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
-		} );
+		// Ensure "comment_author_IP" is set to a valid value for the tests.
+		// Without it, the tests will throw a notice.
+		add_filter(
+			'preprocess_comment',
+			function ( $data ) {
+				if ( ! isset( $data['comment_author_IP'] ) ) {
+					$data['comment_author_IP'] = '127.0.0.1';
+				}
+
+				return $data;
+			}
+		);
 	}
 
 	/**
