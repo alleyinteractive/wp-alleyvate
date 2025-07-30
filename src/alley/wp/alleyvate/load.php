@@ -70,6 +70,10 @@ function load(): void {
 			new Features\Disable_Trackbacks(),
 		),
 		new Feature(
+			'disable_xmlrpc',
+			new Features\Disable_XMLRPC(),
+		),
+		new Feature(
 			'disallow_file_edit',
 			new Features\Disallow_File_Edit(),
 		),
@@ -112,6 +116,14 @@ function load(): void {
 		new Feature(
 			'disable_alley_authors',
 			new Features\Disable_Alley_Authors(),
+		),
+		new Feature(
+			'noindex_password_protected_posts',
+			new Features\Noindex_Password_Protected_Posts(),
+		),
+		new Feature(
+			'twitter_embeds',
+			new Features\Twitter_Embeds(),
 		),
 	);
 

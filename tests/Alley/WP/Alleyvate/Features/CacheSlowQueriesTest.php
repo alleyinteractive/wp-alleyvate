@@ -17,10 +17,14 @@ namespace Alley\WP\Alleyvate\Features;
 use Mantle\Testing\Concerns\Admin_Screen;
 use Mantle\Testkit\Test_Case;
 use Mantle\Testing\Concerns\Refresh_Database;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunClassInSeparateProcess;
 
 /**
  * Tests for caching slow queries.
  */
+#[PreserveGlobalState( false )]
+#[RunClassInSeparateProcess]
 final class CacheSlowQueriesTest extends Test_Case {
 	use Admin_Screen;
 	use Refresh_Database;
@@ -31,19 +35,6 @@ final class CacheSlowQueriesTest extends Test_Case {
 	 * @var Cache_Slow_Queries
 	 */
 	private Cache_Slow_Queries $feature;
-
-	/**
-	 * Setup the test case.
-	 *
-	 * @param array ...$args The array of arguments passed to the class.
-	 */
-	public function __construct( ...$args ) {
-		parent::__construct( ...$args );
-
-		// Run the test in isolation to prevent conflicts with other admin tests.
-		$this->setPreserveGlobalState( false );
-		$this->setRunClassInSeparateProcess( true );
-	}
 
 	/**
 	 * Set up.

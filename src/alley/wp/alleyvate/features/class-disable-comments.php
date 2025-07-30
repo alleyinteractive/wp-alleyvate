@@ -24,6 +24,7 @@ final class Disable_Comments implements Feature {
 	public function boot(): void {
 		add_action( 'add_meta_boxes', [ self::class, 'action__add_meta_boxes' ], 9999 );
 		add_action( 'admin_bar_menu', [ self::class, 'action__admin_bar_menu' ], 9999 );
+		add_action( 'admin_footer', [ self::class, 'action__admin_footer' ], 9999 );
 		add_action( 'admin_init', [ self::class, 'action__admin_init' ], 0 );
 		add_action( 'admin_menu', [ self::class, 'action__admin_menu' ], 9999 );
 		add_action( 'init', [ self::class, 'action__init' ], 9999 );
@@ -52,6 +53,31 @@ final class Disable_Comments implements Feature {
 	 */
 	public static function action__admin_bar_menu( \WP_Admin_Bar $wp_admin_bar ): void {
 		$wp_admin_bar->remove_node( 'comments' );
+	}
+
+	/**
+	 * Removes blocks related to core/comments from the admin block selector.
+	 * 
+	 * JavaScript is used to selectively remove blocks from the editor.
+	 * The PHP filter for allowed blocks passes ‘true’ to allow all blocks by default,
+	 * so you can’t get the full list of blocks and selectively remove them.
+	 * https://developer.wordpress.org/news/2024/01/how-to-disable-specific-blocks-in-wordpress/#disable-blocks-with-php
+	 */
+	public static function action__admin_footer(): void {
+		echo "
+			<script>
+			if (typeof wp?.domReady === 'function') {
+				wp.domReady(() => {
+					if (typeof wp?.blocks?.unregisterBlockType === 'function') {
+						// Unregister blocks related to core comments.
+						wp.blocks.unregisterBlockType('core/comments');
+						wp.blocks.unregisterBlockType('core/post-comments-form');
+						wp.blocks.unregisterBlockType('core/comments-query-loop');
+						wp.blocks.unregisterBlockType('core/latest-comments');
+					}
+				});
+			}
+			</script>";
 	}
 
 	/**

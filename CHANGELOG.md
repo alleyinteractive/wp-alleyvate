@@ -4,6 +4,62 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 
 ## Unreleased
 
+Nothing yet.
+
+## 3.4.0
+
+### Changed
+
+* Minimum PHP version is now 8.2.
+* Upgraded to `symfony/http-foundation` v7.
+
+## 3.7.2
+
+### Added
+
+### Changed
+
+* `disable_deep_pagination`: For urls over max pages display 404 template and set header stauts to 410.
+* `disable_deep_pagination`: Pagination display accordingly to max pages.
+
+## 3.7.1
+
+### Fixed
+
+* `twitter_embeds`: Fixed an issue where support for x.com embeds would load too late in some cases.
+
+## 3.7.0
+
+### Added
+
+* `noindex_password_protected_posts`: Added a feature to add noindex to the robots meta tag content for password-protected posts.
+
+### Changed
+
+* Removed fsockopen backstop option for Twitter/X oEmbeds.
+* On login nonce failure, redirect back to the login page with an error message.
+
+## 3.6.0
+
+### Added
+
+* Added a feature to improve Twitter/X oEmbed handling.
+
+## 3.5.2
+
+* Optimize some unit tests that created a lot of posts.
+
+## 3.5.1
+
+* Added support for `alleyinteractive/wp-type-extensions` v3.
+
+## 3.5.0
+
+### Added
+
+* Added build release scripts and GitHub Actions for automated releases (used for this release).
+* Added a feature to disable XML-RPC (and removes all methods) for all requests that come from IPs that are not known Jetpack IPs.
+
 ### Fixed
 
 * `login_nonce`: Fixed issue where loading cached version of login page would store invalid nonce.

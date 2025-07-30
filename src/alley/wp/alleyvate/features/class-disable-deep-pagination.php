@@ -27,6 +27,7 @@ final class Disable_Deep_Pagination implements Feature {
 	 */
 	public function boot(): void {
 		add_filter( 'posts_where', [ self::class, 'filter__posts_where' ], 10, 2 );
+		add_filter( 'posts_results', [ self::class, 'filter__posts_results' ], 9999, 2 ); // High priority to ensure we can override the max_num_pages.
 	}
 
 	/**
@@ -36,9 +37,9 @@ final class Disable_Deep_Pagination implements Feature {
 	 * @param WP_Query $wp_query The WP_Query object, passed by reference.
 	 * @return string
 	 */
-	public static function filter__posts_where( $where, $wp_query ) {
+	public static function filter__posts_where( string $where, WP_Query $wp_query ): string {
+		// If this is an admin request, or a JSON request with a logged in user, return the posts as normal.
 		$max_pages = ! empty( $wp_query->query['__dangerously_set_max_pages'] ) ? $wp_query->query['__dangerously_set_max_pages'] : 100;
-
 		if (
 			is_admin() ||
 			(
@@ -51,16 +52,47 @@ final class Disable_Deep_Pagination implements Feature {
 			return $where;
 		}
 
-		wp_die(
-			\sprintf(
-				/* translators: The maximum number of pages. */
-				esc_html__( 'Invalid Request: Pagination beyond page %d has been disabled for performance reasons.', 'alley' ),
-				esc_html( $max_pages ),
-			),
-			esc_html__( 'Deep Pagination Disabled', 'alley' ),
-			400
-		);
+		// If this is a JSON request, and the user is not logged in, we need to return a 400 error.
+		if ( wp_is_json_request() ) {
+			wp_die(
+				\sprintf(
+					/* translators: The maximum number of pages. */
+					esc_html__( 'Invalid Request: Pagination beyond page %d has been disabled for performance reasons.', 'alley' ),
+					esc_html( $max_pages ),
+				),
+				esc_html__( 'Deep Pagination Disabled', 'alley' ),
+				400
+			);
+		}
 
+		// Set the HTTP response status code to 410.
+		status_header( 410 );
+		// Load the 404 template.
+		include get_404_template();
 		return $where . 'AND 1 = 0';
+	}
+
+	/**
+	 * Filter post results to force max num of pages.
+	 *
+	 * @param array<\WP_Post> $posts    The posts.
+	 * @param WP_Query        $wp_query The WP_Query object, passed by reference.
+	 * @return array<\WP_Post>
+	 */
+	public static function filter__posts_results( array $posts, WP_Query $wp_query ): array {
+		// If this is an admin request, or a JSON request with a logged in user, return the posts as normal.
+		$max_pages = apply_filters( 'alleyvate_deep_pagination_max_pages', ! empty( $wp_query->query['__dangerously_set_max_pages'] ) ? $wp_query->query['__dangerously_set_max_pages'] : 100 );
+		if (
+			! is_admin() &&
+			(
+				! wp_is_json_request() ||
+				! is_user_logged_in()
+			) &&
+			$wp_query->max_num_pages > $max_pages
+		) {
+			$wp_query->max_num_pages = $max_pages;
+		}
+
+		return $posts;
 	}
 }

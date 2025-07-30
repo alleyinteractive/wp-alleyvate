@@ -60,7 +60,7 @@ admin stability. For technical details on how WP core implements preloading, ref
 
 ### `disable_comments`
 
-This feature disables WordPress comments entirely, including the ability to post, view, edit, list, count, modify settings for, or access URLs that are related to comments completely.
+This feature disables WordPress comments entirely, including the ability to post, view, edit, list, count, modify settings for, or access URLs that are related to comments completely. The blocks are also removed from the Gutenberg block editor.
 
 ### `disable_custom_fields_meta_box`
 
@@ -112,6 +112,10 @@ This feature disables WordPress sticky posts entirely, including the ability to 
 
 This feature disables WordPress from sending or receiving trackbacks or pingbacks.
 
+### `disable_xmlrpc`
+
+This feature disables XML-RPC (and removes all methods) for all requests made to XML-RPC that come from IPs that are not known Jetpack IPs.
+
 ### `force_two_factor_authentication`
 
 This feature forces users with `edit_posts` permissions to use two factor authentication (2fa) for their accounts.
@@ -119,6 +123,10 @@ This feature forces users with `edit_posts` permissions to use two factor authen
 ### `login_nonce`
 
 This feature adds a nonce to the login form to prevent CSRF attacks.
+
+### `noindex_password_protected_posts`
+
+This feature adds noindex to the robots meta tag content for password-protected posts.
 
 ### `prevent_framing`
 
@@ -154,6 +162,16 @@ This feature requires users to be logged in before accessing data about register
 WordPress core ["doesn't consider usernames or user IDs to be private or secure information"][1] and therefore allows users to be listed through some of its APIs.
 
 Our clients tend to not want information about the registered users on their sites to be discoverable; such lists can even disclose Alley's relationship with a client.
+
+### `twitter_embeds`
+
+This feature adds full support for `x.com` URLs for oEmbeds. Out of the box, only `twitter.com` URLs are fully supported in WordPress (the block editor, it should be noted, [replaces x.com with twitter.com](https://github.com/WordPress/gutenberg/blob/a2b6d39d01d023b6c7c48ad6df5002b78a06794d/packages/block-library/src/embed/edit.js#L161-L166)).
+
+This feature also adds fallback handling for Twitter's oEmbed API endpoint, which can unpredictably and inexplicably return 404 responses (see [the X Developers Forum for numerous threads on the topic](https://devcommunity.x.com/tag/oembed)). If a 404 is encountered, the response is passed through the `alleyvate_twitter_embeds_404_backstop` filter, along with data about the request and the number of attempts to that endpoint during this pageload.
+
+By default, Alleyvate hooks into this filter to provide one additional attempt at getting a successful response from a proxy server, if the ENV variable `TWITTER_OEMBED_BACKSTOP_ENDPOINT` is set. WPVIP offers a fallback proxy server which seems to reliably return a valid response.
+
+If one doesn't have a proxy service, one suggestion would be to hook into this filter to enqueue a cron task that makes many (e.g. up to 100) rapid-fire requests to twitter until a successful response comes back. In experimenting with the Twitter oEmbed endpoint, we've found that it both works and fails in spurts, and if we make 100 requests in a loop, we eventually get a 200 response.
 
 ## About
 

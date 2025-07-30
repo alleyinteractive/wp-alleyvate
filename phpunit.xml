@@ -1,10 +1,13 @@
 <?xml version="1.0"?>
 <phpunit
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
     bootstrap="tests/bootstrap.php"
     backupGlobals="false"
     colors="true"
-    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.3/phpunit.xsd"
+    failOnDeprecation="true"
+    failOnNotice="true"
+    failOnRisky="true"
     cacheDirectory=".phpunit.result.cache"
 >
   <testsuite name="unit">

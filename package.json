@@ -1,0 +1,12 @@
+{
+  "name": "wp-alleyvate",
+  "license": "GPL-2.0-or-later",
+  "main": "wp-alleyvate.php",
+  "engines": {
+    "node": "22",
+    "npm": "10"
+  },
+  "scripts": {
+    "release": "npx @alleyinteractive/create-release@latest"
+  }
+}
