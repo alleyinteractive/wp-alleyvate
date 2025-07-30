@@ -71,6 +71,7 @@ final class Feature implements \Alley\WP\Types\Feature {
 		 * to load or not.
 		 *
 		 * @param bool $load Whether to load the feature. Default true.
+		 * @param string $environment The known environment type.
 		 */
 		$load = apply_filters( "alleyvate_load_{$this->handle}_in_environment", $load, wp_get_environment_type() );
 

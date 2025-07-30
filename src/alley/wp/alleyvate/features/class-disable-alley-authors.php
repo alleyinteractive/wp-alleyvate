@@ -13,7 +13,7 @@
 namespace Alley\WP\Alleyvate\Features;
 
 use Alley\WP\Types\Feature;
-use WP_REST_Response;
+use CoAuthors_Plus;
 
 /**
  * Removes the impact of Alley accounts on the frontend of client websites by:
@@ -62,10 +62,10 @@ final class Disable_Alley_Authors implements Feature {
 	/**
 	 * Filter out any staff CoAuthors from the get_coauthors request.
 	 *
-	 * @param array $coauthors The array of coauthors.
-	 * @return array
+	 * @param array<int, \stdClass> $coauthors The array of coauthors.
+	 * @return array<int, \stdClass>
 	 */
-	public static function filter__get_coauthors( $coauthors ) {
+	public static function filter__get_coauthors( $coauthors ): array {
 		if ( ! is_array( $coauthors ) ) {
 			return $coauthors;
 		}
@@ -117,7 +117,12 @@ final class Disable_Alley_Authors implements Feature {
 			return (string) $block;
 		}
 
-		$post        = get_post();
+		$post = get_post();
+
+		if ( ! $post instanceof \WP_Post ) {
+			return (string) $block;
+		}
+
 		$byline_meta = get_post_meta( $post->ID, 'byline', true );
 
 		if ( empty( $byline_meta ) || ! is_array( $byline_meta ) ) {
@@ -147,7 +152,7 @@ final class Disable_Alley_Authors implements Feature {
 		}
 
 		$new_block              = [];
-		$staff_template         = null;
+		$staff_template         = '';
 		$staff_name_placeholder = null;
 		foreach ( $original_bylines as $original_byline ) {
 			foreach ( $bylines as $byline ) {
@@ -184,7 +189,7 @@ final class Disable_Alley_Authors implements Feature {
 
 		$author = get_user_by( 'ID', $author_id );
 
-		if ( false === $author && $coauthors_plus instanceof \CoAuthors_Plus ) {
+		if ( false === $author && $coauthors_plus instanceof CoAuthors_Plus ) {
 			$author = $coauthors_plus->get_coauthor_by( 'id', $author_id );
 		}
 
@@ -206,7 +211,7 @@ final class Disable_Alley_Authors implements Feature {
 	public static function filter__get_the_author_display_name( $display_name, $author_id ): string {
 		$author = get_user_by( 'ID', $author_id );
 
-		if ( ! self::is_staff_author( $author->user_email ) ) {
+		if ( false === $author || ! self::is_staff_author( $author->user_email ) ) {
 			return $display_name;
 		}
 
@@ -238,11 +243,10 @@ final class Disable_Alley_Authors implements Feature {
 	}
 
 	/**
-	 * Generate an array of authors in the database that are to be defined as "Staff"
-	 * authors and not attributable authors.
+	 * Take an email address string and determine if it is a staff domain.
 	 *
 	 * @param string $email The email address to compare against.
-	 * @return int[]
+	 * @return bool
 	 */
 	public static function is_staff_author( string $email ): bool {
 		/**
