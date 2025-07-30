@@ -52,7 +52,7 @@ final class Disable_Alley_Authors implements Feature {
 	 * Boot the feature.
 	 */
 	public function boot(): void {
-		add_action( 'template_include', [ self::class, 'disable_staff_archives' ], 999 );
+		add_filter( 'template_include', [ self::class, 'filter__template_include' ], 999 );
 		add_filter( 'get_the_author_display_name', [ self::class, 'filter__get_the_author_display_name' ], 999, 2 );
 		add_filter( 'render_block_core/post-author', [ self::class, 'filter__render_block_post_author' ], 999 );
 		add_filter( 'author_link', [ self::class, 'filter__author_link' ], 999, 2 );
@@ -219,7 +219,7 @@ final class Disable_Alley_Authors implements Feature {
 	 * @param string $template The template currently being included.
 	 * @return string The template to ultimately include.
 	 */
-	public static function disable_staff_archives( string $template ): string {
+	public static function filter__template_include( string $template ): string {
 		global $wp_query;
 		// If this isn't an author archive, skip it.
 		if ( ! is_author() ) {
