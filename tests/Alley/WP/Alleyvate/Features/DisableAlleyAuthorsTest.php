@@ -22,6 +22,9 @@ use Mantle\Database\Model\User;
 use Mantle\Testkit\Test_Case;
 use Mantle\Testing\Concerns\Refresh_Database;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+
 /**
  * Tests for confirming Alley usernames authors do not appear on the frontend as authors.
  */
@@ -114,10 +117,19 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 	}
 
 	/**
+	 * Set the current environment value.
+	 *
+	 * @param string $environment The environment name to use.
+	 */
+	protected function setEnvironment( string $environment ): void {
+		// Required because `wp_get_environment_type` uses `getenv` to retrieve the value.
+		putenv( 'WP_ENVIRONMENT_TYPE=' . $environment ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.runtime_configuration_putenv
+		$_ENV['WP_ENVIRONMENT_TYPE'] = $environment;
+	}
+
+	/**
 	 * Ensure Alley users (as identified by an email address at one of Alley's domains) do
 	 * not have author archive pages (they should 404)
-	 *
-	 * @test
 	 */
 	public function test_ensure_alley_users_do_not_have_author_archive_pages() {
 		$this->feature->boot();
@@ -134,9 +146,8 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 
 	/**
 	 * Ensure Co-Authors Plus profiles linked to Alley users do not have author archives
-	 *
-	 * @group coauthors-plus
 	 */
+	#[Group( 'coauthors-plus' )]
 	public function test_ensure_co_authors_plus_profiles_linked_to_alley_users_do_not_have_author_archive() {
 		if ( ! $this->co_authors_plus_installed ) {
 			$this->markTestSkipped( 'Co-Authors Plus is not available.' );
@@ -147,9 +158,8 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 
 	/**
 	 * Ensure Byline Manager profiles linked to Alley users do not have author archives
-	 *
-	 * @group byline-manager
 	 */
+	#[Group( 'byline-manager' )]
 	public function test_ensure_byline_manager_profiles_linked_to_alley_users_do_not_have_author_archive() {
 		if ( ! $this->byline_manager_installed ) {
 			$this->markTestSkipped( 'Byline Manager is not available.' );
@@ -169,8 +179,6 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 	/**
 	 * Filter author names for traditional authors data so filtered users don't appear as
 	 * their actual names, but rather a generic "Staff" name.
-	 *
-	 * @test
 	 */
 	public function test_alley_author_names_appear_as_generic_staff_name() {
 		$this->feature->boot();
@@ -188,8 +196,6 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 	/**
 	 * Filter author URLs for traditional authors data so filtered users don't get author
 	 * links.
-	 *
-	 * @test
 	 */
 	public function test_alley_author_urls_do_not_render() {
 		$this->feature->boot();
@@ -206,9 +212,8 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 	/**
 	 * Filter author names for Co-Authors Plus so filtered users appear as "Staff" instead of
 	 * their display name.
-	 *
-	 * @group coauthors-plus
 	 */
+	#[Group( 'coauthors-plus' )]
 	public function test_alley_author_names_appear_as_generic_staff_name_in_co_authors_plus() {
 		if ( ! $this->co_authors_plus_installed ) {
 			$this->markTestSkipped( 'Co-Authors Plus is not available.' );
@@ -220,9 +225,8 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 	/**
 	 * Filter author names for Byline Manager so filtered users appear as "Staff" instead of
 	 * their display name.
-	 *
-	 * @group byline-manager
 	 */
+	#[Group( 'byline-manager' )]
 	public function test_alley_author_names_appear_as_generic_staff_name_in_byline_manager() {
 		if ( ! $this->byline_manager_installed ) {
 			$this->markTestSkipped( 'Byline Manager is not available.' );
@@ -260,11 +264,10 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 	/**
 	 * Generate a list of user accounts by email domain, defaulting to include Alley domains.
 	 *
-	 * @param string $email           The email address to test.
+	 * @param string $email The email address to test.
 	 * @param bool   $expected_result Whether or not the comparison should work.
-	 * @test
-	 * @dataProvider emailProvider
 	 */
+	#[DataProvider( 'emailProvider' )]
 	public function test_user_array_generated_by_email_domain( string $email, bool $expected_result ) {
 		$this->assertSame(
 			$expected_result,
@@ -284,9 +287,8 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 	 *
 	 * @param string $email           The email address to test.
 	 * @param bool   $expected_result Whether or not the comparison should work.
-	 * @test
-	 * @dataProvider emailProvider
 	 */
+	#[DataProvider( 'emailProvider' )]
 	public function test_email_domains_is_filterable( string $email, bool $expected_result ) {
 		// Define the set of domains to be non-alley domains.
 		$filter = fn() => [ 'example.com', 'example.co' ];
@@ -320,6 +322,8 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 		// Temporarily enable feature loading, but disable for all environments.
 		remove_filter( 'alleyvate_load_feature', '__return_false' );
 
+		$this->setEnvironment( 'development' );
+
 		// Allow this feature for our test environment.
 		$filter = fn() => [ 'development' ];
 		add_filter( 'alleyvate_disable_alley_authors_environments', $filter );
@@ -349,6 +353,8 @@ final class DisableAlleyAuthorsTest extends Test_Case {
 
 		// Temporarily enable feature loading, but disable for all environments.
 		remove_filter( 'alleyvate_load_feature', '__return_false' );
+
+		$this->setEnvironment( 'development' );
 
 		$filter = function ( $load, $environment ): bool {
 			if ( 'production' === $environment ) {

@@ -13,9 +13,6 @@
   <testsuite name="unit">
     <directory suffix="Test.php">tests/Alley/WP/</directory>
   </testsuite>
-  <php>
-    <env name="WP_ENVIRONMENT_TYPE" value="development" force="true"/>
-  </php>
 
   <groups>
     <exclude>
