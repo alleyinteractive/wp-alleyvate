@@ -13,6 +13,7 @@
 namespace Alley\WP\Alleyvate\Features;
 
 use Alley\WP\Types\Feature;
+use WP_REST_Response;
 
 /**
  * Removes the impact of Alley accounts on the frontend of client websites by:
@@ -55,6 +56,53 @@ final class Disable_Alley_Authors implements Feature {
 		add_filter( 'get_the_author_display_name', [ self::class, 'filter__get_the_author_display_name' ], 999, 2 );
 		add_filter( 'render_block_core/post-author', [ self::class, 'filter__render_block_post_author' ], 999 );
 		add_filter( 'author_link', [ self::class, 'filter__author_link' ], 999, 2 );
+		add_filter( 'get_coauthors', [ self::class, 'filter__get_coauthors' ], 999 );
+	}
+
+	/**
+	 * Filter out any staff CoAuthors from the get_coauthors request.
+	 *
+	 * @param array $coauthors The array of coauthors.
+	 * @return array
+	 */
+	public static function filter__get_coauthors( $coauthors ) {
+		if ( ! is_array( $coauthors ) ) {
+			return $coauthors;
+		}
+
+		$staff_found = false;
+		foreach ( $coauthors as $key => $author ) {
+			if ( ! self::is_staff_author( $author->user_email ) ) {
+				continue;
+			}
+
+			// If we've found staff already, remove this record instead of changing it.
+			if ( $staff_found ) {
+				unset( $coauthors[ $key ] );
+				continue;
+			}
+
+			// Set CoAuthors data to staff information.
+			$coauthors[ $key ] = (object) [
+				'ID'             => 0,
+				'display_name'   => 'Staff',
+				'first_name'     => '',
+				'last_name'      => '',
+				'user_login'     => '',
+				'user_email'     => '',
+				'linked_account' => '',
+				'website'        => '',
+				'user_nicename'  => 'staff',
+				'type'           => 'guest-author',
+				'nickname'       => '',
+			];
+
+			// We now have a staff record, so we can skip all future ones.
+			$staff_found = true;
+		}
+
+		// Use array_values here to make sure the array keys are set correctly.
+		return array_values( $coauthors );
 	}
 
 	/**
@@ -128,12 +176,19 @@ final class Disable_Alley_Authors implements Feature {
 	 * @return string
 	 */
 	public static function filter__author_link( $link, $author_id ): string {
+		global $coauthors_plus;
+
 		if ( ! is_singular() ) {
 			return $link;
 		}
 
 		$author = get_user_by( 'ID', $author_id );
-		if ( ! self::is_staff_author( $author->user_email ) ) {
+
+		if ( false === $author && $coauthors_plus instanceof \CoAuthors_Plus ) {
+			$author = $coauthors_plus->get_coauthor_by( 'id', $author_id );
+		}
+
+		if ( false !== $author && ! self::is_staff_author( $author->user_email ) ) {
 			return $link;
 		}
 
