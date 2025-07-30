@@ -12,7 +12,7 @@
  * @phpcs:disable WordPress.WP.GlobalVariablesOverride.Prohibited, Generic.CodeAnalysis.EmptyStatement.DetectedCatch, WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
  */
 
-declare( strict_types=1 );
+declare(strict_types=1);
 
 namespace Alley\WP\Alleyvate\Features;
 
