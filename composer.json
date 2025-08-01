@@ -21,7 +21,7 @@
   "require": {
     "php": "^8.2",
     "alleyinteractive/composer-wordpress-autoloader": "^1.0",
-    "alleyinteractive/wp-type-extensions": "^2.0|^3.0",
+    "alleyinteractive/wp-type-extensions": "^2.0|^3.0|^4.0",
     "symfony/http-foundation": "^v7.2"
   },
   "require-dev": {
@@ -38,6 +38,7 @@
     "phpcs": "phpcs",
     "phpstan": "phpstan --memory-limit=768M",
     "phpunit": "phpunit",
+    "release": "npx @alleyinteractive/create-release@latest",
     "scaffold": "npx @alleyinteractive/scaffolder@latest wp-alleyvate@feature",
     "test": [
       "@lint",
