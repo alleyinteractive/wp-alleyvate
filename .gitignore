@@ -3,6 +3,7 @@ build
 vendor
 composer.lock
 node_modules
+package-lock.json
 
 # Log files
 *.log
