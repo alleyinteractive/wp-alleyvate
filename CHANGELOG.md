@@ -4,7 +4,9 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 
 ## Unreleased
 
-Nothing yet.
+### Fixed
+
+* Fixed issue with an undefined `wp` variable in Disable Comments.
 
 ## 3.9.0
 
