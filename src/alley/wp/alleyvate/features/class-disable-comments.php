@@ -66,7 +66,7 @@ final class Disable_Comments implements Feature {
 	public static function action__admin_footer(): void {
 		echo "
 			<script>
-			if (typeof wp?.domReady === 'function') {
+			if (wp && typeof wp?.domReady === 'function') {
 				wp.domReady(() => {
 					if (typeof wp?.blocks?.unregisterBlockType === 'function') {
 						// Unregister blocks related to core comments.
