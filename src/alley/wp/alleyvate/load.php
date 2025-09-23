@@ -114,6 +114,10 @@ function load(): void {
 			new Features\Disable_Block_Editor_Rest_Api_Preload_Paths(),
 		),
 		new Feature(
+			'disable_alley_authors',
+			new Features\Disable_Alley_Authors(),
+		),
+		new Feature(
 			'noindex_password_protected_posts',
 			new Features\Noindex_Password_Protected_Posts(),
 		),
