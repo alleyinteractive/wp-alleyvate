@@ -177,7 +177,6 @@ final class DisableCommentsTest extends Test_Case {
 
 		global $wp_admin_bar;
 		$this->assertInstanceOf( \WP_Admin_Bar::class, $wp_admin_bar );
-		$wp_admin_bar = new \WP_Admin_Bar();
 		set_current_screen( 'dashboard' );
 		do_action( 'admin_bar_menu', $wp_admin_bar ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 		$this->assertNotEmpty( $wp_admin_bar->get_node( 'comments' ) );
