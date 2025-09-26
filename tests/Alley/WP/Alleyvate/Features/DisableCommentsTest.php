@@ -155,7 +155,6 @@ final class DisableCommentsTest extends Test_Case {
 		$this->acting_as( 'administrator' );
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		require_once ABSPATH . 'wp-admin/menu.php';
-		require_once ABSPATH . 'wp-includes/class-wp-admin-bar.php';
 
 		// Ensure comments are in the menu before activating the feature.
 		$this->assertNotEmpty( array_filter( $menu, fn( $item ) => 'edit-comments.php' === $item[2] ) );
