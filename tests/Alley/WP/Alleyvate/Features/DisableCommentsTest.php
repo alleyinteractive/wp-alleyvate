@@ -167,9 +167,15 @@ final class DisableCommentsTest extends Test_Case {
 		$this->assertEmpty( array_filter( $menu, fn( $item ) => 'edit-comments.php' === $item[2] ) );
 		$this->assertArrayNotHasKey( 25, $submenu['options-general.php'] );
 
+		// Clear the current screen global.
+		unset( $GLOBALS['current_screen'] );
+		$GLOBALS['wp']->main();
+
 		// Build the admin bar menu and ensure comments are in it by default.
-		$this->get( admin_url() );
+		_wp_admin_bar_init();
+
 		global $wp_admin_bar;
+		$this->assertInstanceOf( \WP_Admin_Bar::class, $wp_admin_bar );
 		set_current_screen( 'dashboard' );
 		do_action( 'admin_bar_menu', $wp_admin_bar ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 		$this->assertNotEmpty( $wp_admin_bar->get_node( 'comments' ) );
