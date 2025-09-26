@@ -155,6 +155,7 @@ final class DisableCommentsTest extends Test_Case {
 		$this->acting_as( 'administrator' );
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		require_once ABSPATH . 'wp-admin/menu.php';
+		require_once ABSPATH . 'wp-includes/class-wp-admin-bar.php';
 
 		// Ensure comments are in the menu before activating the feature.
 		$this->assertNotEmpty( array_filter( $menu, fn( $item ) => 'edit-comments.php' === $item[2] ) );
@@ -167,9 +168,16 @@ final class DisableCommentsTest extends Test_Case {
 		$this->assertEmpty( array_filter( $menu, fn( $item ) => 'edit-comments.php' === $item[2] ) );
 		$this->assertArrayNotHasKey( 25, $submenu['options-general.php'] );
 
+		// Clear the current screen global.
+		unset( $GLOBALS['current_screen'] );
+		$GLOBALS['wp']->main();
+
 		// Build the admin bar menu and ensure comments are in it by default.
-		$this->get( admin_url() );
+		_wp_admin_bar_init();
+
 		global $wp_admin_bar;
+		$this->assertInstanceOf( \WP_Admin_Bar::class, $wp_admin_bar );
+		$wp_admin_bar = new \WP_Admin_Bar();
 		set_current_screen( 'dashboard' );
 		do_action( 'admin_bar_menu', $wp_admin_bar ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 		$this->assertNotEmpty( $wp_admin_bar->get_node( 'comments' ) );
