@@ -5,6 +5,7 @@
 .phpunit.result.cache
 .scaffolder
 .scoper
+.wp-env.json
 *.sql
 *.tar.gz
 *.zip
@@ -16,9 +17,9 @@ Dockerfile
 Makefile
 node_modules/
 output.log
+package-lock.json
 phpunit.xml
 phpunit.xml
-tests
 tests
 Thumbs.db
 wp-cli.local.yml

@@ -4,9 +4,15 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 
 ## Unreleased
 
-Nothing yet.
+### Fixed
 
-## 3.4.0
+* Fixed issue with an undefined `wp` variable in Disable Comments.
+
+## 3.9.0
+
+* Added support for `alleyinteractive/wp-type-extensions` v4.
+
+## 3.8.0
 
 ### Changed
 
