@@ -29,8 +29,6 @@ use PHPUnit\Framework\Attributes\Group;
  * Tests for confirming Alley usernames authors do not appear on the frontend as authors.
  */
 final class DisableAlleyAuthorsTest extends Test_Case {
-	use Refresh_Database;
-
 	/**
 	 * Feature instance.
 	 *

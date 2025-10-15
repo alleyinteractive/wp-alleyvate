@@ -43,6 +43,11 @@ final class Disable_Alley_Authors implements Feature {
 			return $load;
 		}
 
+		/**
+		 * Filters the list of environment names to allow this feature to load on.
+		 *
+		 * @param string[] $environments The array of environment names to allow loading in.
+		 */
 		$allowed_environments = apply_filters( 'alleyvate_disable_alley_authors_environments', [ 'production' ] );
 
 		return in_array( $environment, $allowed_environments, true );
@@ -176,6 +181,8 @@ final class Disable_Alley_Authors implements Feature {
 	/**
 	 * Filters the author archive URL.
 	 *
+	 * @global \CoAuthors_Plus $coauthors_plus The Co-Authors Plus object.
+	 *
 	 * @param string $link      The author link.
 	 * @param int    $author_id The author ID.
 	 * @return string
@@ -252,7 +259,7 @@ final class Disable_Alley_Authors implements Feature {
 		/**
 		 * Filters which domains to use for defining staff users in the user database.
 		 *
-		 * @param string[]  $domains The array of domains. Defaults to alley domains.
+		 * @param string[] $domains The array of domains. Defaults to alley domains.
 		 */
 		$domains = apply_filters(
 			'alleyvate_staff_author_domains',
