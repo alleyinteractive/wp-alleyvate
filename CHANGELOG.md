@@ -4,6 +4,11 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 
 ## Unreleased
 
+### Added
+
+* `disable_alley_authors`: Changes the author name for anyone with an Alley email address to `Staff`.
+* Added the ability to restrict features to specific environments with `alleyvate_load_{$this->handle}_in_environment` where the dynamic portion of the hook name is the feature's handle.
+
 ### Fixed
 
 * Fixed issue with an undefined `wp` variable in Disable Comments.
