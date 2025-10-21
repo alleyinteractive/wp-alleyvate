@@ -1,0 +1,49 @@
+{
+    "name": "alleyinteractive/wp-plugin-loader",
+    "description": "Code-enabled WordPress plugin loading",
+    "type": "library",
+    "keywords": [
+        "alleyinteractive",
+        "wp-plugin-loader"
+    ],
+    "homepage": "https://github.com/alleyinteractive/wp-plugin-loader",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Sean Fisher",
+            "email": "sean@alley.com"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "alleyinteractive/composer-wordpress-autoloader": "^1.0"
+    },
+    "require-dev": {
+        "alleyinteractive/alley-coding-standards": "^2.0",
+        "szepeviktor/phpstan-wordpress": "^1.1"
+    },
+    "config": {
+        "allow-plugins": {
+            "alleyinteractive/composer-wordpress-autoloader": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "pestphp/pest-plugin": true
+        },
+        "sort-packages": true
+    },
+    "autoload": {
+        "files": [
+            "src/class-wp-plugin-loader.php"
+        ]
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "phpcbf": "phpcbf .",
+        "phpcs": "phpcs .",
+        "phpstan": "phpstan --memory-limit=512M",
+        "test": [
+            "@phpcs",
+            "@phpstan"
+        ]
+    }
+}
