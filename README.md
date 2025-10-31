@@ -173,6 +173,10 @@ By default, Alleyvate hooks into this filter to provide one additional attempt a
 
 If one doesn't have a proxy service, one suggestion would be to hook into this filter to enqueue a cron task that makes many (e.g. up to 100) rapid-fire requests to twitter until a successful response comes back. In experimenting with the Twitter oEmbed endpoint, we've found that it both works and fails in spurts, and if we make 100 requests in a loop, we eventually get a 200 response.
 
+### `yoast_performance_enhancements`
+
+Adds a feature to improve Yoast SEO and Yoast SEO Premium performance. Disables the Yoast SEO Indexables feature. Disables the Yoast SEO Premium Prominent words feature.
+
 ## About
 
 ### License
