@@ -125,6 +125,10 @@ function load(): void {
 			'twitter_embeds',
 			new Features\Twitter_Embeds(),
 		),
+		new Feature(
+			'yoast_performance_enhancements',
+			new Features\Yoast_Performance_Enhancements(),
+		),
 	);
 
 	$plugin->boot();
