@@ -62,6 +62,8 @@ admin stability. For technical details on how WP core implements preloading, ref
 
 This feature disables WordPress comments entirely, including the ability to post, view, edit, list, count, modify settings for, or access URLs that are related to comments completely. The blocks are also removed from the Gutenberg block editor.
 
+Some commenting features are still available to logged in users in order to allow the functionality of the block notes feature introduced in WordPress 6.9.
+
 ### `disable_custom_fields_meta_box`
 
 This feature removes the custom fields meta box from the post editor.

@@ -2,13 +2,17 @@
 
 This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a CHANGELOG](https://keepachangelog.com/en/1.0.0/).
 
-## Unreleased
+## 3.9.1
 
 ### Added
 
 * `yoast_performance_enhancements`: Disables Yoast SEO Indexables. Disables Yoast SEO Premium Prominent Words.
 * `disable_alley_authors`: Changes the author name for anyone with an Alley email address to `Staff`.
 * Added the ability to restrict features to specific environments with `alleyvate_load_{$this->handle}_in_environment` where the dynamic portion of the hook name is the feature's handle.
+
+### Changed
+
+* `disable_comments`: Only disables commenting features for unauthenticated users. These changes were made to allow the functionality of the new block notes feature introduced in WordPress 6.9.
 
 ### Fixed
 
