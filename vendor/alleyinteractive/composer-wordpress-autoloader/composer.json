@@ -1,0 +1,73 @@
+{
+    "name": "alleyinteractive/composer-wordpress-autoloader",
+    "description": "Autoload files using WordPress File Conventions using Composer",
+    "license": "GPL-2.0-or-later",
+    "type": "composer-plugin",
+    "authors": [
+        {
+            "name": "Alley Interactive",
+            "email": "info@alley.co"
+        },
+        {
+            "name": "Sean Fisher",
+            "email": "sean@alley.co"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "composer-plugin-api": "^2.0",
+        "alleyinteractive/wordpress-autoloader": "^1.1.1"
+    },
+    "require-dev": {
+        "composer/composer": "^2.4",
+        "phpunit/phpunit": "^11.0",
+        "squizlabs/php_codesniffer": "^4.0"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "ComposerWordPressAutoloader\\": "src/"
+        },
+        "files": [
+            "src/autoload.php"
+        ]
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    },
+    "extra": {
+        "class": "ComposerWordPressAutoloader\\Plugin"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "@prepare-test"
+        ],
+        "post-update-cmd": [
+            "@prepare-test"
+        ],
+        "lint": "@phpcs",
+        "lint:fix": "@phpcbf",
+        "phpcbf": "phpcbf --standard=./phpcs.xml.dist .",
+        "phpcs": "phpcs --standard=./phpcs.xml.dist .",
+        "phpunit": "phpunit",
+        "clear-prepared-test": [
+            "cd tests/fixtures/root && rm -rf vendor || true",
+            "cd tests/fixtures/inject && rm -rf vendor || true",
+            "cd tests/fixtures/apcu && rm -rf vendor || true",
+            "cd tests/fixtures/vendor-dir && rm -rf vendor || true"
+        ],
+        "prepare-test": [
+            "cd tests/fixtures/root && composer update",
+            "cd tests/fixtures/inject && composer update",
+            "cd tests/fixtures/apcu && composer update",
+            "cd tests/fixtures/vendor-dir && composer update"
+        ],
+        "test": [
+            "@phpcs",
+            "@phpunit"
+        ]
+    }
+}
