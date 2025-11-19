@@ -28,12 +28,12 @@ final class Disable_Comments implements Feature {
 		add_action( 'admin_init', [ self::class, 'action__admin_init' ], 0 );
 		add_action( 'admin_menu', [ self::class, 'action__admin_menu' ], 9999 );
 		add_action( 'init', [ self::class, 'action__init' ], 9999 );
-		add_filter( 'comments_open', '__return_false', 9999 );
+		add_filter( 'comments_open', [ self::class, 'filter__comments_open' ], 9999, 2 );
 		add_filter( 'comments_pre_query', [ self::class, 'filter__comments_pre_query' ], 9999, 2 );
 		add_filter( 'comments_rewrite_rules', '__return_empty_array', 9999 );
-		add_filter( 'get_comments_number', '__return_zero', 9999 );
-		add_filter( 'rest_endpoints', [ self::class, 'filter__rest_endpoints' ], 9999 );
+		add_filter( 'get_comments_number', [ self::class, 'filter__get_comments_number' ], 9999, 2 );
 		add_filter( 'rewrite_rules_array', [ self::class, 'filter__rewrite_rules_array' ], 9999 );
+		add_filter( 'rest_dispatch_request', [ self::class, 'filter__rest_dispatch_request' ], 9999, 4 );
 	}
 
 	/**
@@ -120,28 +120,38 @@ final class Disable_Comments implements Feature {
 	}
 
 	/**
-	 * Short-circuits the comments query to return an empty array or 0 (if count was requested).
+	 * Filters whether comments are open to always return false for
+	 * unauthenticated users. This allows logged-in users to use the block notes
+	 * feature introduced in WordPress 6.9.
 	 *
-	 * @param array<mixed>|int|null $comment_data  Not used.
-	 * @param \WP_Comment_Query     $comment_query The comment query object to filter results for.
-	 * @return int|array<mixed>
+	 * @param bool $comments_open Whether the current post is open for comments.
+	 * @param int  $post_id       The post ID.
 	 */
-	public static function filter__comments_pre_query( $comment_data, \WP_Comment_Query $comment_query ) {
-		return $comment_query->query_vars['count'] ? 0 : [];
+	public static function filter__comments_open( bool $comments_open, int $post_id ): bool {
+		// Allow logged-in users to see comments.
+		if ( is_user_logged_in() ) {
+			return $comments_open;
+		}
+
+		return false;
 	}
 
 	/**
-	 * Removes REST endpoints related to comments.
+	 * Short-circuits the comments query to return an empty array or 0 (if count
+	 * was requested). This allows logged-in users to use the block notes feature
+	 * introduced in WordPress 6.9.
 	 *
-	 * @param array<string> $endpoints REST endpoints to be filtered.
-	 *
-	 * @return array<string> Filtered endpoints.
+	 * @param array<mixed>|int|null $comment_data  Not used.
+	 * @param \WP_Comment_Query     $comment_query The comment query object to filter results for.
+	 * @return int|array<mixed>|null Filtered comment data.
 	 */
-	public static function filter__rest_endpoints( array $endpoints ): array {
-		unset( $endpoints['/wp/v2/comments'] );
-		unset( $endpoints['/wp/v2/comments/(?P<id>[\d]+)'] );
+	public static function filter__comments_pre_query( $comment_data, \WP_Comment_Query $comment_query ): int|array|null {
+		// Allow logged-in users to see comments.
+		if ( is_user_logged_in() ) {
+			return $comment_data;
+		}
 
-		return $endpoints;
+		return $comment_query->query_vars['count'] ? 0 : [];
 	}
 
 	/**
@@ -162,6 +172,25 @@ final class Disable_Comments implements Feature {
 	}
 
 	/**
+	 * Filters the comment count to return zero for unauthenticated users. This
+	 * allows logged-in users to use the block notes feature introduced in
+	 * WordPress 6.9.
+	 *
+	 * @param string|int $comments_number A string representing the number of comments a post has, otherwise 0.
+	 * @param int        $post_id Post ID.
+	 *
+	 * @return int Filtered comment count.
+	 */
+	public static function filter__get_comments_number( string|int $comments_number, int $post_id ): int {
+		// Allow logged-in users to see the comment count.
+		if ( is_user_logged_in() ) {
+			return (int) $comments_number;
+		}
+
+		return 0;
+	}
+
+	/**
 	 * Removes rewrite rules related to comments.
 	 *
 	 * @param array<string> $rules Rewrite rules to be filtered.
@@ -176,5 +205,35 @@ final class Disable_Comments implements Feature {
 		}
 
 		return $rules;
+	}
+
+	/**
+	 * Filters REST API endpoints to return an error response from comments
+	 * endpoints for unauthenticated users. This prevents comment botspam.
+	 *
+	 * @param mixed            $dispatch_result Dispatch result, will be used if not empty.
+	 * @param \WP_REST_Request $request         Request used to generate the response.
+	 * @param string           $route           Route matched for the request.
+	 * @param array<mixed>     $handler         Route handler used for the request.
+	 *
+	 * @return mixed Filtered REST API endpoints.
+	 */
+	public static function filter__rest_dispatch_request( mixed $dispatch_result, \WP_REST_Request $request, string $route, array $handler ): mixed {
+		$comment_routes = [
+			'/wp/v2/comments',
+			'/wp/v2/comments/(?P<id>[\d]+)',
+		];
+
+		if ( ! in_array( $route, $comment_routes, true ) || is_user_logged_in() ) {
+			return $dispatch_result;
+		}
+
+		return new \WP_Error(
+			'rest_forbidden',
+			__( 'Sorry, you are not allowed to access comments.', 'alley' ),
+			[
+				'status' => rest_authorization_required_code(),
+			],
+		);
 	}
 }
