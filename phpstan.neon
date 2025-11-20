@@ -11,3 +11,5 @@ parameters:
 
 	ignoreErrors:
 		- '#WP_REST_Request but does not specify its#'
+		- '#Class CoAuthors_Plus not found#'
+		- '#Call to method get_coauthor_by#'

@@ -13,4 +13,12 @@
   <testsuite name="unit">
     <directory suffix="Test.php">tests/Alley/WP/</directory>
   </testsuite>
+
+  <groups>
+    <exclude>
+      <!-- Exclude by default. These require additional plugins to run. -->
+      <group>byline-manager</group>
+      <group>coauthors-plus</group>
+    </exclude>
+  </groups>
 </phpunit>

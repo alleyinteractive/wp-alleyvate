@@ -62,6 +62,8 @@ admin stability. For technical details on how WP core implements preloading, ref
 
 This feature disables WordPress comments entirely, including the ability to post, view, edit, list, count, modify settings for, or access URLs that are related to comments completely. The blocks are also removed from the Gutenberg block editor.
 
+Some commenting features are still available to logged in users in order to allow the functionality of the block notes feature introduced in WordPress 6.9.
+
 ### `disable_custom_fields_meta_box`
 
 This feature removes the custom fields meta box from the post editor.
@@ -172,6 +174,10 @@ This feature also adds fallback handling for Twitter's oEmbed API endpoint, whic
 By default, Alleyvate hooks into this filter to provide one additional attempt at getting a successful response from a proxy server, if the ENV variable `TWITTER_OEMBED_BACKSTOP_ENDPOINT` is set. WPVIP offers a fallback proxy server which seems to reliably return a valid response.
 
 If one doesn't have a proxy service, one suggestion would be to hook into this filter to enqueue a cron task that makes many (e.g. up to 100) rapid-fire requests to twitter until a successful response comes back. In experimenting with the Twitter oEmbed endpoint, we've found that it both works and fails in spurts, and if we make 100 requests in a loop, we eventually get a 200 response.
+
+### `yoast_performance_enhancements`
+
+Adds a feature to improve Yoast SEO and Yoast SEO Premium performance. Disables the Yoast SEO Indexables feature. Disables the Yoast SEO Premium Prominent words feature.
 
 ## About
 

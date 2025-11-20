@@ -68,7 +68,8 @@ final class DisableCommentsTest extends Test_Case {
 	}
 
 	/**
-	 * Test that the feature prevents fetching a count of comments via the get_comments function.
+	 * Test that the feature prevents fetching a count of comments via the
+	 * get_comments function for unauthenticated users.
 	 */
 	public function test_get_comments_count_returns_empty(): void {
 		$post_id = self::factory()->post->create();
@@ -91,6 +92,24 @@ final class DisableCommentsTest extends Test_Case {
 		// Activate the disable comments feature.
 		$this->feature->boot();
 
+		// Authenticate a user.
+		wp_set_current_user( self::factory()->user->create() );
+
+		// Ensure that comments are still counted for authenticated users.
+		$this->assertSame(
+			1,
+			get_comments(
+				[
+					'post_id' => $post_id,
+					'count'   => true,
+				]
+			)
+		);
+
+		// Log out to test unauthenticated behavior.
+		wp_set_current_user( 0 );
+
+		// Ensure comment count is zero for unauthenticated users.
 		$this->assertSame(
 			0,
 			get_comments(
@@ -103,7 +122,8 @@ final class DisableCommentsTest extends Test_Case {
 	}
 
 	/**
-	 * Test that the feature prevents posting new comments.
+	 * Test that the feature prevents posting new comments for unauthenticated
+	 * users.
 	 */
 	public function test_prevent_comment_posting(): void {
 		$post_id = self::factory()->post->create();
@@ -125,8 +145,26 @@ final class DisableCommentsTest extends Test_Case {
 		// Activate the disable comments feature.
 		$this->feature->boot();
 
-		// Try again, and this time it should fail to insert.
-		$result_post = wp_handle_comment_submission(
+		// Ensure that posting a comment still works for authenticated users.
+		wp_set_current_user( self::factory()->user->create() );
+		$result_auth = wp_handle_comment_submission(
+			[
+				'author'            => 'Auth User',
+				'comment_author_IP' => '127.0.0.1',
+				'comment_parent'    => 0,
+				'comment_post_ID'   => $post_id,
+				'comment'           => 'Lorem ipsum dolor sit amet.',
+				'email'             => 'user@example.org',
+				'url'               => 'https://example.org',
+			]
+		);
+		$this->assertNotWPError( $result_auth );
+
+		// Log out to test unauthenticated behavior.
+		wp_set_current_user( 0 );
+
+		// Ensure that posting a comment fails for unauthenticated users.
+		$result_unauth = wp_handle_comment_submission(
 			[
 				'author'            => 'Testy McTesterson',
 				'comment_author_IP' => '127.0.0.1',
@@ -137,7 +175,7 @@ final class DisableCommentsTest extends Test_Case {
 				'url'               => 'https://example.org/testy',
 			]
 		);
-		$this->assertWPError( $result_post );
+		$this->assertWPError( $result_unauth );
 	}
 
 	/**
@@ -225,7 +263,8 @@ final class DisableCommentsTest extends Test_Case {
 	}
 
 	/**
-	 * Test that the feature removes REST routes related to comments.
+	 * Test that the feature prevents access to REST routes related to comments
+	 * by unauthenticated users.
 	 */
 	public function test_remove_rest_routes(): void {
 		$post_id    = self::factory()->post->create();
@@ -250,16 +289,33 @@ final class DisableCommentsTest extends Test_Case {
 		// Activate plugin.
 		$this->feature->boot();
 
-		// Ensure comment routes are removed.
+		// Authenticate a user.
+		wp_set_current_user( self::factory()->user->create() );
+		
+		// Ensure comment routes still exist for authenticated users.
 		$routes = rest_get_server()->get_routes();
-		$this->assertArrayNotHasKey( '/wp/v2/comments', $routes );
-		$this->assertArrayNotHasKey( '/wp/v2/comments/(?P<id>[\d]+)', $routes );
+		$this->assertArrayHasKey( '/wp/v2/comments', $routes );
+		$this->assertArrayHasKey( '/wp/v2/comments/(?P<id>[\d]+)', $routes );
 
-		// Ensure comment routes 404.
+		// Ensure comment routes are still successful for authenticated users.
 		$result_generic  = rest_do_request( new \WP_REST_Request( 'GET', '/wp/v2/comments' ) );
 		$result_specific = rest_do_request( new \WP_REST_Request( 'GET', \sprintf( '/wp/v2/comments/%d', $comment_id ) ) );
-		$this->assertSame( 404, $result_generic->get_status() );
-		$this->assertSame( 404, $result_specific->get_status() );
+		$this->assertSame( 200, $result_generic->get_status() );
+		$this->assertSame( 200, $result_specific->get_status() );
+
+		// Log out to test unauthenticated behavior.
+		wp_set_current_user( 0 );
+		
+		// Ensure comment routes still exist for an unauthenticated user.
+		$routes = rest_get_server()->get_routes();
+		$this->assertArrayHasKey( '/wp/v2/comments', $routes );
+		$this->assertArrayHasKey( '/wp/v2/comments/(?P<id>[\d]+)', $routes );
+
+		// Ensure comment routes 401.
+		$result_generic  = rest_do_request( new \WP_REST_Request( 'GET', '/wp/v2/comments' ) );
+		$result_specific = rest_do_request( new \WP_REST_Request( 'GET', \sprintf( '/wp/v2/comments/%d', $comment_id ) ) );
+		$this->assertSame( 401, $result_generic->get_status() );
+		$this->assertSame( 401, $result_specific->get_status() );
 	}
 
 	/**
@@ -302,7 +358,8 @@ final class DisableCommentsTest extends Test_Case {
 	}
 
 	/**
-	 * Test that the feature suppresses being able to fetch comments for posts altogether.
+	 * Test that the feature suppresses being able to fetch comments for posts
+	 * for unauthenticated users.
 	 */
 	public function test_suppress_comment_fetch(): void {
 		// Make a post and give it a comment, then ensure the comment is returned.
@@ -318,12 +375,21 @@ final class DisableCommentsTest extends Test_Case {
 		// Activate the disable comments feature.
 		$this->feature->boot();
 
+		// Authenticate a user.
+		wp_set_current_user( self::factory()->user->create() );
+
+		// Ensure that comments are still returned for authenticated users.
+		$this->assertNotEmpty( get_comments( [ 'post_id' => $post_id ] ) );
+
+		// Log out to test unauthenticated behavior.
+		wp_set_current_user( 0 );
+
 		// Ensure comments are suppressed.
 		$this->assertEmpty( get_comments( [ 'post_id' => $post_id ] ) );
 	}
 
 	/**
-	 * Test that the feature reports comment count as 0.
+	 * Test that the feature reports comment count as 0 for unauthenticated users.
 	 */
 	public function test_suppress_comments_number(): void {
 		// Create a post and give it a comment.
@@ -336,12 +402,21 @@ final class DisableCommentsTest extends Test_Case {
 		);
 
 		// Ensure that the get_comments_number function returns the correct comment count.
-		$this->assertSame( '1', get_comments_number( $post_id ) );
+		$this->assertSame( 1, (int) get_comments_number( $post_id ) );
 
 		// Activate the feature.
 		$this->feature->boot();
 
+		// Authenticate a user.
+		wp_set_current_user( self::factory()->user->create() );
+
+		// Ensure that the get_comments_number function still returns the correct comment count.
+		$this->assertSame( 1, (int) get_comments_number( $post_id ) );
+
+		// Log out to test unauthenticated behavior.
+		wp_set_current_user( 0 );
+
 		// Ensure the comments number is reported as 0.
-		$this->assertSame( 0, get_comments_number( $post_id ) );
+		$this->assertSame( 0, (int) get_comments_number( $post_id ) );
 	}
 }
