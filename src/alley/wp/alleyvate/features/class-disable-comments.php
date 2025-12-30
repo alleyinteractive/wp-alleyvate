@@ -69,11 +69,18 @@ final class Disable_Comments implements Feature {
 			if (typeof wp !== 'undefined' && typeof wp?.domReady === 'function') {
 				wp.domReady(() => {
 					if (typeof wp?.blocks?.unregisterBlockType === 'function') {
-						// Unregister blocks related to core comments.
-						wp.blocks.unregisterBlockType('core/comments');
-						wp.blocks.unregisterBlockType('core/post-comments-form');
-						wp.blocks.unregisterBlockType('core/comments-query-loop');
-						wp.blocks.unregisterBlockType('core/latest-comments');
+						const blocks = [
+							'core/comments',
+							'core/post-comments-form',
+							'core/comments-query-loop',
+							'core/latest-comments',
+						];
+						blocks.forEach((block) => {
+							if (wp.blocks.getBlockType(block)) {
+								console.log('unregistering');
+								wp.blocks.unregisterBlockType(block);
+							}
+						});
 					}
 				});
 			}
