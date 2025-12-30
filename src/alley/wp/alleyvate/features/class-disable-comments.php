@@ -77,7 +77,6 @@ final class Disable_Comments implements Feature {
 						];
 						blocks.forEach((block) => {
 							if (wp.blocks.getBlockType(block)) {
-								console.log('unregistering');
 								wp.blocks.unregisterBlockType(block);
 							}
 						});
