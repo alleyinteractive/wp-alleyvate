@@ -24,9 +24,6 @@ final class Yoast_Performance_Enhancements implements Feature {
 	 * Boot the feature.
 	 */
 	public function boot(): void {
-		// Disable the Yoast Indexables feature.
-		add_filter( 'Yoast\WP\SEO\should_index_indexables', '__return_false' );
-
 		// Disable the Yoast SEO Premium Prominent Words feature.
 		add_filter( 'Yoast\WP\SEO\prominent_words_post_types', '__return_empty_array' );
 		add_filter( 'Yoast\WP\SEO\prominent_words_taxonomies', '__return_empty_array' );
