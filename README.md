@@ -177,7 +177,7 @@ If one doesn't have a proxy service, one suggestion would be to hook into this f
 
 ### `yoast_performance_enhancements`
 
-Adds a feature to improve Yoast SEO and Yoast SEO Premium performance. Disables the Yoast SEO Indexables feature. Disables the Yoast SEO Premium Prominent words feature.
+Adds a feature to improve Yoast SEO and Yoast SEO Premium performance. Disables the Yoast SEO Premium Prominent words feature.
 
 ## About
 

@@ -2,6 +2,11 @@
 
 This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a CHANGELOG](https://keepachangelog.com/en/1.0.0/).
 
+## 3.9.2
+
+### Removed
+* `yoast_performance_enhancements`: No longer disables Yoast SEO Indexables.
+
 ## 3.9.1
 
 ### Added
