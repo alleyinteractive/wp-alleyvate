@@ -65,7 +65,7 @@ final class Feature implements \Alley\WP\Types\Feature {
 		/**
 		 * Filters whether to load the given Alleyvate feature.
 		 *
-		 * The dynamic portion of the hook name, `$this->>handle`, refers to the
+		 * The dynamic portion of the hook name, `$this->handle`, refers to the
 		 * machine name for the feature. Filtering in this instance is based on the
 		 * secondary parameter, environment, which should be used to determine whether
 		 * to load or not.
