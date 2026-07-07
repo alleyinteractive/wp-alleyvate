@@ -2,6 +2,12 @@
 
 This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a CHANGELOG](https://keepachangelog.com/en/1.0.0/).
 
+## 3.11.0
+
+### Removed
+
+* `login_nonce`: Removed the login nonce feature. This feature was causing legitimate login attempts to be rejected with an "expired" message.
+
 ## 3.10.0
 
 ### Added
