@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<ruleset name="phpcodesniffer-composer-installer">
+  <description>Coding standards for WordPress Autoload Plugin</description>
+
+  <arg name="extensions" value="php" />
+  <!-- Show sniff codes in all reports, and progress when running -->
+  <arg value="sp" />
+  <!-- Strip the filepaths down to the relevant bit. -->
+  <arg name="basepath" value="." />
+
+  <file>.</file>
+  <exclude-pattern>*/.github/*</exclude-pattern>
+  <exclude-pattern>*/vendor/*</exclude-pattern>
+  <exclude-pattern>tests/*</exclude-pattern>
+
+  <rule ref="PSR12">
+    <exclude name="PSR1.Methods.CamelCapsMethodName.NotCamelCaps" />
+  </rule>
+</ruleset>
