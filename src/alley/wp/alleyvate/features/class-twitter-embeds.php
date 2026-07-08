@@ -55,7 +55,7 @@ final class Twitter_Embeds implements Feature {
 	 * @param string                $url         URL of the HTTP request.
 	 * @return array<mixed>|WP_Error
 	 */
-	public function filter_twitter_oembed_404s( array|WP_Error $response, array $parsed_args, string $url ): array|WP_Error {
+	public function filter_twitter_oembed_404s( $response, array $parsed_args, string $url ): array|WP_Error {
 		if (
 			strpos( $url, 'publish.twitter.com' ) !== false
 			&& 404 === wp_remote_retrieve_response_code( $response )
@@ -90,7 +90,7 @@ final class Twitter_Embeds implements Feature {
 	 * @param int          $attempts Number of times this filter has fired for this URL during this request.
 	 * @return array<mixed>
 	 */
-	public function attempt_404_backstop( array $response, string $url, int $attempts ): array|WP_Error {
+	public function attempt_404_backstop( $response, string $url, int $attempts ): array|WP_Error {
 		if ( 1 === $attempts ) {
 			$env_endpoint = \function_exists( 'vip_get_env_var' )
 				? vip_get_env_var( 'TWITTER_OEMBED_BACKSTOP_ENDPOINT' )

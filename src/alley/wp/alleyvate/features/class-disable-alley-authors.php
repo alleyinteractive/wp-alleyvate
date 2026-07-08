@@ -231,7 +231,7 @@ final class Disable_Alley_Authors implements Feature {
 	 * @param string $template The template currently being included.
 	 * @return string The template to ultimately include.
 	 */
-	public static function filter__template_include( string $template ): string {
+	public static function filter__template_include( $template ): string {
 		global $wp_query;
 		// If this isn't an author archive, skip it.
 		if ( ! is_author() ) {

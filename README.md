@@ -122,10 +122,6 @@ This feature disables XML-RPC (and removes all methods) for all requests made to
 
 This feature forces users with `edit_posts` permissions to use two factor authentication (2fa) for their accounts.
 
-### `login_nonce`
-
-This feature adds a nonce to the login form to prevent CSRF attacks.
-
 ### `noindex_password_protected_posts`
 
 This feature adds noindex to the robots meta tag content for password-protected posts.

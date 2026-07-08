@@ -30,7 +30,7 @@ final class Disable_Apple_News_Non_Prod_Push implements Feature {
 	 *
 	 * @param bool $skip Should we skip the Apple News push.
 	 */
-	public function filter_apple_news_skip_push( bool $skip ): bool {
+	public function filter_apple_news_skip_push( $skip ): bool {
 		// If we are on a production environment, don't modify the value.
 		if ( 'production' === wp_get_environment_type() ) {
 			return $skip;

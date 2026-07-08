@@ -78,10 +78,6 @@ function load(): void {
 			new Features\Disallow_File_Edit(),
 		),
 		new Feature(
-			'login_nonce',
-			new Features\Login_Nonce(),
-		),
-		new Feature(
 			'prevent_framing',
 			new Features\Prevent_Framing(),
 		),
