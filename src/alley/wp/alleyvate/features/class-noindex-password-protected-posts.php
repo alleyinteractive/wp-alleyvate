@@ -33,7 +33,7 @@ final class Noindex_Password_Protected_Posts implements Feature {
 	 *
 	 * @return array<string, boolean>
 	 */
-	public function filter_robots_content( array $robots ): array {
+	public function filter_robots_content( $robots ): array {
 		if ( post_password_required() ) {
 			$robots['noindex'] = true;
 		}

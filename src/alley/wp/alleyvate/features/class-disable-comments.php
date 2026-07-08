@@ -133,7 +133,7 @@ final class Disable_Comments implements Feature {
 	 * @param bool $comments_open Whether the current post is open for comments.
 	 * @param int  $post_id       The post ID.
 	 */
-	public static function filter__comments_open( bool $comments_open, int $post_id ): bool {
+	public static function filter__comments_open( $comments_open, int $post_id ): bool {
 		// Allow logged-in users to see comments.
 		if ( is_user_logged_in() ) {
 			return $comments_open;
@@ -167,7 +167,7 @@ final class Disable_Comments implements Feature {
 	 *
 	 * @return \WP_REST_Response Filtered response.
 	 */
-	public static function filter__rest_prepare( \WP_REST_Response $response ): \WP_REST_Response {
+	public static function filter__rest_prepare( $response ): \WP_REST_Response {
 		$response->remove_link( 'replies' );
 
 		if ( \is_array( $response->data ) && isset( $response->data['comment_status'] ) ) {
@@ -187,7 +187,7 @@ final class Disable_Comments implements Feature {
 	 *
 	 * @return int Filtered comment count.
 	 */
-	public static function filter__get_comments_number( string|int $comments_number, int $post_id ): int {
+	public static function filter__get_comments_number( $comments_number, int $post_id ): int {
 		// Allow logged-in users to see the comment count.
 		if ( is_user_logged_in() ) {
 			return (int) $comments_number;
@@ -203,7 +203,7 @@ final class Disable_Comments implements Feature {
 	 *
 	 * @return array<string> Filtered rewrite rules.
 	 */
-	public static function filter__rewrite_rules_array( array $rules ): array {
+	public static function filter__rewrite_rules_array( $rules ): array {
 		foreach ( $rules as $regex => $rewrite ) {
 			if ( str_contains( $rewrite, 'cpage=$' ) ) {
 				unset( $rules[ $regex ] );

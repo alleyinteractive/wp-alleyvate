@@ -37,7 +37,7 @@ final class Disable_Deep_Pagination implements Feature {
 	 * @param WP_Query $wp_query The WP_Query object, passed by reference.
 	 * @return string
 	 */
-	public static function filter__posts_where( string $where, WP_Query $wp_query ): string {
+	public static function filter__posts_where( $where, WP_Query $wp_query ): string {
 		// If this is an admin request, or a JSON request with a logged in user, return the posts as normal.
 		$max_pages = ! empty( $wp_query->query['__dangerously_set_max_pages'] ) ? $wp_query->query['__dangerously_set_max_pages'] : 100;
 		if (
@@ -79,7 +79,7 @@ final class Disable_Deep_Pagination implements Feature {
 	 * @param WP_Query        $wp_query The WP_Query object, passed by reference.
 	 * @return array<\WP_Post>
 	 */
-	public static function filter__posts_results( array $posts, WP_Query $wp_query ): array {
+	public static function filter__posts_results( $posts, WP_Query $wp_query ): array {
 		// If this is an admin request, or a JSON request with a logged in user, return the posts as normal.
 		$max_pages = apply_filters( 'alleyvate_deep_pagination_max_pages', ! empty( $wp_query->query['__dangerously_set_max_pages'] ) ? $wp_query->query['__dangerously_set_max_pages'] : 100 );
 		if (

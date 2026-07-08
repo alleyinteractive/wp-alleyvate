@@ -46,11 +46,6 @@
         <exclude-pattern>tests/</exclude-pattern>
     </rule>
 
-    <!-- Suppress the filter callback typehint sniff. -->
-    <rule ref="Alley.PHP.FilterCallbackTypehint.ParameterTypehint">
-        <severity>0</severity>
-    </rule>
-
     <!-- In effect, set the minimum supported version of WordPress to the latest version. -->
     <config name="minimum_supported_wp_version" value="99.0"/>
 </ruleset>

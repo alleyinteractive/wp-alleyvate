@@ -27,7 +27,7 @@ final class Site_Health_Panel implements Feature {
 	 * @param array<string, array{label: string, description: string, fields: array<int, array<string, mixed>>}> $info Debug information.
 	 * @return array<string, array{label: string, description: string, fields: array<int, array<string, mixed>>}> Debug information.
 	 */
-	public function add_debug_panel( array $info ): array {
+	public function add_debug_panel( $info ): array {
 		$info['wp-alleyvate'] = [
 			'label'       => __( 'Alleyvate', 'alley' ),
 			'description' => __( 'Diagnostic information about the Alleyvate plugin and which features are enabled.', 'alley' ),
@@ -43,7 +43,7 @@ final class Site_Health_Panel implements Feature {
 	 * @param array<string, array{label: string, description: string, fields: array<int, array<string, mixed>>}> $info Debug information.
 	 * @return array<string, array{label: string, description: string, fields: array<int, array<string, mixed>>}> Debug information.
 	 */
-	public function sort_debug_panel_features( array $info ): array {
+	public function sort_debug_panel_features( $info ): array {
 		$panel = 'wp-alleyvate';
 
 		$fields = $info[ $panel ]['fields'] ?? [];
