@@ -125,6 +125,10 @@ function load(): void {
 			'yoast_performance_enhancements',
 			new Features\Yoast_Performance_Enhancements(),
 		),
+		new Feature(
+			'disable_script_style_concatenation',
+			new Features\Disable_Script_Style_Concatenation(),
+		),
 	);
 
 	$plugin->boot();

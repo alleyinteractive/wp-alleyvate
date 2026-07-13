@@ -101,6 +101,14 @@ which have been shown to force those environments to use an insecure protocol at
 
 This feature disables sending password change notification emails to site admins.
 
+### `disable_script_style_concatenation`
+
+This feature disables the script and style concatenation (and CSS minification) that WordPress VIP enables by default via its [file concatenation and minification](https://docs.wpvip.com/vip-go-mu-plugins/file-concatenation-and-minification/) mu-plugin.
+
+The concatenation produces single, large, rarely cacheable bundles (served from `/_static/??…` URLs) that hurt performance with HTTP/2 enabled and can cause script errors.
+
+This feature has no effect on sites that are not hosted on WordPress VIP.
+
 ### `disable_site_health_directories`
 
 This feature disables the site health check for information about the WordPress directories and their sizes.
