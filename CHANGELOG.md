@@ -2,6 +2,12 @@
 
 This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a CHANGELOG](https://keepachangelog.com/en/1.0.0/).
 
+## 3.12.0
+
+### Added
+
+* `disable_script_style_concatenation`: Disables the script and style concatenation (and CSS minification) that WordPress VIP enables by default.
+
 ## 3.11.0
 
 ### Removed
