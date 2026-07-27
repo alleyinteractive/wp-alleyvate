@@ -163,9 +163,9 @@ sites.
 
 ### `reset_theme_json_cache_on_switch_blog`
 
-This feature resets WordPress's cached theme.json data (`WP_Theme_JSON_Resolver`) whenever the current site changes during a multisite request (i.e., on the `switch_blog` action).
+This feature clears WordPress's cached theme.json data (via core's own `wp_clean_theme_json_cache()`) whenever the current site changes during a multisite request (i.e., on the `switch_blog` action).
 
-`WP_Theme_JSON_Resolver` memoizes its merged theme.json data in static properties for the life of the request, and that cache isn't aware of `switch_to_blog()`/`restore_current_blog()`. On a multisite network, anything that switches into another site mid-request — most notably, WordPress core's admin bar building its "My Sites" menu for a user who belongs to multiple sites — can prime the cache with a different site's resolved data. If that other site's theme.json differs from the current site's (for example, a child theme overriding a font-family preset), the current page ends up rendering global styles using the wrong site's data, but only for logged-in users who see the admin bar.
+WordPress core already hooks `wp_clean_theme_json_cache()` to the `switch_theme` and `start_previewing_theme` actions, since the active theme context changing mid-request can otherwise leave `WP_Theme_JSON_Resolver`'s static cache and the `theme_json` object cache group stale. It isn't hooked to `switch_blog`, though. On a multisite network, anything that switches into another site mid-request — most notably, WordPress core's admin bar building its "My Sites" menu for a user who belongs to multiple sites — can prime these caches with a different site's resolved data. If that other site's theme.json differs from the current site's (for example, a child theme overriding a font-family preset), the current page ends up rendering global styles using the wrong site's data, but only for logged-in users who see the admin bar.
 
 ### `user_enumeration_restrictions`
 
