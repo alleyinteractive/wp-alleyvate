@@ -129,6 +129,10 @@ function load(): void {
 			'disable_script_style_concatenation',
 			new Features\Disable_Script_Style_Concatenation(),
 		),
+		new Feature(
+			'reset_theme_json_cache_on_switch_blog',
+			new Features\Reset_Theme_Json_Cache_On_Switch_Blog(),
+		),
 	);
 
 	$plugin->boot();
