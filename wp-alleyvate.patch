@@ -1,0 +1,203 @@
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 0b42bf1..81bdfc1 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -6,6 +6,7 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
+ 
+ ### Added
+ 
++* `cache_slow_queries`: Cache the result of `get_available_post_mime_types()` in the object cache (via core's `pre_get_available_post_mime_types` filter, WordPress 6.4+) so the media library no longer runs the expensive `SELECT DISTINCT post_mime_type` query on every page load. The cache is invalidated when an attachment is added, edited or deleted. Disable with the `alleyvate_cache_available_post_mime_types` filter.
+ * `disable_random_content_redirect`: Disables the `/random/` endpoint introduced in WordPress 7.2 via the `wp_enable_random_content_redirect` filter.
+ 
+ ## 3.13.0
+diff --git a/README.md b/README.md
+index ad92b2d..c1f3472 100644
+--- a/README.md
++++ b/README.md
+@@ -35,6 +35,7 @@ performance. It is enabled by default and currently includes the following slow
+ queries with the relevant filters to disable them:
+ 
+ - `alleyvate_cache_months_dropdown`: The dropdown for selecting a month in the post list table.
++- `alleyvate_cache_available_post_mime_types`: The available post MIME types query used by the media library (`get_available_post_mime_types()`). Requires WordPress 6.4 or later; on older versions the query runs as usual.
+ 
+ ### `clean_admin_bar`
+ 
+diff --git a/src/alley/wp/alleyvate/features/class-cache-slow-queries.php b/src/alley/wp/alleyvate/features/class-cache-slow-queries.php
+index 629a2d3..9f3aae0 100644
+--- a/src/alley/wp/alleyvate/features/class-cache-slow-queries.php
++++ b/src/alley/wp/alleyvate/features/class-cache-slow-queries.php
+@@ -42,6 +42,18 @@ final class Cache_Slow_Queries implements Feature {
+ 			add_action( 'save_post', [ $this, 'action__save_post' ], 10, 2 );
+ 			add_action( 'delete_post', [ $this, 'action__delete_post' ], 10, 2 );
+ 		}
++
++		/**
++		 * Filter if the available post MIME types query should be cached.
++		 *
++		 * @param bool $cache_available_post_mime_types Whether to cache the available post MIME types. Default true.
++		 */
++		if ( apply_filters( 'alleyvate_cache_available_post_mime_types', true ) ) {
++			add_filter( 'pre_get_available_post_mime_types', [ $this, 'filter__pre_get_available_post_mime_types' ], 10, 2 );
++			add_action( 'add_attachment', [ $this, 'action__invalidate_available_post_mime_types_cache' ] );
++			add_action( 'edit_attachment', [ $this, 'action__invalidate_available_post_mime_types_cache' ] );
++			add_action( 'delete_attachment', [ $this, 'action__invalidate_available_post_mime_types_cache' ] );
++		}
+ 	}
+ 
+ 	/**
+@@ -119,4 +131,56 @@ final class Cache_Slow_Queries implements Feature {
+ 	public function action__delete_post( $post_id, $post ): void {
+ 		wp_cache_delete( $post->post_type, 'alleyvate_months_dropdown' );
+ 	}
++
++	/**
++	 * Filter the available post MIME types to return the cached result.
++	 *
++	 * `get_available_post_mime_types()` runs an expensive `SELECT DISTINCT
++	 * post_mime_type` query over the posts table on every media library page
++	 * load. WordPress core added the `pre_get_available_post_mime_types`
++	 * filter in version 6.4.0, which allows short-circuiting that query.
++	 * On older versions of WordPress the filter is never applied and the
++	 * query runs as usual.
++	 *
++	 * There is no "after" filter for this function in core, so on a cache
++	 * miss this runs the same query core would run, caches the result and
++	 * returns it. Subsequent calls return from the object cache until the
++	 * cache expires or is invalidated by an attachment being added, edited
++	 * or deleted.
++	 *
++	 * @param string[]|null $mime_types An array of MIME types. Default null.
++	 * @param string        $type       The post type name. Usually 'attachment' but can be any post type.
++	 * @return string[]
++	 */
++	public function filter__pre_get_available_post_mime_types( $mime_types, $type ) {
++		$cache = wp_cache_get( $type, 'alleyvate_available_post_mime_types' );
++
++		if ( \is_array( $cache ) ) {
++			return $cache;
++		}
++
++		global $wpdb;
++
++		$mime_types = $wpdb->get_col(
++			$wpdb->prepare(
++				"SELECT DISTINCT post_mime_type FROM $wpdb->posts WHERE post_type = %s AND post_mime_type != ''",
++				$type,
++			),
++		);
++
++		$mime_types = array_values( array_filter( $mime_types ) );
++
++		wp_cache_set( $type, $mime_types, 'alleyvate_available_post_mime_types', DAY_IN_SECONDS );
++
++		return $mime_types;
++	}
++
++	/**
++	 * Invalidate the cached available post MIME types when an attachment changes.
++	 *
++	 * @param int $post_id The attachment ID.
++	 */
++	public function action__invalidate_available_post_mime_types_cache( $post_id ): void {
++		wp_cache_delete( 'attachment', 'alleyvate_available_post_mime_types' );
++	}
+ }
+diff --git a/tests/Alley/WP/Alleyvate/Features/CacheSlowQueriesTest.php b/tests/Alley/WP/Alleyvate/Features/CacheSlowQueriesTest.php
+index e9fffbb..6f5255d 100644
+--- a/tests/Alley/WP/Alleyvate/Features/CacheSlowQueriesTest.php
++++ b/tests/Alley/WP/Alleyvate/Features/CacheSlowQueriesTest.php
+@@ -108,4 +108,94 @@ final class CacheSlowQueriesTest extends Test_Case {
+ 
+ 		$this->assertEmpty( wp_cache_get( 'post', 'alleyvate_months_dropdown' ) );
+ 	}
++
++	/**
++	 * Test that the available post MIME types are returned from the cache.
++	 */
++	public function test_available_post_mime_types_are_cached(): void {
++		$this->expectApplied( 'pre_get_available_post_mime_types' )->once();
++
++		// Boot feature.
++		$this->feature->boot();
++
++		// Prime the cache with a known value.
++		wp_cache_set( 'attachment', [ 'image/png' ], 'alleyvate_available_post_mime_types' );
++
++		$this->assertSame( [ 'image/png' ], get_available_post_mime_types( 'attachment' ) );
++	}
++
++	/**
++	 * Test that the available post MIME types query result is cached on a cache miss.
++	 */
++	public function test_available_post_mime_types_cache_is_populated(): void {
++		self::factory()->post->create(
++			[
++				'post_type'      => 'attachment',
++				'post_mime_type' => 'image/jpeg',
++			],
++		);
++		self::factory()->post->create(
++			[
++				'post_type'      => 'attachment',
++				'post_mime_type' => 'application/pdf',
++			],
++		);
++
++		// Boot feature.
++		$this->feature->boot();
++
++		$mime_types = get_available_post_mime_types( 'attachment' );
++
++		sort( $mime_types );
++
++		$this->assertSame( [ 'application/pdf', 'image/jpeg' ], $mime_types );
++
++		$cached = wp_cache_get( 'attachment', 'alleyvate_available_post_mime_types' );
++
++		sort( $cached );
++
++		$this->assertSame( [ 'application/pdf', 'image/jpeg' ], $cached );
++	}
++
++	/**
++	 * Test that the available post MIME types cache is cleared when an attachment is added.
++	 */
++	public function test_available_post_mime_types_cache_cleared_on_add_attachment(): void {
++		// Boot feature.
++		$this->feature->boot();
++
++		// Prime the cache with a stale value.
++		wp_cache_set( 'attachment', [ 'image/png' ], 'alleyvate_available_post_mime_types' );
++
++		self::factory()->post->create(
++			[
++				'post_type'      => 'attachment',
++				'post_mime_type' => 'image/jpeg',
++			],
++		);
++
++		$this->assertFalse( wp_cache_get( 'attachment', 'alleyvate_available_post_mime_types' ) );
++	}
++
++	/**
++	 * Test that the available post MIME types cache is cleared when an attachment is deleted.
++	 */
++	public function test_available_post_mime_types_cache_cleared_on_delete_attachment(): void {
++		$attachment_id = self::factory()->post->create(
++			[
++				'post_type'      => 'attachment',
++				'post_mime_type' => 'image/jpeg',
++			],
++		);
++
++		// Boot feature.
++		$this->feature->boot();
++
++		// Prime the cache with a stale value.
++		wp_cache_set( 'attachment', [ 'image/png' ], 'alleyvate_available_post_mime_types' );
++
++		wp_delete_attachment( $attachment_id, true );
++
++		$this->assertFalse( wp_cache_get( 'attachment', 'alleyvate_available_post_mime_types' ) );
++	}
+ }
