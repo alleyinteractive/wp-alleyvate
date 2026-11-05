@@ -107,8 +107,10 @@ final class TwitterEmbedsTest extends Test_Case {
 	 */
 	public function test_oembed_providers(): void {
 		// Kids, don't try this at home. Because _wp_oembed_get_object() stores a static reference to the WP_oEmbed
-		// object, we rerun the constructor to reset the set of available providers.
-		$wp_oembed = _wp_oembed_get_object();
+		// object, we rerun the constructor to reset the set of available providers. Since WordPress 7.1 the constructor
+		// merges into the existing providers instead of replacing them, so clear them first.
+		$wp_oembed            = _wp_oembed_get_object();
+		$wp_oembed->providers = [];
 		$wp_oembed->__construct();
 
 		$body = '{"url":"https:\/\/twitter.com\/WordPress\/status\/1819377181035745510","author_name":"WordPress","author_url":"https:\/\/twitter.com\/WordPress","html":"\u003Cblockquote class=\"twitter-tweet\" data-width=\"550\" data-dnt=\"true\"\u003E\u003Cp lang=\"en\" dir=\"ltr\"\u003EMeet the brand-new, reimagined Learn WordPress experience and grow your WordPress skills at your own pace. Get more details: \u003Ca href=\"https:\/\/t.co\/6bj2bRr8BW\"\u003Ehttps:\/\/t.co\/6bj2bRr8BW\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/hashtag\/WordPress?src=hash&amp;ref_src=twsrc%5Etfw\"\u003E#WordPress\u003C\/a\u003E \u003Ca href=\"https:\/\/t.co\/24TkZaB6pW\"\u003Epic.twitter.com\/24TkZaB6pW\u003C\/a\u003E\u003C\/p\u003E&mdash; WordPress (@WordPress) \u003Ca href=\"https:\/\/twitter.com\/WordPress\/status\/1819377181035745510?ref_src=twsrc%5Etfw\"\u003EAugust 2, 2024\u003C\/a\u003E\u003C\/blockquote\u003E\n\u003Cscript async src=\"https:\/\/platform.twitter.com\/widgets.js\" charset=\"utf-8\"\u003E\u003C\/script\u003E\n\n","width":550,"height":null,"type":"rich","cache_age":"3153600000","provider_name":"Twitter","provider_url":"https:\/\/twitter.com","version":"1.0"}';
