@@ -24,12 +24,10 @@ final class DisableRandomContentRedirectTest extends Test_Case {
 	 * Test that the feature turns off the random content redirect.
 	 */
 	public function test_boot(): void {
-		$hook = 'wp_enable_random_content_redirect';
-
-		$this->assertTrue( apply_filters( $hook, true ) );
+		$this->assertTrue( apply_filters( 'wp_enable_random_content_redirect', true ) ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 
 		( new Disable_Random_Content_Redirect() )->boot();
 
-		$this->assertFalse( apply_filters( $hook, true ) );
+		$this->assertFalse( apply_filters( 'wp_enable_random_content_redirect', true ) ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 	}
 }
