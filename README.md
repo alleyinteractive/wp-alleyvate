@@ -101,6 +101,10 @@ which have been shown to force those environments to use an insecure protocol at
 
 This feature disables sending password change notification emails to site admins.
 
+### `disable_random_content_redirect`
+
+This feature disables the `/random/` endpoint added in WordPress 7.2 by returning `false` from the `wp_enable_random_content_redirect` filter. No random rewrite rules are generated, the random base field is hidden on the permalinks screen, and the random query variable is ignored.
+
 ### `disable_script_style_concatenation`
 
 This feature disables the script and style concatenation (and CSS minification) that WordPress VIP enables by default via its [file concatenation and minification](https://docs.wpvip.com/vip-go-mu-plugins/file-concatenation-and-minification/) mu-plugin.
