@@ -5,6 +5,7 @@ This library adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 ## Unreleased
 
 ### Added
+* `cache_slow_queries`: Cache the result of `get_available_post_mime_types()` in the object cache (via core's `pre_get_available_post_mime_types` filter, WordPress 6.4+ so the media library no longer runs the expensive `SELECT DISTINCT post_mime_type` query on every page load. The cache is invalidated when an attachment is added, edited or deleted. Disable with the `alleyvate_cache_available_post_mime_types` filter.
 
 * `disable_random_content_redirect`: Disables the `/random/` endpoint introduced in WordPress 7.2 via the `wp_enable_random_content_redirect` filter.
 

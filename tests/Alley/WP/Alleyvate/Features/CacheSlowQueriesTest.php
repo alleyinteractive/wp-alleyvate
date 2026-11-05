@@ -108,4 +108,94 @@ final class CacheSlowQueriesTest extends Test_Case {
 
 		$this->assertEmpty( wp_cache_get( 'post', 'alleyvate_months_dropdown' ) );
 	}
+
+	/**
+	 * Test that the available post MIME types are returned from the cache.
+	 */
+	public function test_available_post_mime_types_are_cached(): void {
+		$this->expectApplied( 'pre_get_available_post_mime_types' )->once();
+
+		// Boot feature.
+		$this->feature->boot();
+
+		// Prime the cache with a known value.
+		wp_cache_set( 'attachment', [ 'image/png' ], 'alleyvate_available_post_mime_types' );
+
+		$this->assertSame( [ 'image/png' ], get_available_post_mime_types( 'attachment' ) );
+	}
+
+	/**
+	 * Test that the available post MIME types query result is cached on a cache miss.
+	 */
+	public function test_available_post_mime_types_cache_is_populated(): void {
+		self::factory()->post->create(
+			[
+				'post_type'      => 'attachment',
+				'post_mime_type' => 'image/jpeg',
+			],
+		);
+		self::factory()->post->create(
+			[
+				'post_type'      => 'attachment',
+				'post_mime_type' => 'application/pdf',
+			],
+		);
+
+		// Boot feature.
+		$this->feature->boot();
+
+		$mime_types = get_available_post_mime_types( 'attachment' );
+
+		sort( $mime_types );
+
+		$this->assertSame( [ 'application/pdf', 'image/jpeg' ], $mime_types );
+
+		$cached = wp_cache_get( 'attachment', 'alleyvate_available_post_mime_types' );
+
+		sort( $cached );
+
+		$this->assertSame( [ 'application/pdf', 'image/jpeg' ], $cached );
+	}
+
+	/**
+	 * Test that the available post MIME types cache is cleared when an attachment is added.
+	 */
+	public function test_available_post_mime_types_cache_cleared_on_add_attachment(): void {
+		// Boot feature.
+		$this->feature->boot();
+
+		// Prime the cache with a stale value.
+		wp_cache_set( 'attachment', [ 'image/png' ], 'alleyvate_available_post_mime_types' );
+
+		self::factory()->post->create(
+			[
+				'post_type'      => 'attachment',
+				'post_mime_type' => 'image/jpeg',
+			],
+		);
+
+		$this->assertFalse( wp_cache_get( 'attachment', 'alleyvate_available_post_mime_types' ) );
+	}
+
+	/**
+	 * Test that the available post MIME types cache is cleared when an attachment is deleted.
+	 */
+	public function test_available_post_mime_types_cache_cleared_on_delete_attachment(): void {
+		$attachment_id = self::factory()->post->create(
+			[
+				'post_type'      => 'attachment',
+				'post_mime_type' => 'image/jpeg',
+			],
+		);
+
+		// Boot feature.
+		$this->feature->boot();
+
+		// Prime the cache with a stale value.
+		wp_cache_set( 'attachment', [ 'image/png' ], 'alleyvate_available_post_mime_types' );
+
+		wp_delete_attachment( $attachment_id, true );
+
+		$this->assertFalse( wp_cache_get( 'attachment', 'alleyvate_available_post_mime_types' ) );
+	}
 }
