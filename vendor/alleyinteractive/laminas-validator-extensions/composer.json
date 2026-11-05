@@ -1,0 +1,40 @@
+{
+  "name": "alleyinteractive/laminas-validator-extensions",
+  "description": "Additional validation classes for the laminas-validator framework.",
+  "type": "library",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Alley",
+      "email": "info@alley.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Alley\\": "src/Alley/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Alley\\": "tests/Alley/"
+    }
+  },
+  "config": {
+    "lock": false
+  },
+  "require": {
+    "php": "^8.0",
+    "laminas/laminas-validator": "^2.20"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^3.8",
+    "phpunit/phpunit": "^9.5",
+    "squizlabs/php_codesniffer": "^3.6"
+  },
+  "scripts": {
+    "fixer": "php-cs-fixer -v fix --allow-risky=yes",
+    "phpcbf": "phpcbf",
+    "phpcs": "phpcs",
+    "phpunit": "phpunit"
+  }
+}
