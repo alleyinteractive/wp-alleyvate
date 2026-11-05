@@ -35,6 +35,7 @@ performance. It is enabled by default and currently includes the following slow
 queries with the relevant filters to disable them:
 
 - `alleyvate_cache_months_dropdown`: The dropdown for selecting a month in the post list table.
+- `alleyvate_cache_available_post_mime_types`: The available post MIME types query used by the media library (`get_available_post_mime_types()`). Requires WordPress 6.4 or later; on older versions the query runs as usual.
 
 ### `clean_admin_bar`
 
