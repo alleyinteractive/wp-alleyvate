@@ -133,6 +133,10 @@ function load(): void {
 			'reset_theme_json_cache_on_switch_blog',
 			new Features\Reset_Theme_Json_Cache_On_Switch_Blog(),
 		),
+		new Feature(
+			'disable_random_content_redirect',
+			new Features\Disable_Random_Content_Redirect(),
+		),
 	);
 
 	$plugin->boot();
